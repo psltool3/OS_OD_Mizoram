@@ -25,7 +25,7 @@ if(isset($_SESSION['district_user'])){
 	$numrows = mysqli_num_rows($result);
 	
 	if($numrows==0){
-		header("Location:Login.html");
+		header("Location:/OS_OD_Mizoram/pds_district_mizoram/Login.html");
 		exit();
 	}
 	
@@ -34,7 +34,7 @@ if(isset($_SESSION['district_user'])){
 	mysqli_query($con,$queryUpdate);
 }
 else{
-	header("Location:Login.html");
+	header("Location:/OS_OD_Mizoram/pds_district_mizoram/Login.html");
 }
 
 ?>

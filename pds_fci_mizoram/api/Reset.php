@@ -36,7 +36,7 @@ if (empty($row)) {
     return;
 }
 
-if ($row['role'] !== 'admin') {
+if ($row['role'] !== 'fci') {
     echo "<script>alert('Error: Unauthorized role for this module.'); window.history.back();</script>";
     return;
 }
@@ -71,5 +71,5 @@ $cleanupQuery = "DELETE FROM password_history WHERE username='$username' AND id 
 mysqli_query($con, $cleanupQuery);
 
 mysqli_close($con);
-echo "<script>alert('Password reset successful. Please login with your new password.'); window.location.href = '../AdminLogin.html';</script>";
+echo "<script>alert('Password reset successful. Please login with your new password.'); window.location.href = '../Login.html';</script>";
 ?>

@@ -294,6 +294,7 @@ while($row = mysqli_fetch_array($result))
 										<th style="font-size:16px">Reason for not Approve</th>
 										<th style="font-size:16px">Suggest Warehouse</th>
 										<th style="font-size:16px">Suggested Warehouse Distance</th>
+										<th class="csp-style-dd7e28" style="font-size:16px">Action</th>
 									</tr>
                                  </thead>
 								<tbody id="table_body">
@@ -402,6 +403,53 @@ while($row = mysqli_fetch_array($result))
 			document.body.appendChild(form);
 			form.submit();
 		}
+
+		function saveRowData(uniqueid) {
+			var params = {};
+			
+			// Admin implementations often track uniqueid_bool
+			var uniqueid_bool = uniqueid + "_bool";
+			if (modifiedData.hasOwnProperty(uniqueid_bool)) params[uniqueid_bool] = modifiedData[uniqueid_bool];
+			
+			// Extract modified fields
+			if (modifiedData.hasOwnProperty(uniqueid)) params[uniqueid] = modifiedData[uniqueid];
+			if (typeof modifiedIdData !== 'undefined' && modifiedIdData.hasOwnProperty(uniqueid)) params[uniqueid] = modifiedIdData[uniqueid];
+			
+			var idreason = uniqueid + "_idreason";
+			if (modifiedReasonData.hasOwnProperty(idreason)) params[idreason] = modifiedReasonData[idreason];
+			
+			var iddistance = uniqueid + "_iddistance";
+			if (modifiedDistanceData.hasOwnProperty(iddistance)) params[iddistance] = modifiedDistanceData[iddistance];
+
+			var idapprove = uniqueid + "_approve";
+			if (typeof modifiedApproveData !== 'undefined' && modifiedApproveData.hasOwnProperty(idapprove)) params[idapprove] = modifiedApproveData[idapprove];
+
+			var value = params[uniqueid];
+			if (value && value != "yes" && value != "" && value != "same" && value != "no") {
+				if (!params.hasOwnProperty(idreason)) {
+					alert("New Id " + String(value) + " Reason needs to be selected");
+					return;
+				}
+				if (!params.hasOwnProperty(iddistance)) {
+					alert("New Id " + String(value) + " distance needs to be filled");
+					return;
+				}
+			}
+
+			if (Object.keys(params).length === 0) {
+				alert("No changes to save for this row.");
+				return;
+			}
+			
+			post(params, "api/SaveRow.php");
+		}
+
+		function resetRowData(uniqueid) {
+			var params = {};
+			params[uniqueid] = "reset";
+			post(params, "api/ResetRow.php");
+		}
+
 		
 		function enableDisable(selectedId){
 			newvalue = document.getElementById(selectedId + "_bool").value;
@@ -686,6 +734,9 @@ while($row = mysqli_fetch_array($result))
 								else if(approve_district==""){
 									var approve_district_part = "<td><button class='btn btn-warning'>Pending</button></td>";
 								}
+								else {
+									var approve_district_part = "<td></td>";
+								}
 								
 								if(reason_admin.length>0){
 									var admin_reason = "<td>" + reason_admin + "</td>";
@@ -738,7 +789,8 @@ while($row = mysqli_fetch_array($result))
 									var newid_admin_part = "<td><select class='form-control' onchange='handleNewIdChange(\"" + uniqueid + "\")' id='" + uniqueid + "' name='" + uniqueid + "' disabled required><option value=''>Select Id</option>" + warehousepart + "</select></td>";
 								}
 								if(approve_district==""){
-									subpart1 = subpart1 + "<td>" + newid_district + "</td><td>" + reason_district + "</td><td>" + distance_district  + approve_district_part + "</td><td></td><td></td><td></td><td></td></tr>";
+									var action_col = "<td><button class='btn btn-success' style='margin-bottom:5px;' data-csp-click=\"saveRowData('" + uniqueid + "')\">Save</button><br><button class='btn btn-danger' data-csp-click=\"resetRowData('" + uniqueid + "')\">Reset</button></td>";
+									subpart1 = subpart1 + "<td>" + newid_district + "</td><td>" + reason_district + "</td><td>" + distance_district  + approve_district_part + "</td><td></td><td></td><td></td><td></td>" + action_col + "</tr>";
 								}
 								else{
 									if(approve_admin=="yes"){
@@ -751,7 +803,8 @@ while($row = mysqli_fetch_array($result))
 										var approve_admin_part = "<td><select class='form-control' onchange='enableDisable(\"" + uniqueid + "\")' id='" + uniqueid_bool + "' name='" + uniqueid_bool + "' required><option value=''>Select</option><option value='yes'>Approve District</option><option value='same'>Keep System Generated</option><option value='no'>Change ID</option></select></td>";
 										uniqueid_array.push(uniqueid_bool);
 									}
-									subpart1 = subpart1 + "<td>" + newid_district + "</td><td>" + reason_district + "</td><td>" + distance_district + approve_district_part + approve_admin_part + admin_reason + newid_admin_part + distance_admin_part + "</tr>";
+									var action_col = "<td><button class='btn btn-success' style='margin-bottom:5px;' data-csp-click=\"saveRowData('" + uniqueid + "')\">Save</button><br><button class='btn btn-danger' data-csp-click=\"resetRowData('" + uniqueid + "')\">Reset</button></td>";
+									subpart1 = subpart1 + "<td>" + newid_district + "</td><td>" + reason_district + "</td><td>" + distance_district + approve_district_part + approve_admin_part + admin_reason + newid_admin_part + distance_admin_part + action_col + "</tr>";
 								}
 								$('#table_body').append(subpart1);
 							}

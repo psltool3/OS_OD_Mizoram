@@ -1439,6 +1439,78 @@
       "Storage_Capacity": "3500",
       "Owned/Rented": "",
       "quantity of Wheat stored (Quintals)": ""
+    },
+    {
+      "State Name": "",
+      "WH_District": "Aizawl",
+      "WH_Name": "Fd15003",
+      "WH_ID": "FD15003",
+      "Type of WH": "fci",
+      "WH_Lat": "23.73833314",
+      "WH_Long": "92.67722146",
+      "Storage_Capacity": "574200",
+      "Owned/Rented": "",
+      "quantity of Wheat stored (Quintals)": ""
+    },
+    {
+      "State Name": "",
+      "WH_District": "Kolasib",
+      "WH_Name": "Fd15001",
+      "WH_ID": "FD15001",
+      "Type of WH": "fci",
+      "WH_Lat": "24.24627618",
+      "WH_Long": "92.68273129",
+      "Storage_Capacity": "626400",
+      "Owned/Rented": "",
+      "quantity of Wheat stored (Quintals)": ""
+    },
+    {
+      "State Name": "",
+      "WH_District": "Kolasib",
+      "WH_Name": "Fd15005",
+      "WH_ID": "FD15005",
+      "Type of WH": "fci",
+      "WH_Lat": "24.1007769",
+      "WH_Long": "92.68498096",
+      "Storage_Capacity": "574200",
+      "Owned/Rented": "",
+      "quantity of Wheat stored (Quintals)": ""
+    },
+    {
+      "State Name": "",
+      "WH_District": "Lunglei",
+      "WH_Name": "Fd15002",
+      "WH_ID": "FD15002",
+      "Type of WH": "fci",
+      "WH_Lat": "22.86601579",
+      "WH_Long": "92.74049945",
+      "Storage_Capacity": "365400",
+      "Owned/Rented": "",
+      "quantity of Wheat stored (Quintals)": ""
+    },
+    {
+      "State Name": "",
+      "WH_District": "Kolasib",
+      "WH_Name": "Fd15004",
+      "WH_ID": "FD15004",
+      "Type of WH": "fci",
+      "WH_Lat": "24.2012396",
+      "WH_Long": "92.54186875",
+      "Storage_Capacity": "626400",
+      "Owned/Rented": "",
+      "quantity of Wheat stored (Quintals)": ""
+    },
+    {
+      "State Name": "",
+      "WH_District": "Lawngtlai",
+      "WH_Name": "Fd15007",
+      "WH_ID": "FD15007",
+      "Type of WH": "fci",
+      "WH_Lat": "22.52471726",
+      "WH_Long": "92.91176285",
+      "Storage_Capacity": "417600",
+      "Owned/Rented": "",
+      "quantity of Wheat stored (Quintals)": ""
     }
   ],
   "fps": [

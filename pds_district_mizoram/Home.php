@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require('util/Connection.php');
 require('util/SessionCheck.php');
 require('Header.php');
@@ -281,6 +281,7 @@ if($currentTimestamp >= $targetTimestamp) {
 												<th style="font-size:16px">District Reason for not Approve</th>
 												<th style="font-size:16px">District Suggested Warehouse Distance (Km)</th>
 												<th style="font-size:16px">Admin Approved</th>										
+												<th class="csp-style-dd7e28" style="font-size:16px">Action</th>
                                             </tr>
                                         </thead>
 										<tbody id="table_body">
@@ -399,6 +400,51 @@ if($currentTimestamp >= $targetTimestamp) {
 
 			document.body.appendChild(form);
 			form.submit();
+		}
+
+		function saveRowData(uniqueid) {
+			var params = {};
+			
+			// Extract modified fields
+			var uniqueid_bool = uniqueid + "_bool";
+			if (modifiedData.hasOwnProperty(uniqueid_bool)) params[uniqueid_bool] = modifiedData[uniqueid_bool];
+			
+			if (modifiedData.hasOwnProperty(uniqueid)) params[uniqueid] = modifiedData[uniqueid];
+			if (typeof modifiedIdData !== 'undefined' && modifiedIdData.hasOwnProperty(uniqueid)) params[uniqueid] = modifiedIdData[uniqueid];
+			
+			var idreason = uniqueid + "_idreason";
+			if (modifiedReasonData.hasOwnProperty(idreason)) params[idreason] = modifiedReasonData[idreason];
+			
+			var iddistance = uniqueid + "_iddistance";
+			if (modifiedDistanceData.hasOwnProperty(iddistance)) params[iddistance] = modifiedDistanceData[iddistance];
+
+			var idapprove = uniqueid + "_approve";
+			if (typeof modifiedApproveData !== 'undefined' && modifiedApproveData.hasOwnProperty(idapprove)) params[idapprove] = modifiedApproveData[idapprove];
+
+			var value = params[uniqueid];
+			if (value && value != "yes" && value != "" && value != "same" && value != "no") {
+				if (!params.hasOwnProperty(idreason)) {
+					alert("New Id " + String(value) + " Reason needs to be selected");
+					return;
+				}
+				if (!params.hasOwnProperty(iddistance)) {
+					alert("New Id " + String(value) + " distance needs to be filled");
+					return;
+				}
+			}
+
+			if (Object.keys(params).length === 0) {
+				alert("No changes to save for this row.");
+				return;
+			}
+			
+			post(params, "api/SaveRow.php");
+		}
+
+		function resetRowData(uniqueid) {
+			var params = {};
+			params[uniqueid] = "reset";
+			post(params, "api/ResetRow.php");
 		}
 		
 		function enableDisable(selectedId){
@@ -722,6 +768,9 @@ if($currentTimestamp >= $targetTimestamp) {
 									else if(approve_admin==""){
 										var admin_approve = "<td><button class='btn btn-warning'>Pending</button></td>";
 									}
+									else {
+										var admin_approve = "<td></td>";
+									}
 									
 									if(approve_district=="yes"){
 										var warehouse_id_part = "<td><button class='btn btn-info'>Reviewed</button></td><td>" + newid_district + "</td>";
@@ -748,7 +797,11 @@ if($currentTimestamp >= $targetTimestamp) {
 										var district_reason = "<td><select class='form-control' onchange='handleReasonChange(\"" + uniqueid_idreason + "\")' id='" + uniqueid_idreason + "' name='" + uniqueid_idreason + "' disabled><option value=''>Select</option><option value='Road not accessible'>Road not accessible</option><option value='Road repair going on'>Road repair going on</option><option value='Pertaining to Distance'>Pertaining to Distance</option></select></td>";
 									}
 									
-									$('#table_body').append(subpart1 + warehouse_id_part + district_reason + newdistance  + admin_approve + "</tr>");
+									var is_admin_approved = (approve_admin == "yes");
+									var reset_disabled = is_admin_approved ? "disabled" : "";
+									var action_col = "<td><button class='btn btn-success' style='margin-bottom:5px;' data-csp-click=\"saveRowData('" + uniqueid + "')\">Save</button><br><button class='btn btn-danger' data-csp-click=\"resetRowData('" + uniqueid + "')\" " + reset_disabled + ">Reset</button></td>";
+									
+									$('#table_body').append(subpart1 + warehouse_id_part + district_reason + newdistance  + admin_approve + action_col + "</tr>");
 								}
 							}
 							//fetchCardDataFromServer();							

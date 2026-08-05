@@ -25,7 +25,7 @@ if(isset($_SESSION['user'])){
 	$numrows = mysqli_num_rows($result);
 	
 	if($numrows==0){
-		header("Location:AdminLogin.html");
+		header("Location:/OS_OD_Mizoram/pds_admin_mizoram/AdminLogin.html");
 		exit();
 	}
 	$currentLoginTime = date("Y-m-d H:i:s");
@@ -34,7 +34,7 @@ if(isset($_SESSION['user'])){
 	
 }
 else{
-	header("Location:AdminLogin.html");
+	header("Location:/OS_OD_Mizoram/pds_admin_mizoram/AdminLogin.html");
 }
 
 ?>
