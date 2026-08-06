@@ -22,15 +22,20 @@ if (isset($_GET['format'])) {
 	$result = mysqli_query($con,$query);
 	$numrow = mysqli_num_rows($result);
 	$id = "";
+	$rolled_out = "0";
 	if($numrow>0){
 		$row = mysqli_fetch_assoc($result);
 		$id = $row['id'];
+		$rolled_out = isset($row['rolled_out']) ? $row['rolled_out'] : "0";
 	}
 
-	$tablename = "optimiseddata_".$id;
-    $query = "SELECT * FROM ".$tablename." WHERE to_district='$district'";
-    $result = mysqli_query($con,$query);
-    $numrows = mysqli_num_rows($result);
+	$numrows = 0;
+	if($rolled_out == '1' && !empty($id)){
+		$tablename = "optimiseddata_".$id;
+		$query = "SELECT * FROM ".$tablename." WHERE to_district='$district'";
+		$result = mysqli_query($con,$query);
+		if($result) $numrows = mysqli_num_rows($result);
+	}
     $tableData = array();
     $tableData_pdf = array();
     array_push($tableData,$columns);

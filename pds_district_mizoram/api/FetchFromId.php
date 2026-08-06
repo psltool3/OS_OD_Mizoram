@@ -12,9 +12,16 @@ $query = "SELECT * FROM optimised_table ORDER BY last_updated DESC LIMIT 1";
 $result = mysqli_query($con,$query);
 $numrow = mysqli_num_rows($result);
 $id = "";
+$rolled_out = "0";
 if($numrow>0){
 	$row = mysqli_fetch_assoc($result);
 	$id = $row['id'];
+	$rolled_out = isset($row['rolled_out']) ? $row['rolled_out'] : "0";
+}
+
+if ($rolled_out != '1' || empty($id)) {
+	echo json_encode(array());
+	exit();
 }
 
 $tablename = "optimiseddata_".$id;

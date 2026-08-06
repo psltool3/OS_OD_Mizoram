@@ -20,12 +20,12 @@ if($numrows>0){
 	$status = $row['active'];
 	if($status==0){
 		$query = "UPDATE fps SET active='1' WHERE type='Normal FPS'";
-		writeLog("User ->" ." Normal FPS Active -> ". $_SESSION['user'] . "| " . $fpsname);
+		writeLog("User ->" ." All Normal FPS Active -> ". $_SESSION['user']);
 		mysqli_query($con,$query);
 	}
 	else{
 		$query = "UPDATE fps SET active='0' WHERE type='Normal FPS'";
-		writeLog("User ->" ." Normal FPS InActive -> ". $_SESSION['user'] . "| " . $fpsname);
+		writeLog("User ->" ." All Normal FPS InActive -> ". $_SESSION['user']);
 		mysqli_query($con,$query);
 	}
 }

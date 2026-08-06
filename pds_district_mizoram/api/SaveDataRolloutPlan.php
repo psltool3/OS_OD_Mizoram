@@ -10,9 +10,16 @@ $query = "SELECT * FROM optimised_table ORDER BY last_updated DESC LIMIT 1";
 $result = mysqli_query($con,$query);
 $response = array();
 $id = "";
+$rolled_out = "0";
 while($row = mysqli_fetch_array($result))
 {
 	$id= $row["id"];
+	$rolled_out = isset($row["rolled_out"]) ? $row["rolled_out"] : "0";
+}
+
+if ($rolled_out != '1' || empty($id)) {
+	echo "<script>window.location.href = '../RolloutPlan.php';</script>";
+	exit();
 }
 
 

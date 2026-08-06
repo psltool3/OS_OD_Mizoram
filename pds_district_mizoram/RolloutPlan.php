@@ -8,29 +8,37 @@ $query = "SELECT * FROM optimised_table ORDER BY last_updated DESC LIMIT 1";
 $result = mysqli_query($con,$query);
 $response = array();
 $id = "";
+$rolled_out = "0";
 while($row = mysqli_fetch_array($result))
 {
 	$id= $row["id"];
+	$rolled_out = isset($row["rolled_out"]) ? $row["rolled_out"] : "0";
 }
 
+$totalids = 0;
+$totalidsreviewed = 0;
+$totalidsrequested = 0;
+$totalidsapproved = 0;
 
-$tablename = "optimiseddata_".$id;
+if($rolled_out == '1' && !empty($id)){
+	$tablename = "optimiseddata_".$id;
 
-$query = "SELECT from_district FROM " . $tablename . " WHERE 1";
-$result = mysqli_query($con,$query);
-$totalids = mysqli_num_rows($result);
+	$query = "SELECT from_district FROM " . $tablename . " WHERE 1";
+	$result = mysqli_query($con,$query);
+	if($result) $totalids = mysqli_num_rows($result);
 
-$query = "SELECT approve_district FROM " . $tablename . " WHERE approve_district='yes'";
-$result = mysqli_query($con,$query);
-$totalidsreviewed = mysqli_num_rows($result);
+	$query = "SELECT approve_district FROM " . $tablename . " WHERE approve_district='yes'";
+	$result = mysqli_query($con,$query);
+	if($result) $totalidsreviewed = mysqli_num_rows($result);
 
-$query = "SELECT new_id_district FROM " . $tablename . " WHERE new_id_district<>''";
-$result = mysqli_query($con,$query);
-$totalidsrequested = mysqli_num_rows($result);
+	$query = "SELECT new_id_district FROM " . $tablename . " WHERE new_id_district<>''";
+	$result = mysqli_query($con,$query);
+	if($result) $totalidsrequested = mysqli_num_rows($result);
 
-$query = "SELECT approve_admin FROM " . $tablename . " WHERE approve_admin='yes'";
-$result = mysqli_query($con,$query);
-$totalidsapproved = mysqli_num_rows($result);
+	$query = "SELECT approve_admin FROM " . $tablename . " WHERE approve_admin='yes'";
+	$result = mysqli_query($con,$query);
+	if($result) $totalidsapproved = mysqli_num_rows($result);
+}
 							
 ?>
 <style>
@@ -114,6 +122,14 @@ $totalidsapproved = mysqli_num_rows($result);
                             <div class="panel panel-default">
 								<div class="panel-heading">
                                     <h3 class="panel-title" id="mainheading_big"></h3>
+									</br></br>
+									<?php if($rolled_out=='1'){
+											echo "<center><h3 style='color:green'>Plan already rolled out for district verification</h3></center>";
+										}
+										else{
+											echo "<center><h3 style='color:red'>Plan yet to be rolled out to districts</h3></center>";
+										}
+									?>
                                 </div>
                             </div>
 							<div class="row">
@@ -169,7 +185,9 @@ $totalidsapproved = mysqli_num_rows($result);
 									<button id="downloadPDF" class="btn btn-danger" style="margin-bottom: 10px;" type="button">Download PDF</button>
 								</div>
 								</br></br>
+								<?php if($rolled_out == '1'){ ?>
 								<button class='btn btn-info pull-right' onClick='acceptAll()' type='button' style='margin-left:10px;'>Accept All</button><button class='btn btn-primary pull-right' onClick='sendData()' type='button'>Save</button>
+								<?php } ?>
 								</br></br>
 								<div class="table-container">
                                     <table id="export_table" class="table" >

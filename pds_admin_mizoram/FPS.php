@@ -49,7 +49,7 @@ require('Header.php');
 								<div>
 								</br></br></br>
                                 <a href="api/SmartFPSStatus.php" style="float:right;margin-top:10px;margin-right:13px"><button type="button" class="btn btn-warning">Model FPS Status Change</button></a>
-								<a href="api/NonSmartFPSStatus.php" style="float:right;margin-top:10px;margin-right:13px"><button type="button" class="btn btn-info">Non Smart FPS Status Change</button></a>
+								<a href="api/NonSmartFPSStatus.php" style="float:right;margin-top:10px;margin-right:13px"><button type="button" class="btn btn-info">Normal FPS Status Change</button></a>
 								</div>
 								<div class="row" style="margin-top:60px">
 									<div class="col-md-8">
