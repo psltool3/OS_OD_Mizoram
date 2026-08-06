@@ -2,6 +2,9 @@
 require('../util/Connection.php');
 require('../util/SessionFunction.php');
 require('../structures/Login.php');
+require('../util/Security.php');
+require('../util/Encryption.php');
+$nonceValue = 'nonce_value';
 
 if(!SessionCheck()){
 	return;
@@ -11,7 +14,8 @@ require('Header.php');
 
 $person = new Login;
 $person->setUsername($_POST["username"]);
-$person->setPassword($_POST["password"]);
+$Encryption = new Encryption();
+$person->setPassword($Encryption->decrypt($_POST["password"], $nonceValue));
 
 if($_SESSION['user']!=$person->getUsername()){
 	echo "User is logged in with different username and password";

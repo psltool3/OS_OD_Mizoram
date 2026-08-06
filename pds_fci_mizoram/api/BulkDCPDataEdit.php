@@ -95,8 +95,8 @@ try{
 						$redirect = 0;
 					}
 
-					if(!isStringNumber($column[$demand])){
-						echo "Error : Check Demand Value: ".$column[$demand];
+					if(!isStringNumber($column[$demand]) || floatval($column[$demand]) < 0){
+						echo "Error : Check Demand Value (must be greater than or equal to 0): ".$column[$demand];
 						echo "</br>";
 						$redirect = 0;
 					}	

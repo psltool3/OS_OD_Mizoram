@@ -81,7 +81,7 @@ require('Header.php');
 												<th style="font-size:16px">District</th>
 												<th style="font-size:16px">Name of FPS</th>
 												<th style="font-size:16px">FPS ID</th>
-												<th style="font-size:16px">Smart FPS/Non Smart FPS</th>
+												<th style="font-size:16px">Model FPS/Normal FPS</th>
 												<th style="font-size:16px">Latitude</th>
 												<th style="font-size:16px">Longitude</th>
 												<th style="font-size:16px">Demand of FRice (Qtl)</th>

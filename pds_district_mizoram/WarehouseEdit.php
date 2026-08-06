@@ -314,6 +314,15 @@ else{
                 alert('Please enter all fields');
                 return false;
             }
+            if (isNaN(Number(storage)) || Number(storage) < 0) {
+                alert('Storage Capacity must be a valid number greater than or equal to 0');
+                return false;
+            }
+            var idRegex = /^[A-Za-z0-9]+$/;
+            if (!idRegex.test(id)) {
+                alert('Warehouse ID must contain only letters and numbers (no spaces or special characters)');
+                return false;
+            }
 			
             document.getElementById('popup').style.display = 'block';
         }

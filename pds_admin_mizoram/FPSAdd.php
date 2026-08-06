@@ -110,7 +110,7 @@ require('Header.php');
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="text" class="form-control" id="id" name="id" required />
+                                                        <input type="text" class="form-control" id="id" name="id" pattern="[A-Za-z0-9]+" title="Only letters and numbers allowed" required />
                                                     </div>
                                                     <span class="help-block">FPS ID</span>
                                                 </div>
@@ -231,6 +231,15 @@ require('Header.php');
 
             if (name === '' || type === '' || latitude === '' || longitude === '' || id === '' || demand === '' || district === '') {
                 alert('Please enter all fields');
+                return false;
+            }
+            if (isNaN(Number(demand)) || Number(demand) < 0) {
+                alert('Demand must be a valid number greater than or equal to 0');
+                return false;
+            }
+            var idRegex = /^[A-Za-z0-9]+$/;
+            if (!idRegex.test(id)) {
+                alert('FPS ID must contain only letters and numbers (no spaces or special characters)');
                 return false;
             }
 			

@@ -20,8 +20,8 @@ require('Header.php');
 
 $person = new Login;
 $person->setUsername($_POST["username"]);
-$person->setPassword$Encryption = new Encryption();
-$person->setPassword($Encryption->decrypt($_POST["password"], $nonceValue));($_POST["password"]);
+$Encryption = new Encryption();
+$person->setPassword($Encryption->decrypt($_POST["password"], $nonceValue));
 
 if($_SESSION['district_user']!=$person->getUsername()){
 	echo "User is logged in with different username and password";

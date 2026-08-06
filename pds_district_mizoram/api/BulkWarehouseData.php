@@ -108,8 +108,8 @@ if(password_verify($person->getPassword(), $dbHashedPassword)){
 						echo "</br>";
 						$redirect = 0;
 					}
-					if(!isStringNumber($column[$storage])){
-						echo "Error : Check Storage Value: ".$column[$storage];
+					if(!isStringNumber($column[$storage]) || floatval($column[$storage]) < 0){
+						echo "Error : Check Storage Value (must be greater than or equal to 0): ".$column[$storage];
 						echo "</br>";
 						$redirect = 0;
 					}

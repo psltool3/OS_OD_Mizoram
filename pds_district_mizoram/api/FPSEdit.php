@@ -62,8 +62,24 @@ if(!isValidCoordinate($_POST["latitude"],'latitude') or !isValidCoordinate($_POS
 	exit();
 }
 
-if(!isStringNumber($_POST["demand"])){
-	echo "Error : Check Demand Value";
+if (!is_numeric($_POST["latitude"]) || floatval($_POST["latitude"]) >= 40) {
+	echo "Error : Latitude must be less than 40. Given: " . $_POST["latitude"];
+	exit();
+}
+
+// Longitude check (must be more than 65)
+if (!is_numeric($_POST["longitude"]) || floatval($_POST["longitude"]) <= 65) {
+	echo "Error : Longitude must be more than 65. Given: " . $_POST["longitude"];
+	exit();
+}
+
+if(!isStringNumber($_POST["demand"]) || floatval($_POST["demand"]) < 0){
+	echo "Error : Check Demand Value (must be greater than or equal to 0)";
+	exit();
+}
+
+if(!preg_match('/^[A-Za-z0-9]+$/', $_POST["id"])){
+	echo "Error : FPS ID must contain only letters and numbers (no spaces or special characters)";
 	exit();
 }
 
