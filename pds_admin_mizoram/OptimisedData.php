@@ -789,7 +789,7 @@ while($row = mysqli_fetch_array($result))
 									var newid_admin_part = "<td><select class='form-control' onchange='handleNewIdChange(\"" + uniqueid + "\")' id='" + uniqueid + "' name='" + uniqueid + "' disabled required><option value=''>Select Id</option>" + warehousepart + "</select></td>";
 								}
 								if(approve_district==""){
-									var action_col = "<td><button class='btn btn-success' style='margin-bottom:5px;' data-csp-click=\"saveRowData('" + uniqueid + "')\">Save</button><br><button class='btn btn-danger' data-csp-click=\"resetRowData('" + uniqueid + "')\">Reset</button></td>";
+									var action_col = "<td><button class='btn btn-success' style='margin-bottom:5px;' onclick=\"saveRowData('" + uniqueid + "')\">Save</button><br><button class='btn btn-danger' onclick=\"resetRowData('" + uniqueid + "')\">Reset</button></td>";
 									subpart1 = subpart1 + "<td>" + newid_district + "</td><td>" + reason_district + "</td><td>" + distance_district  + approve_district_part + "</td><td></td><td></td><td></td><td></td>" + action_col + "</tr>";
 								}
 								else{
@@ -803,7 +803,7 @@ while($row = mysqli_fetch_array($result))
 										var approve_admin_part = "<td><select class='form-control' onchange='enableDisable(\"" + uniqueid + "\")' id='" + uniqueid_bool + "' name='" + uniqueid_bool + "' required><option value=''>Select</option><option value='yes'>Approve District</option><option value='same'>Keep System Generated</option><option value='no'>Change ID</option></select></td>";
 										uniqueid_array.push(uniqueid_bool);
 									}
-									var action_col = "<td><button class='btn btn-success' style='margin-bottom:5px;' data-csp-click=\"saveRowData('" + uniqueid + "')\">Save</button><br><button class='btn btn-danger' data-csp-click=\"resetRowData('" + uniqueid + "')\">Reset</button></td>";
+									var action_col = "<td><button class='btn btn-success' style='margin-bottom:5px;' onclick=\"saveRowData('" + uniqueid + "')\">Save</button><br><button class='btn btn-danger' onclick=\"resetRowData('" + uniqueid + "')\">Reset</button></td>";
 									subpart1 = subpart1 + "<td>" + newid_district + "</td><td>" + reason_district + "</td><td>" + distance_district + approve_district_part + approve_admin_part + admin_reason + newid_admin_part + distance_admin_part + action_col + "</tr>";
 								}
 								$('#table_body').append(subpart1);

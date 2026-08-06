@@ -771,7 +771,7 @@ if($currentTimestamp >= $targetTimestamp) {
 									var admin_reason = "<td><select class='form-control' onchange='handleReasonChange(\"" + uniqueid_idreason + "\")' id='" + uniqueid_idreason + "' name='" + uniqueid_idreason + "' disabled><option value=''>Select</option><option value='Road not accessible'>Road not accessible</option><option value='Road repair going on'>Road repair going on</option><option value='Pertaining to Distance'>Pertaining to Distance</option></select></td>";
 								}
 								
-								var action_col = "<td><button class='btn btn-success' style='margin-bottom:5px;' data-csp-click=\"saveRowData('" + uniqueid + "')\">Save</button><br><button class='btn btn-danger' data-csp-click=\"resetRowData('" + uniqueid + "')\">Reset</button></td>";
+								var action_col = "<td><button class='btn btn-success' style='margin-bottom:5px;' onclick=\"saveRowData('" + uniqueid + "')\">Save</button><br><button class='btn btn-danger' onclick=\"resetRowData('" + uniqueid + "')\">Reset</button></td>";
 								
 								$('#table_body').append(subpart1 + warehouse_id_part + admin_reason + newdistance  + admin_approve + action_col + "</tr>");
 							}

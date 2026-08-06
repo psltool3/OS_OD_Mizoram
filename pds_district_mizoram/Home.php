@@ -816,7 +816,7 @@ if($currentTimestamp >= $targetTimestamp) {
 									
 									var is_admin_approved = (approve_admin == "yes");
 									var reset_disabled = is_admin_approved ? "disabled" : "";
-									var action_col = "<td><button class='btn btn-success' style='margin-bottom:5px;' data-csp-click=\"saveRowData('" + uniqueid + "')\">Save</button><br><button class='btn btn-danger' data-csp-click=\"resetRowData('" + uniqueid + "')\" " + reset_disabled + ">Reset</button></td>";
+									var action_col = "<td><button class='btn btn-success' style='margin-bottom:5px;' onclick=\"saveRowData('" + uniqueid + "')\">Save</button><br><button class='btn btn-danger' onclick=\"resetRowData('" + uniqueid + "')\" " + reset_disabled + ">Reset</button></td>";
 									
 									$('#table_body').append(subpart1 + warehouse_id_part + district_reason + newdistance  + admin_approve + action_col + "</tr>");
 								}
