@@ -78,6 +78,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
 				</li>
 				
 				
+				<li <?php echo ($current_page === 'OptimisedDataLeg1.php') ? 'class="active"' : ''; ?>>
+					<a href="OptimisedDataLeg1.php" style="padding-left:0px"><span class="xn-text" style="font-family:sans-serif;font-weight:italic;font-size:16px;">Optimised Data Leg1</span></a>
+				</li>
 				<li>
 					<a style="background-color:#FFC167"><center><span class="xn-text" style="font-family:sans-serif;font-weight:italic;font-size:16px;">Edit PDS Details</span></center></a>
 				</li>
