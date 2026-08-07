@@ -106,13 +106,15 @@ if (isset($_GET['format'])) {
 	}
 
 	$tablename = "optimiseddata_leg1_".$id;
-	$query = "SELECT * FROM ".$tablename." WHERE 1";
 	
-	if($district!="" and $district!="all"){
-		$query = "SELECT * FROM ".$tablename." WHERE to_district='$district'";
-	}
-	
-    $result = mysqli_query($con,$query);
+	if($id != ""){
+		$query = "SELECT * FROM ".$tablename." WHERE 1";
+		
+		if($district!="" and $district!="all"){
+			$query = "SELECT * FROM ".$tablename." WHERE to_district='$district'";
+		}
+		
+		$result = mysqli_query($con,$query);
     $numrows = mysqli_num_rows($result);
     
     if($numrows>0){
@@ -132,7 +134,7 @@ if (isset($_GET['format'])) {
 				$row["from_name"] = $row['new_name_admin'];
 				$row["distance"] = $row['new_distance_admin'];
 			}
-			else if(($row['new_id_district']!=null or $row['new_id_district']!="") and $row['admin_approve']=="yes"){
+			else if(($row['new_id_district']!=null or $row['new_id_district']!="") and (isset($row['admin_approve']) && $row['admin_approve']=="yes")){
 				$id = $row['new_id_district'];
 				$query_warehouse = "SELECT latitude,longitude,district FROM warehouse_leg1_".$id." WHERE id='$id'";
 				$result_warehouse = mysqli_query($con,$query_warehouse);
@@ -159,6 +161,7 @@ if (isset($_GET['format'])) {
             array_push($tableData_pdf,$temp_pdf);
         }
     }
+	} // end if($id != "")
     
     // Filename for the downloaded file
     $filename = 'table_data';

@@ -5,7 +5,11 @@ require('../util/Connection.php');
 $district = $_POST['district'];
 $tablename = $_POST['tablename'];
 
-$query = "SELECT * FROM ".$tablename." WHERE district='$district'";
+if($district === 'all'){
+	$query = "SELECT * FROM ".$tablename;
+} else {
+	$query = "SELECT * FROM ".$tablename." WHERE district='$district'";
+}
 $result = mysqli_query($con,$query);
 $numrows = mysqli_num_rows($result);
 $data = null;

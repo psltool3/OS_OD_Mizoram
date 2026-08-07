@@ -189,7 +189,7 @@ $tablename = "fps_".$id;
 			if(district==""){
 				var options = districtElement.options;
 				for (var i = 0; i < options.length; i++) {
-					if (options[i].value != "all" && options[i].value != "") {
+					if (options[i].value != "") {
 						districtElement.selectedIndex = i;
 						district = options[i].value ;
 						break;

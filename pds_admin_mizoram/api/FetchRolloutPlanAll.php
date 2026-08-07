@@ -357,12 +357,12 @@ if ($result && $result->num_rows > 0) {
 }
 
 
-$resultarray["DemandTotal"] = $resultarray["tableleg1"]["Demand"] + $resultarray["table"]["Demand"];
-$resultarray["Total_QKMTotal"] = $resultarray["tableleg1"]["Total_QKM"] + $resultarray["table"]["Total_QKM"];
-$resultarray["Average_Distance_OptimisedTotal"] = $resultarray["Total_QKMTotal"]/ $resultarray["DemandTotal"];
+$resultarray["DemandTotal"] = ($resultarray["tableleg1"]["Demand"] ?? 0) + ($resultarray["table"]["Demand"] ?? 0);
+$resultarray["Total_QKMTotal"] = ($resultarray["tableleg1"]["Total_QKM"] ?? 0) + ($resultarray["table"]["Total_QKM"] ?? 0);
+$resultarray["Average_Distance_OptimisedTotal"] = $resultarray["DemandTotal"] != 0 ? $resultarray["Total_QKMTotal"] / $resultarray["DemandTotal"] : 0;
 $resultarray["Reduction_OptimisedTotal"] = ((93.3-$resultarray["Average_Distance_OptimisedTotal"])/93.3)*100;
 $resultarray["Baseline_OptimisedTotal"] = 1245637;
-$resultarray["DistanceTotal"] =  $resultarray["tableleg1"]["Distance"] + $resultarray["table"]["Distance"];
+$resultarray["DistanceTotal"] = ($resultarray["tableleg1"]["Distance"] ?? 0) + ($resultarray["table"]["Distance"] ?? 0);
 
 
 echo json_encode($resultarray);

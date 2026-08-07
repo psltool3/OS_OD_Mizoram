@@ -13,6 +13,11 @@ $query = "SELECT * FROM districts ORDER BY name";
 $result = mysqli_query($con,$query);
 $numrows = mysqli_num_rows($result);
 
+echo 'var optionAll = document.createElement("option");';
+echo 'optionAll.text = "All";';
+echo 'optionAll.value = "all";';
+echo 'x.add(optionAll);';
+
 while($row = mysqli_fetch_assoc($result)){
 	echo 'var option = document.createElement("option");';
 	echo 'option.text = "'.$row['name'].'";';
