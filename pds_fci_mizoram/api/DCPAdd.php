@@ -16,7 +16,7 @@ require('Header.php');
 
 function formatName($name) {
 	$name = preg_replace('/[^a-zA-Z0-9_ ]/', '', $name);
-    $name = ucwords(strtolower($name));
+    $name = strtoupper($name);
     return trim($name);
 }
 
@@ -103,7 +103,7 @@ $uniqueid = uniqid("DCP_",);
 
 $DCP = new DCP;
 $DCP->setUniqueid(substr($uniqueid,0,15));
-$DCP->setDistrict(ucwords(strtolower($district)));
+$DCP->setDistrict(strtoupper($district));
 $DCP->setLatitude($latitude);
 $DCP->setLongitude($longitude);
 $DCP->setName($name);

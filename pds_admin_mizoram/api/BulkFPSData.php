@@ -51,7 +51,7 @@ if($numrows>0){
 
 function formatName($name) {
 	$name = preg_replace('/[^a-zA-Z0-9_ ]/', '', $name);
-    $name = ucwords(strtolower($name));
+    $name = strtoupper($name);
     return trim($name);
 }
 
@@ -118,7 +118,7 @@ if(password_verify($person->getPassword(), $dbHashedPassword)){
 						echo "</br>";
 						$redirect = 0;
 					}
-					if(!in_array($column[$district], $districts)){
+					if(!in_array(strtoupper(trim($column[$district])), $districts)){
 						echo "Error : Check District Name: ".$column[$district];
 						echo "</br>";
 						$redirect = 0;
@@ -216,7 +216,7 @@ if(password_verify($person->getPassword(), $dbHashedPassword)){
 						$FPS = new FPS;
 						$uniqueid = uniqid("FPS_",);
 						$FPS->setUniqueid(substr($uniqueid,0,15));
-						$FPS->setDistrict(ucwords(strtolower($column[$district])));
+						$FPS->setDistrict(strtoupper(trim($column[$district])));
 						$FPS->setLatitude($column[$latitude]);
 						$FPS->setLongitude($column[$longitude]);
 						$FPS->setName($column[$name]);

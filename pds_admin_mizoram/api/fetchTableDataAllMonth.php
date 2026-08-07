@@ -30,7 +30,7 @@ while($row = mysqli_fetch_array($result))
 	}
 }
 if(count($response)==0){
-	$message = "First optimized the leg2 for this month";
+	$message = "First optimized the leg2 for this month or previous month";
 }
 $response_data["data"] = $response;
 $response_data["message"] = $message;

@@ -18,7 +18,7 @@ require('Header.php');
 
 function formatName($name) {
 	$name = preg_replace('/[^a-zA-Z0-9_ ]/', '', $name);
-    $name = ucwords(strtolower($name));
+    $name = strtoupper($name);
     return trim($name);
 }
 

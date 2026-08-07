@@ -33,7 +33,7 @@ if($numrows>0){
 
 function formatName($name) {
 	$name = preg_replace('/[^a-zA-Z0-9_ ]/', '', $name);
-    $name = ucwords(strtolower($name));
+    $name = strtoupper($name);
     return trim($name);
 }
 
@@ -93,7 +93,7 @@ try{
 					$redirect = 0;
 				}
 
-				if(!in_array($column[$district], $districts)){
+				if(!in_array(strtoupper(trim($column[$district])), $districts)){
 					echo "Error : Check District Name: ".$column[$district];
 					echo "</br>";
 					$redirect = 0;
@@ -192,7 +192,7 @@ try{
 					$DCP = new DCP;
 					$uniqueid = uniqid("DCP_",);
 					$DCP->setUniqueid(substr($uniqueid,0,15));
-					$DCP->setDistrict(ucwords(strtolower($column[$district])));
+					$DCP->setDistrict(strtoupper(trim($column[$district])));
 					$DCP->setLatitude($column[$latitude]);
 					$DCP->setLongitude($column[$longitude]);
 					$DCP->setName($column[$name]);

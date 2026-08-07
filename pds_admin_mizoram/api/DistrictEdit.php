@@ -24,7 +24,7 @@ function formatName($name) {
         echo "Error : Name contains invalid characters. Only letters and spaces are allowed.";
 		exit();
     }
-    $name = ucwords(strtolower($name));
+    $name = strtoupper($name);
     return trim($name);
 }
 
