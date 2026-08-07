@@ -1,7 +1,2 @@
-*.log
-*.xlsx
-*.csv
-*.rar
-*.zip
 logs/
 *.exe
