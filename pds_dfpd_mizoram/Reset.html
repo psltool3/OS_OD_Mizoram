@@ -8,6 +8,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         
 		<meta name="theme-color" content="#ffffff">
+		<script src="crypto-js/crypto-js.js"></script>
+		<script src="js/Encryption.js"></script>
         <!-- END META SECTION -->
         
         <!-- CSS INCLUDE -->        
@@ -29,6 +31,19 @@
 		function verifyCaptcha() {
 			const usr_input = document.getElementById("captchainput").value;
 			if (usr_input == captcha.innerHTML) {
+				var readableString = document.getElementById("oldpassword").value;
+				var readableString1 = document.getElementById("newpassword").value;
+				var readableString2 = document.getElementById("confirmpassword").value;
+				var nonceValue = "nonce_value";
+
+				let encryption = new Encryption();
+				var encrypted = encryption.encrypt(readableString, nonceValue);
+				var encrypted1 = encryption.encrypt(readableString1, nonceValue);
+				var encrypted2 = encryption.encrypt(readableString2, nonceValue);
+				document.getElementById("oldpassword").value = encrypted;
+				document.getElementById("newpassword").value = encrypted1;
+				document.getElementById("confirmpassword").value = encrypted2;
+
 				return true;
 			}
 			else {
@@ -61,7 +76,7 @@
             <div class="login-box animated fadeInDown">
 			     <div class="login-body">
                     <div class="login-title"><strong>Welcome</strong>, Reset Password</div>
-                    <form action="api/Reset.php" class="form-horizontal" method="post" autocomplete="off">
+                    <form action="api/Reset.php" class="form-horizontal" method="post" autocomplete="off" onsubmit="return verifyCaptcha()">
 					<div class="form-group">
                         <div class="col-md-12">
                             <input type="text" id="username" name="username" class="form-control" placeholder="Username"/>

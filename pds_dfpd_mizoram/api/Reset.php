@@ -1,44 +1,77 @@
 <?php
 require('../util/Connection.php');
-require('../structures/Login.php');
+require('../util/Encryption.php');
 
-require('Header.php');
+session_start();
 
-$newpassword = $_POST['newpassword'];
-$confirmpassword = $_POST['confirmpassword'];
+$nonceValue = 'nonce_value';
+$Encryption = new Encryption();
 
-if($newpassword=="" || $confirmpassword==""){
-	echo "Error : Password is Empty";
+$username = $_POST['username'];
+$oldpassword = $Encryption->decrypt($_POST["oldpassword"], $nonceValue);
+$newpassword = $Encryption->decrypt($_POST["newpassword"], $nonceValue);
+$confirmpassword = $Encryption->decrypt($_POST["confirmpassword"], $nonceValue);
+
+if(empty($newpassword) || empty($confirmpassword) || empty($username) || empty($oldpassword)){
+	echo "<script>alert('Error: All fields are required.'); window.history.back();</script>";
 	return;
 }
-if($newpassword!=$confirmpassword){
-	echo "Error : Both Password doesn't match";
-	return;
-}
-
-$person = new Login;
-$person->setUsername($_POST["username"]);
-$person->setPassword($_POST["oldpassword"]);
-
-if($_SESSION['user']!=$person->getUsername()){
-	echo "User is logged in with different username and password";
+if($newpassword !== $confirmpassword){
+	echo "<script>alert('Error: Both Passwords do not match.'); window.history.back();</script>";
 	return;
 }
 
-$query = "SELECT * FROM login WHERE username='".$person->getUsername()."' AND password='".$person->getPassword()."'";
-$result = mysqli_query($con,$query);
-$numrows = mysqli_num_rows($result);
-
-if($numrows == 0){
-	echo "Error : Old Password and username is incorrect";
+$pattern = '/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/';
+if (!preg_match($pattern, $newpassword)) {
+    echo "<script>alert('Error: Password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character.'); window.history.back();</script>";
+    return;
 }
-else if($numrows > 0){
-	$query1 = "UPDATE login SET password='$newpassword' WHERE 1";
-	mysqli_query($con,$query1);
 
-	mysqli_close($con);
-	echo "<script>window.location.href = '../Login.php';</script>";
+$query = "SELECT * FROM login WHERE username='$username'";
+$result = mysqli_query($con, $query);
+$row = mysqli_fetch_assoc($result);
 
+if (empty($row)) {
+    echo "<script>alert('Error: Invalid username or password.'); window.history.back();</script>";
+    return;
 }
+
+if ($row['role'] !== 'dfpd') {
+    echo "<script>alert('Error: Unauthorized role for this module.'); window.history.back();</script>";
+    return;
+}
+
+$dbHashedPassword = $row['password'];
+if (!password_verify($oldpassword, $dbHashedPassword)) {
+    echo "<script>alert('Error: Old password is incorrect.'); window.history.back();</script>";
+    return;
+}
+
+$historyQuery = "SELECT password_hash FROM password_history WHERE username='$username' ORDER BY changed_at DESC LIMIT 5";
+$historyResult = mysqli_query($con, $historyQuery);
+if ($historyResult) {
+    while ($historyRow = mysqli_fetch_assoc($historyResult)) {
+        if (password_verify($newpassword, $historyRow['password_hash'])) {
+            echo "<script>alert('Error: You cannot use any of your previous 5 passwords.'); window.history.back();</script>";
+            return;
+        }
+    }
+}
+
+$newHashedPassword = password_hash($newpassword, PASSWORD_DEFAULT);
+$updateQuery = "UPDATE login SET password='$newHashedPassword' WHERE username='$username'";
+mysqli_query($con, $updateQuery);
+
+$insertHistoryQuery = "INSERT INTO password_history (username, password_hash) VALUES ('$username', '$newHashedPassword')";
+mysqli_query($con, $insertHistoryQuery);
+
+$cleanupQuery = "DELETE FROM password_history WHERE username='$username' AND id NOT IN (
+    SELECT id FROM (
+        SELECT id FROM password_history WHERE username='$username' ORDER BY changed_at DESC LIMIT 5
+    ) temp
+)";
+mysqli_query($con, $cleanupQuery);
+
+mysqli_close($con);
+echo "<script>alert('Password reset successful. Please login with your new password.'); window.location.href = '../Login.html';</script>";
 ?>
-<?php require('Fullui.php');  ?>

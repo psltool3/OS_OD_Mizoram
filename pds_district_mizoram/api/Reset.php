@@ -49,10 +49,12 @@ if (!password_verify($oldpassword, $dbHashedPassword)) {
 
 $historyQuery = "SELECT password_hash FROM password_history WHERE username='$username' ORDER BY changed_at DESC LIMIT 5";
 $historyResult = mysqli_query($con, $historyQuery);
-while ($historyRow = mysqli_fetch_assoc($historyResult)) {
-    if (password_verify($newpassword, $historyRow['password_hash'])) {
-        echo "<script>alert('Error: You cannot use any of your previous 5 passwords.'); window.history.back();</script>";
-        return;
+if ($historyResult) {
+    while ($historyRow = mysqli_fetch_assoc($historyResult)) {
+        if (password_verify($newpassword, $historyRow['password_hash'])) {
+            echo "<script>alert('Error: You cannot use any of your previous 5 passwords.'); window.history.back();</script>";
+            return;
+        }
     }
 }
 
