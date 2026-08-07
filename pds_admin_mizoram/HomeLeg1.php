@@ -1470,7 +1470,7 @@ currentYearOption.textContent = currentYear;
 currentYearOption.style.fontWeight = "bold";
 currentYearOption.style.color = "#000";
 dropdown_year.appendChild(currentYearOption);
-currentYearOption.selected = false; 
+currentYearOption.selected = true; 
  
 const nextYearOption = document.createElement("option");
 nextYearOption.value = nextYear;
@@ -1478,7 +1478,7 @@ nextYearOption.textContent = nextYear;
 nextYearOption.style.fontWeight = "bold";
 nextYearOption.style.color = "#000";
 dropdown_year.appendChild(nextYearOption);
-nextYearOption.selected = true
+nextYearOption.selected = false;
 
 var dropdown = document.getElementById("month");
 var option = document.createElement('option');
@@ -1490,7 +1490,8 @@ dropdown.options[1].selected = true;
 fetchApplicableMonth(currentMonthValue);
 
 function fetchApplicableMonth(month){
-	var datastring = "month=" + month;
+	var year = document.getElementById('year').value;
+	var datastring = "month=" + month + "&year=" + year;
 	$.ajax({
 		type: "POST",
 		url: "api/fetchTableDataAllMonth.php",
@@ -1543,13 +1544,10 @@ document.getElementById('month').addEventListener('change', function() {
 	fetchApplicableMonth(selectedMonth);
 });
 
-var dropdown = document.getElementById('year');
-for (var i = 0; i < dropdown.options.length; i++) {
-    if (dropdown.options[i].value == currentYear) {
-        dropdown.options[i].selected = true;
-        break;
-    }
-}
+document.getElementById('year').addEventListener('change', function() {
+    var selectedMonth = document.getElementById('month').value;
+	fetchApplicableMonth(selectedMonth);
+});
 
 var dropdown = document.getElementById('type');
 var currentType = "inter"
