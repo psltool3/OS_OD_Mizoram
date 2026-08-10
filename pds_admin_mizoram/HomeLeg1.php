@@ -546,7 +546,7 @@ require('util/Logger.php');
 									<div class="card h-100"
 										style="background-color:#56A5FF; color:white; padding:12px; font-weight: bold;">
 										<div style="font-size:20px" id="total_warehouse"></div>
-										<div style="font-size:14px">Total Warehouse</div>
+										<div style="font-size:14px">Total FCI</div>
 									</div>
 								</div>
 								<div class="col-md-3 mb-4">
@@ -560,14 +560,14 @@ require('util/Logger.php');
 									<div class="card h-100"
 										style="background-color:#FFC167; color:white; padding:12px; font-weight: bold;">
 										<div style="font-size:20px" id="total_fps"></div>
-										<div style="font-size:14px">Total FPS Counts</div>
+										<div style="font-size:14px">Total Warehouse Counts</div>
 									</div>
 								</div>
 								<div class="col-md-3 mb-4">
 									<div class="card h-100"
 										style="background-color:#F96981; color:white; padding:12px; font-weight: bold;">
 										<div style="font-size:20px" id="total_demand"></div>
-										<div style="font-size:14px">Total FPS Demands (Qtl)</div>
+										<div style="font-size:14px">Total Warehouse Demands (Qtl)</div>
 									</div>
 								</div>
 								<div class="col-md-2 mb-4">
@@ -651,8 +651,8 @@ require('util/Logger.php');
 						<thead>
 							<tr>
 								<th>Scenario</th>
+								<th>FCI_Used</th>
 								<th>WH_Used</th>
-								<th>FPS_Used</th>
 								<th>Total_Allocation</th>
 								<th>Total_QKM</th>
 								<th>Average Distance</th>
@@ -761,7 +761,7 @@ require('util/Logger.php');
 		
 		var thead = document.createElement("thead");
 		var headerRow = document.createElement("tr");
-		var headers = ["Scenario", "WH_Used", "FPS_Used", "Total_Allocation", "Total_QKM", "Average Distance"];
+		var headers = ["Scenario", "FCI_Used", "WH_Used", "Total_Allocation", "Total_QKM", "Average Distance"];
 		headers.forEach(function(headerText) {
 			var th = document.createElement("th");
 			th.textContent = headerText;
