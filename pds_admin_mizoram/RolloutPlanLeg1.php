@@ -410,7 +410,12 @@ require('Header.php');
 	
 	function acceptAll(){
 		for (let i = 0; i < uniqueid_bool_array.length; i++) {
-			markReview(uniqueid_bool_array[i]);
+			var selectedId = uniqueid_bool_array[i];
+			modifiedIdData[selectedId] = "yes";
+			var elements = document.querySelectorAll('[id="' + selectedId + '"]');
+			elements.forEach(function(el) {
+				el.className = "btn btn-danger";
+			});
 		}
 	}
 
@@ -457,6 +462,7 @@ require('Header.php');
 				timeout: 59000,
 				success: function(result){
 					$('#table_body').empty();
+					uniqueid_bool_array = [];
 					try{
 						var resultarray = JSON.parse(result);
 						var obj = resultarray["data"];

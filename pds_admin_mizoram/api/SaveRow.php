@@ -31,7 +31,7 @@ foreach ($_POST as $key => $value) {
 		$commodity = $parts[2];
 		$toid = str_replace('_', '.', $toid);
 		$commodity = str_replace('_', '.', $commodity);
-		$commodity = str_replace('.bool', '', $commodity);
+		$commodity = str_replace('_approve', '', $commodity);
 		if($value=="yes"){
 			$query = "UPDATE " . $tablename . " SET district_change_approve='yes' WHERE from_id='$fromid' AND to_id='$toid' AND commodity='$commodity'";
 			writeLog("User ->" ." Save Data | approve district change yes ->". $_SESSION['user'] . "| " . $fromid . " - " . $toid . " - ". $commodity);

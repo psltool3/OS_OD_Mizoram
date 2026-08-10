@@ -691,6 +691,7 @@ if($currentTimestamp >= $targetTimestamp) {
 					timeout: 59000,
 					success: function(result){
 						$('#table_body').empty();
+						uniqueid_bool_array = [];
 						try{
 							var resultarray = JSON.parse(result);
 							var warehousearray = resultarray["warehouse"];

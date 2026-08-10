@@ -19,6 +19,11 @@ $tablename = "optimiseddata_leg1_".$id;
 
 
 foreach ($_POST as $key => $value) {	
+	$parts = explode("_", $key,3);
+	$fromid = $parts[0];
+	$toid = $parts[1];
+	$toid = str_replace('_', '.', $toid);
+	
 	if (substr($key, -8) === '_approve'){
 		if($value=="yes"){
 			$query = "UPDATE " . $tablename . " SET district_change_approve='yes' WHERE from_id='$fromid' AND to_id='$toid'";
@@ -34,11 +39,8 @@ foreach ($_POST as $key => $value) {
 	if (substr($key, -11) === '_iddistance' or substr($key, -9) === '_idreason' or substr($key, -8) === '_approve' or $value===""){
 		continue;
 	}
-	$parts = explode("_", $key,3);
-	$fromid = $parts[0];
-	$toid = $parts[1];
+
 	$commodity = $parts[2];
-	$toid = str_replace('_', '.', $toid);
 	$commodity = str_replace('_', '.', $commodity);
 	$commodity = str_replace('.bool', '', $commodity);
 	if($value=="yes"){
