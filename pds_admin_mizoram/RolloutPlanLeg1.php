@@ -15,7 +15,7 @@ require('Header.php');
 
         /* You can add similar styles for other elements as needed */
         /* For example: */
-        th
+        th,
         td {
             font-size: 18px; /* Increase font size for table headers and data cells */
         }
