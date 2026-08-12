@@ -20,7 +20,7 @@ require('Header.php');
                 <!-- START BREADCRUMB -->
                 <ul class="breadcrumb">
                     <li><a href="#">Home</a></li>
-                    <li class="active">Performa Leg1</li>
+                    <li class="active">Proforma Leg1</li>
                 </ul>
                 <!-- END BREADCRUMB -->
 
@@ -34,7 +34,7 @@ require('Header.php');
                             <!-- START SIMPLE DATATABLE -->
                             <div class="panel panel-default">
 							<div class="panel-heading">
-								<h3 class="panel-title">Performa Leg1</h3>
+								<h3 class="panel-title">Proforma Leg1</h3>
 							</div>
 								<div class="panel-body">
 								
@@ -71,7 +71,13 @@ require('Header.php');
 											$qkm_optimised = 0;
 											$averagedistance = 0;
 											
-											$query_fps = "SELECT SUM(storage) FROM fci_leg1_".$id;
+											$query_col = "SHOW COLUMNS FROM fci_leg1_".$id." LIKE 'storage'";
+											$result_col = mysqli_query($con, $query_col);
+											if(mysqli_num_rows($result_col) > 0) {
+												$query_fps = "SELECT SUM(storage) FROM fci_leg1_".$id;
+											} else {
+												$query_fps = "SELECT SUM(offtake) FROM fci_leg1_".$id;
+											}
 											$result_fps = mysqli_query($con,$query_fps);
 											$row_fps = mysqli_fetch_assoc($result_fps);
 											
