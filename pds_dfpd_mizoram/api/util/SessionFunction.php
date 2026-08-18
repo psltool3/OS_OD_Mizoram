@@ -2,6 +2,8 @@
 
 function SessionCheck(){
 	require('Connection.php');
+	ini_set('session.gc_maxlifetime', 10000);
+	session_set_cookie_params(10000);
 	session_start();
 
 	if(isset($_SESSION['district_user'])){

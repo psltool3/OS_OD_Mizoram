@@ -135,7 +135,7 @@ $tablename = "dcp_".$id;
 				var tableName = '<?php echo $tablename ?>';
 				const csvResponse = await fetch('api/DownloadOptimalDataDCP.php?format=csv&tableName='+tableName);
 				const csvBlob = await csvResponse.blob();
-				downloadFile(csvBlob, 'Maharashtra_DCP_' + getDateString() + '.csv');
+				downloadFile(csvBlob, 'Mizoram_DCP_' + getDateString() + '.csv');
 			} catch (error) {
 				console.error('Error downloading CSV file:', error);
 			}
@@ -147,7 +147,7 @@ $tablename = "dcp_".$id;
 				var tableName = '<?php echo $tablename ?>';
 				const excelResponse = await fetch('api/DownloadOptimalDataDCP.php?format=xlsx&tableName='+tableName);
 				const excelBlob = await excelResponse.blob();
-				downloadFile(excelBlob, 'Maharashtra_DCP_' + getDateString() + '.xlsx');
+				downloadFile(excelBlob, 'Mizoram_DCP_' + getDateString() + '.xlsx');
 			} catch (error) {
 				console.error('Error downloading XLSX file:', error);
 			}

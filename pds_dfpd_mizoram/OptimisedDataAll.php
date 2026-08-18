@@ -57,7 +57,7 @@ require('Header.php');
                             <!-- START SIMPLE DATATABLE -->
                             <div class="panel panel-default">
 								<div class="panel-heading">                                
-                                    <h3 class="panel-title">Maharashtra Data</h3> 
+                                    <h3 class="panel-title">Mizoram Data</h3> 
 
                                 </div>
 								<!--<button class='btn btn-success' style="float:right;margin-top:10px;margin-right:13px" onclick="send_all('all')">Send Email to All</button>-->

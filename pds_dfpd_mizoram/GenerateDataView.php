@@ -233,7 +233,7 @@ function addRow($pdf, $row, $colWidth, $isHeader = false) {
 // Add to lines
 $fontSize = 12;
 $pdf->SetFont('Arial', 'B', $fontSize);
-$text = "PDS report generated for state Maharashtra and applicable month ".ucfirst($month)." and Date ".$date;
+$text = "PDS report generated for state Mizoram and applicable month ".ucfirst($month)." and Date ".$date;
 $pdf->Cell(0, 10, $text, 0, 1);
 
 $text = "Cost saving for L2";

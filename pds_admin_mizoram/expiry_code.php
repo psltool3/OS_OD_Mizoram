@@ -42,7 +42,7 @@ function login($username, $password, $conn) {
                 // Create new session
                 $session_id = session_id();
                 $current_time = time();
-                $expiry_time = $current_time + 3600; // Session expiry time (1 hour)
+                $expiry_time = $current_time + 10000; // Session expiry time (10000 seconds)
                 $sql_insert_session = "INSERT INTO sessions (user_id, session_id, device_info, expiry_time, is_active) VALUES ('$user_id', '$session_id', '$device_info', '$expiry_time', 1)";
                 if ($conn->query($sql_insert_session) === TRUE) {
                     return "Login successful!";
@@ -95,8 +95,8 @@ if (isset($_POST['login'])) {
     echo logout($conn);
 }
 
-// Check and expire sessions every hour (you can adjust the interval as needed)
-if (time() % 3600 == 0) {
+// Check and expire sessions (you can adjust the interval as needed)
+if (time() % 10000 == 0) {
     echo expireSessions($conn);
 }
 ?>
