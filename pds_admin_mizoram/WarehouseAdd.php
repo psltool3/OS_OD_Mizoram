@@ -252,8 +252,9 @@ require('Header.php');
                 alert('Please enter all fields');
                 return false;
             }
-            if (isNaN(Number(storage)) || Number(storage) < 0) {
-                alert('Storage Capacity must be a valid number greater than or equal to 0');
+            var numRegex = /^\d+(\.\d{1,2})?$/;
+            if (!numRegex.test(storage) || parseFloat(storage) < 0) {
+                alert('Please enter a valid non-negative number with up to 2 decimal places for Storage Capacity.');
                 return false;
             }
             var idRegex = /^[A-Za-z0-9]+$/;

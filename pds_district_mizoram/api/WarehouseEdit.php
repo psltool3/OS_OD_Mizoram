@@ -43,7 +43,7 @@ function isValidCoordinate($value, $coordinateType) {
 }
 
 function isStringNumber($stringValue) {
-    return is_numeric($stringValue);
+    return is_numeric($stringValue) && preg_match('/^\d+(\.\d{1,2})?$/', trim($stringValue)) && floatval($stringValue) >= 0;
 }
 
 $person = new Login;
@@ -72,8 +72,8 @@ if (!is_numeric($_POST["longitude"]) || floatval($_POST["longitude"]) <= 65) {
 	exit();
 }
 
-if(!isStringNumber($_POST["storage"]) || floatval($_POST["storage"]) < 0){
-	echo "Error : Check Storage Value (must be greater than or equal to 0)";
+if(!isStringNumber($_POST["storage"])){
+	echo "Error : Check Storage Value (Must be non-negative with up to 2 decimal places)";
 	exit();
 }
 

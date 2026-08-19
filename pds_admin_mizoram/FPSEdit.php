@@ -277,8 +277,9 @@ else{
                 alert('Please enter all fields');
                 return false;
             }
-            if (isNaN(Number(demand)) || Number(demand) < 0) {
-                alert('Demand must be a valid number greater than or equal to 0');
+            var numRegex = /^\d+(\.\d{1,2})?$/;
+            if (!numRegex.test(demand) || parseFloat(demand) < 0) {
+                alert('Please enter a valid non-negative number with up to 2 decimal places for Demand.');
                 return false;
             }
             var idRegex = /^[A-Za-z0-9]+$/;

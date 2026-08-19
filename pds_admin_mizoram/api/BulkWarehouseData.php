@@ -78,7 +78,7 @@ function isValidCoordinate($value, $coordinateType) {
 }
 
 function isStringNumber($stringValue) {
-    return is_numeric($stringValue);
+    return is_numeric($stringValue) && preg_match('/^\d+(\.\d{1,2})?$/', trim($stringValue)) && floatval($stringValue) >= 0;
 }
 
 $redirect = 1;
@@ -117,8 +117,8 @@ if(password_verify($person->getPassword(), $dbHashedPassword)){
 						$redirect = 0;
 					}
 	
-					if(!isStringNumber($column[$storage]) || floatval($column[$storage]) < 0){
-						echo "Error : Check Storage Value (must be greater than or equal to 0): ".$column[$storage];
+					if(!isStringNumber($column[$storage])){
+						echo "Error : Check Storage Value: ".$column[$storage];
 						echo "</br>";
 						$redirect = 0;
 					}

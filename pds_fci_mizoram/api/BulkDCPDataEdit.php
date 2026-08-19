@@ -57,7 +57,7 @@ function isValidCoordinate($value, $coordinateType) {
 }
 
 function isStringNumber($stringValue) {
-    return is_numeric($stringValue);
+    return is_numeric($stringValue) && preg_match('/^\d+(\.\d{1,2})?$/', trim($stringValue)) && floatval($stringValue) >= 0;
 }
 
 
@@ -95,8 +95,8 @@ try{
 						$redirect = 0;
 					}
 
-					if(!isStringNumber($column[$demand]) || floatval($column[$demand]) < 0){
-						echo "Error : Check Demand Value (must be greater than or equal to 0): ".$column[$demand];
+					if(!isStringNumber($column[$demand])){
+						echo "Error : Check Demand Value: ".$column[$demand];
 						echo "</br>";
 						$redirect = 0;
 					}	
