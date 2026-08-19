@@ -85,7 +85,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 					<a style="background-color:#FFC167"><center><span class="xn-text" style="font-family:sans-serif;font-weight:italic;font-size:18px;">Step 1</span></center></a>
 				</li>
 				<li <?php echo ($current_page === 'Home.php') ? 'class="active"' : ''; ?>>
-					<a href="Home.php" style="padding-left:0px"><span class="xn-text" style="font-family:sans-serif;font-weight:italic;font-size:16px;">Step 1.1 Optimised Leg2</span></a>
+					<a href="Home.php" style="padding-left:0px"><span class="xn-text" style="font-family:sans-serif;font-weight:italic;font-size:16px;">Step 1.1 Optimise Leg2</span></a>
 				</li>
 				<li <?php echo ($current_page === 'OptimisedData.php') ? 'class="active"' : ''; ?>>
 					<a href="OptimisedData.php" style="padding-left:0px"><span class="xn-text" style="font-family:sans-serif;font-weight:italic;font-size:16px;">Step 1.2 OptimisedPlan Leg2</span></a>
@@ -97,7 +97,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 					<a style="background-color:#FFC167"><center><span class="xn-text" style="font-family:sans-serif;font-weight:italic;font-size:16px;">Step 2</span></center></a>
 				</li>
 				<li <?php echo ($current_page === 'HomeLeg1.php') ? 'class="active"' : ''; ?>>
-					<a href="HomeLeg1.php" style="padding-left:0px"><span class="xn-text" style="font-family:sans-serif;font-weight:italic;font-size:16px;">Step 2.1 Optimised Leg1</span></a>
+					<a href="HomeLeg1.php" style="padding-left:0px"><span class="xn-text" style="font-family:sans-serif;font-weight:italic;font-size:16px;">Step 2.1 Optimise Leg1</span></a>
 				</li>
 				<li <?php echo ($current_page === 'OptimisedDataLeg1.php') ? 'class="active"' : ''; ?>>
 					<a href="OptimisedDataLeg1.php" style="padding-left:0px"><span class="xn-text" style="font-family:sans-serif;font-weight:italic;font-size:16px;">Step 2.2 OptimisedPlan Leg1</span></a>

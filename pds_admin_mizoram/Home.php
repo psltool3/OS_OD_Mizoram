@@ -954,18 +954,25 @@ require('util/Logger.php');
 	setInterval(checkServerStatus, 10000);
 	
 	function formatNumberWithCommas(value) {
-		const formattedNumber = Number(value).toFixed(2);
-
-		// Separate the integer and decimal parts
-		const parts = formattedNumber.split('.');
-		let integerPart = parts[0];
-		const decimalPart = parts[1] || '';
-
-		// Add commas every two digits from the right in the integer part
-		integerPart = integerPart.replace(/\B(?=(\d{2})+(?!\d))/g, ',');
-
-		// Combine the integer and decimal parts and return the formatted number
-		return integerPart + '.' + decimalPart;
+		if (value === undefined || value === null || value === "") {
+			return "0";
+		}
+		const str = String(value).trim();
+		const cleanStr = str.replace(/,/g, '');
+		const num = Number(cleanStr);
+		if (isNaN(num)) {
+			return str;
+		}
+		const hasDecimal = cleanStr.includes('.');
+		if (hasDecimal) {
+			const formattedNumber = num.toFixed(2);
+			const parts = formattedNumber.split('.');
+			let integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+			return integerPart + '.' + parts[1];
+		} else {
+			let integerPart = cleanStr.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+			return integerPart;
+		}
 	}
 	
 	function formatNumberWithCommasWithoutDecimal(value) {

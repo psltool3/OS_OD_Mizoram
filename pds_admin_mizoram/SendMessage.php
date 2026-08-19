@@ -74,7 +74,7 @@ while($row = mysqli_fetch_assoc($result)){
                                     <table id="export_table" class="table">
                                         <thead>
                                             <tr>
-												<th style="font-size:16px">Email Id</th>
+												<th style="font-size:16px">User Id</th>
                                                 <th style="font-size:16px">District</th>
                                                 <th style="font-size:16px">Send</th>
                                             </tr>
@@ -103,7 +103,7 @@ while($row = mysqli_fetch_assoc($result)){
                                     <table id="" class="table">
                                         <thead>
                                             <tr>
-												<th style="font-size:16px">Email Id</th>
+												<th style="font-size:16px">User Id</th>
                                                 <th style="font-size:16px">Message</th>
                                                 <th style="font-size:16px">Date</th>
                                                 <th style="font-size:16px">Acknowledged</th>
