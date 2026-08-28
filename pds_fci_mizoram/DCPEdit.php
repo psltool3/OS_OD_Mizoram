@@ -275,9 +275,9 @@ else{
                 alert('Please enter all fields');
                 return false;
             }
-            var numRegex = /^\d+(\.\d{1,2})?$/;
+            var numRegex = /^\d+(\.\d+)?$/;
             if (!numRegex.test(demand) || parseFloat(demand) < 0) {
-                alert('Please enter a valid non-negative number with up to 2 decimal places for Off Take Quantity.');
+                alert('Please enter a valid non-negative number with any number of decimal places for Off Take Quantity.');
                 return false;
             }
             var idRegex = /^[A-Za-z0-9]+$/;

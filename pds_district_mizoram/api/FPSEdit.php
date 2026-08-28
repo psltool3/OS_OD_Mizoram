@@ -43,7 +43,7 @@ function isValidCoordinate($value, $coordinateType) {
 }
 
 function isStringNumber($stringValue) {
-    return is_numeric($stringValue) && preg_match('/^\d+(\.\d{1,2})?$/', trim($stringValue)) && floatval($stringValue) >= 0;
+    return is_numeric($stringValue) && preg_match('/^\d+(\.\d+)?$/', trim($stringValue)) && floatval($stringValue) >= 0;
 }
 
 $person = new Login;
@@ -62,8 +62,8 @@ if(!isValidCoordinate($_POST["latitude"],'latitude') or !isValidCoordinate($_POS
 	exit();
 }
 
-if (!is_numeric($_POST["latitude"]) || floatval($_POST["latitude"]) >= 40) {
-	echo "Error : Latitude must be less than 40. Given: " . $_POST["latitude"];
+if (!is_numeric($_POST["latitude"]) || floatval($_POST["latitude"]) <= 0 || floatval($_POST["latitude"]) >= 45) {
+	echo "Error : Latitude must be between 0 and 45. Given: " . $_POST["latitude"];
 	exit();
 }
 
@@ -74,7 +74,7 @@ if (!is_numeric($_POST["longitude"]) || floatval($_POST["longitude"]) <= 65) {
 }
 
 if(!isStringNumber($_POST["demand"])){
-	echo "Error : Check Demand Value (Must be non-negative with up to 2 decimal places)";
+	echo "Error : Check Demand Value (Must be non-negative with any number of decimal places)";
 	exit();
 }
 

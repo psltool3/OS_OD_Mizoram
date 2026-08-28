@@ -58,7 +58,7 @@ function isValidCoordinate($value, $coordinateType) {
 }
 
 function isStringNumber($stringValue) {
-    return is_numeric($stringValue) && preg_match('/^\d+(\.\d{1,2})?$/', trim($stringValue)) && floatval($stringValue) >= 0;
+    return is_numeric($stringValue) && preg_match('/^\d+(\.\d+)?$/', trim($stringValue)) && floatval($stringValue) >= 0;
 }
 
 $redirect = 1;
@@ -117,8 +117,8 @@ try{
 					$redirect = 0;
 				}
 				
-				if (!is_numeric($column[$latitude]) || $column[$latitude] >= 40) {
-					echo "Error : Latitude must be less than 40. Given: " . $column[$latitude];
+				if (!is_numeric($column[$latitude]) || $column[$latitude] <= 0 || $column[$latitude] >= 45) {
+					echo "Error : Latitude must be between 0 and 45. Given: " . $column[$latitude];
 					echo "</br>";
 					$redirect = 0;
 				}

@@ -320,9 +320,9 @@ else{
                 alert('Please enter all fields');
                 return false;
             }
-            var numRegex = /^\d+(\.\d{1,2})?$/;
+            var numRegex = /^\d+(\.\d+)?$/;
             if (!numRegex.test(storage) || parseFloat(storage) < 0) {
-                alert('Please enter a valid non-negative number with up to 2 decimal places for Storage Capacity.');
+                alert('Please enter a valid non-negative number with any number of decimal places for Storage Capacity.');
                 return false;
             }
             var idRegex = /^[A-Za-z0-9]+$/;
