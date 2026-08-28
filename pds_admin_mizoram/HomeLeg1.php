@@ -538,7 +538,7 @@ require('util/Logger.php');
 						&nbsp
 						<div class="row">
 							<div
-								style="font-size: 20px; font-weight: 700; margin-top: 0px; padding: 5px; margin-bottom: 20px;">
+								style="font-size: 20px; font-weight: 700; margin-top: 0px; padding: 5px; margin-bottom: 20px; color: #000;">
 								<i class="fa fa-info-circle" aria-hidden="true"></i> Pre-Analysis
 							</div>
 							<div class="row">
@@ -934,39 +934,25 @@ require('util/Logger.php');
 	setInterval(checkServerStatus, 10000);
 	
 	function formatNumberWithCommas(value) {
-		if (value === undefined || value === null || value === "") {
-			return "0";
+		const num = Number(value);
+
+		if (Number.isInteger(num)) {
+			return num.toLocaleString('en-IN');
 		}
-		const str = String(value).trim();
-		const cleanStr = str.replace(/,/g, '');
-		const num = Number(cleanStr);
-		if (isNaN(num)) {
-			return str;
-		}
-		const hasDecimal = cleanStr.includes('.');
-		if (hasDecimal) {
-			const formattedNumber = num.toFixed(2);
-			const parts = formattedNumber.split('.');
-			let integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-			return integerPart + '.' + parts[1];
-		} else {
-			let integerPart = cleanStr.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-			return integerPart;
-		}
+
+		return num.toLocaleString('en-IN', {
+			minimumFractionDigits: 2,
+			maximumFractionDigits: 2
+		});
 	}
 	
 	function formatNumberWithCommasWithoutDecimal(value) {
-		const roundedNumber = Math.round(value);
+		const num = Number(value);
+		const roundedNumber = Math.round(num * 100) / 100;
 
-		// Separate the integer and decimal parts
-		const parts = roundedNumber.toString().split('.');
-		let integerPart = parts[0];
-  
-		// Add commas every three digits from the right in the integer part
-		integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-	  
-		// Return the formatted number
-		return integerPart;
+		return roundedNumber.toLocaleString('en-IN', {
+			maximumFractionDigits: 0
+		});
 	}
 	
 
@@ -1349,8 +1335,8 @@ function handleStateCheckboxChange() {
 				var totalDemand = Object.values(data.District_Demand).reduce((acc, demand) => acc + demand, 0);
 				var month = document.getElementById("month").value;
 
-				document.getElementById("totalFciDemand").innerHTML = "<span style='color: white; font-size: 14px;'>" + "Total Demand: " + totalDemand + " (Qtl)</span>";
-				document.getElementById("totalFciSupply").innerHTML = "<span style='color: white; font-size: 14px;'>" + "Total Supply: " + totalCapacity + " (Qtl)</span>";
+				document.getElementById("totalFciDemand").innerHTML = "<span style='color: white; font-size: 14px;'>" + "Total Demand: " + formatNumberWithCommasWithoutDecimal(totalDemand) + " (Qtl)</span>";
+				document.getElementById("totalFciSupply").innerHTML = "<span style='color: white; font-size: 14px;'>" + "Total Supply: " + formatNumberWithCommasWithoutDecimal(totalCapacity) + " (Qtl)</span>";
 				document.getElementById("selectedMonth").innerHTML = "<span style='color: white; font-size: 14px;'>" + "Selected Month: " + capitalizeFirstLetter(month) + "</span>";
 
 

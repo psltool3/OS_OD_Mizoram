@@ -954,39 +954,25 @@ require('util/Logger.php');
 	setInterval(checkServerStatus, 10000);
 	
 	function formatNumberWithCommas(value) {
-		if (value === undefined || value === null || value === "") {
-			return "0";
+		const num = Number(value);
+
+		if (Number.isInteger(num)) {
+			return num.toLocaleString('en-IN');
 		}
-		const str = String(value).trim();
-		const cleanStr = str.replace(/,/g, '');
-		const num = Number(cleanStr);
-		if (isNaN(num)) {
-			return str;
-		}
-		const hasDecimal = cleanStr.includes('.');
-		if (hasDecimal) {
-			const formattedNumber = num.toFixed(2);
-			const parts = formattedNumber.split('.');
-			let integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-			return integerPart + '.' + parts[1];
-		} else {
-			let integerPart = cleanStr.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-			return integerPart;
-		}
+
+		return num.toLocaleString('en-IN', {
+			minimumFractionDigits: 2,
+			maximumFractionDigits: 2
+		});
 	}
 	
 	function formatNumberWithCommasWithoutDecimal(value) {
-		const roundedNumber = Math.round(value);
+		const num = Number(value);
+		const roundedNumber = Math.round(num * 100) / 100;
 
-		// Separate the integer and decimal parts
-		const parts = roundedNumber.toString().split('.');
-		let integerPart = parts[0];
-  
-		// Add commas every three digits from the right in the integer part
-		integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-	  
-		// Return the formatted number
-		return integerPart;
+		return roundedNumber.toLocaleString('en-IN', {
+			maximumFractionDigits: 0
+		});
 	}
 	
 
@@ -1401,8 +1387,8 @@ function handleStateCheckboxChange() {
 				var month = document.getElementById("month").value;
 
 				// Format the total demand and total capacity values with commas
-				var formattedTotalDemand = totalDemand.toLocaleString();
-				var formattedTotalCapacity = totalCapacity.toLocaleString();
+				var formattedTotalDemand = formatNumberWithCommasWithoutDecimal(totalDemand);
+				var formattedTotalCapacity = formatNumberWithCommasWithoutDecimal(totalCapacity);
 
 				document.getElementById("totalFciDemand").innerHTML = "<span style='color: white; font-size: 14px;'>" + "Total Demand: " + formattedTotalDemand + " (Qtl)</span>";
 				document.getElementById("totalFciSupply").innerHTML = "<span style='color: white; font-size: 14px;'>" + "Total Supply: " + formattedTotalCapacity + " (Qtl)</span>";
