@@ -448,14 +448,13 @@ require('util/Logger.php');
 				<div class="col-md-3">
 					<div class="form-group">
 						<div class="col-md-2"></div>
-						<div class="col-md-9">  
-							<div class="input-group" style="width:100%;">					
-							<select class="form-control" id="year" name="year" style="border-radius:5px;font-weight:bold">
-								<!-- <option value='' style="font-weight:bold;color:#000;">Select</option> -->
-								<!-- <option value='2024' style="font-weight:bold;color:#000;">2024</option> -->
+						<div class="col-md-9">
+							<div class="input-group" style="width:100%;">				
+							<select class="form-control" id="month" name="month" style="border-radius:5px;font-weight:bold" onchange="updateApplicableMonths()">
+								<option value='' style="font-weight:bold;color:#000;">Select</option>
 							</select>
 							</div>
-							<span class="help-block">Selected Year</span>
+							<span class="help-block">Current Month</span>
 						</div>
 					</div>
 				</div>
@@ -463,13 +462,14 @@ require('util/Logger.php');
 				<div class="col-md-3">
 					<div class="form-group">
 						<div class="col-md-2"></div>
-						<div class="col-md-9">
-							<div class="input-group" style="width:100%;">				
-							<select class="form-control" id="month" name="month" style="border-radius:5px;font-weight:bold">
-								<option value='' style="font-weight:bold;color:#000;">Select</option>
+						<div class="col-md-9">  
+							<div class="input-group" style="width:100%;">					
+							<select class="form-control" id="year" name="year" style="border-radius:5px;font-weight:bold" onchange="updateApplicableMonths()">
+								<!-- <option value='' style="font-weight:bold;color:#000;">Select</option> -->
+								<!-- <option value='2024' style="font-weight:bold;color:#000;">2024</option> -->
 							</select>
 							</div>
-							<span class="help-block">Selected Month</span>
+							<span class="help-block">Applicable Year</span>
 						</div>
 					</div>
 				</div>
@@ -1504,6 +1504,7 @@ function fetchApplicableMonth(month){
 					}
 				});
 			});
+			updateApplicableMonths();
 			document.getElementById("processingPopup").style.display = "none";
 			fetchFromDb();
 		}
@@ -1534,10 +1535,43 @@ for (var i = 0; i < dropdown.options.length; i++) {
     }
 }
 
+function updateApplicableMonths() {
+    var monthNames = ['jan', 'feb', 'march', 'april', 'may', 'june', 'july', 'aug', 'sept', 'oct', 'nov', 'dec'];
+    var selectedMonth = document.getElementById("month").value;
+    var selectedIndex = monthNames.indexOf(selectedMonth);
+    var selectedYear = document.getElementById("year").value;
+    var actualCurrentYear = new Date().getFullYear();
+
+    monthNames.forEach(function(mName, index) {
+        var checkbox = document.getElementById(mName);
+        if (checkbox) {
+            var label = checkbox.closest ? checkbox.closest('label') : checkbox.parentElement;
+            // Only disable months prior to current month if the selected year is the current calendar year
+            if (selectedYear == actualCurrentYear && selectedIndex !== -1 && index < selectedIndex) {
+                checkbox.disabled = true;
+                checkbox.checked = false;
+                if (label) {
+                    label.style.color = "#aaa";
+                    label.style.cursor = "not-allowed";
+                    label.style.pointerEvents = "none";
+                }
+            } else {
+                checkbox.disabled = false;
+                if (label) {
+                    label.style.color = "#000";
+                    label.style.cursor = "pointer";
+                    label.style.pointerEvents = "auto";
+                }
+            }
+        }
+    });
+}
+
 var expanded = false;
 
 function showCheckboxes() {
   var checkboxes = document.getElementById("checkboxes");
+  updateApplicableMonths();
   if (!expanded) {
     checkboxes.style.display = "block";
     expanded = true;
@@ -1549,6 +1583,7 @@ function showCheckboxes() {
 var firstStart = 0;
 checkForActiveJob(CG_JOB_KEY, JOB_ENDPOINT, displayResults);
 
+updateApplicableMonths();
 
 </script>
 </body>
