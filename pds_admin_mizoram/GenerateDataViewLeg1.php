@@ -24,10 +24,24 @@ $columns_pdf = ["scenario","from","from_state","from_id","from_name","from_distr
 $filename = 'table_data';
 
 $id = isset($_POST['id']) ? preg_replace('/[^a-zA-Z0-9_-]/', '', $_POST['id']) : '';
-$tablename = get_safe_table_name($con, "optimiseddata_", $id);
+if (empty($id)) {
+    $query = "SELECT * FROM optimised_table_leg1 ORDER BY last_updated DESC LIMIT 1";
+    $result = mysqli_query($con, $query);
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $id = $row["id"];
+    }
+}
+
+$tablename = get_safe_table_name($con, "optimiseddata_leg1_", $id);
+if (empty($tablename)) {
+    $tablename = get_safe_table_name($con, "optimiseddata_", $id);
+}
 if (empty($tablename)) {
     $tablename = "optimiseddata";
 }
+$tablename1 = $tablename;
+$leg = 1;
 $leg_id = "";
 
 $month = "";
@@ -35,7 +49,7 @@ $date = "";
 $cost = "";
 $cost1 = "";
 
-$query = "SELECT * FROM optimised_table WHERE id='$id'";
+$query = "SELECT * FROM optimised_table_leg1 WHERE id='$id'";
 $result = mysqli_query($con,$query);
 $numrows = mysqli_num_rows($result);
 if($numrows>0){

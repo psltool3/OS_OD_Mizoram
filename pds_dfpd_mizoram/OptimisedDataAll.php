@@ -57,9 +57,20 @@ require('Header.php');
                             <!-- START SIMPLE DATATABLE -->
                             <div class="panel panel-default">
 								<div class="panel-heading">                                
-                                    <h3 class="panel-title">Mizoram Data</h3> 
-
+                                     <h3 class="panel-title">Mizoram Data</h3> 
                                 </div>
+								<div style="margin: 15px 15px 0 15px;">
+									<label for="yearFilter" style="font-size: 16px;">Filter by Year:</label>
+									<select id="yearFilter" class="form-control" style="width: 200px; display: inline-block; margin-left: 10px;" onchange="filterTableByYear()">
+										<?php
+										$year_query = "SELECT DISTINCT year FROM optimised_table ORDER BY year DESC";
+										$year_res = mysqli_query($con, $year_query);
+										while ($y_row = mysqli_fetch_assoc($year_res)) {
+											echo "<option value='{$y_row['year']}'>{$y_row['year']}</option>";
+										}
+										?>
+									</select>
+								</div>
 								<!--<button class='btn btn-success' style="float:right;margin-top:10px;margin-right:13px" onclick="send_all('all')">Send Email to All</button>-->
 								<div class="panel-body">
                                  <div class="table-responsive">
@@ -262,6 +273,24 @@ require('Header.php');
             document.getElementById('popup').style.display = 'none';
         }
 		
+		function filterTableByYear() {
+			var selectedYear = document.getElementById("yearFilter").value;
+			var table = document.getElementById("export_table");
+			var tr = table.getElementsByTagName("tr");
+			for (var i = 1; i < tr.length; i++) {
+				var td = tr[i].getElementsByTagName("td")[0];
+				if (td) {
+					var yearValue = td.textContent || td.innerText;
+					if (selectedYear === "" || yearValue === selectedYear) {
+						tr[i].style.display = "";
+					} else {
+						tr[i].style.display = "none";
+					}
+				}
+			}
+		}
+		
+		window.onload = filterTableByYear;
 		
 		</script>	
     </body>

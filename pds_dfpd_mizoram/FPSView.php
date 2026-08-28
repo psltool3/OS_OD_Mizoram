@@ -3,9 +3,26 @@ require('util/Connection.php');
 require('util/SessionCheck.php');
 require('Header.php');
 
-$id = $_POST['id'];
-$tablename = "fps_".$id;
+if (!function_exists('get_safe_table_name')) {
+    function get_safe_table_name($con, $prefix, $id) {
+        if (empty($id)) return "";
+        $id = preg_replace('/[^a-zA-Z0-9_-]/', '', $id);
+        $table_pattern = $prefix . $id . "%";
+        $query = "SHOW TABLES LIKE '" . mysqli_real_escape_string($con, $table_pattern) . "'";
+        $result = mysqli_query($con, $query);
+        if ($result && mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_array($result);
+            return $row[0];
+        }
+        return "";
+    }
+}
 
+$id = isset($_POST['id']) ? preg_replace('/[^a-zA-Z0-9_-]/', '', $_POST['id']) : '';
+$tablename = get_safe_table_name($con, "fps_", $id);
+if (empty($tablename)) {
+    $tablename = "fps_".$id;
+}
 ?>
 <style>
     td {
@@ -61,19 +78,38 @@ $tablename = "fps_".$id;
 								</div>
                                 <div class="panel-body">
                                  <div class="table-responsive">
-                                    <table id="export_table" class="table">
+                                    <table id="export_table" class="table datatable">
                                         <thead>
                                             <tr>
-												<th style="font-size:16px">District</th>
-												<th style="font-size:16px">Name of FPS</th>
-												<th style="font-size:16px">FPS ID</th>
-												<th style="font-size:16px">Model FPS/Normal FPS</th>
-												<th style="font-size:16px">Latitude</th>
-												<th style="font-size:16px">Longitude</th>
-												<th style="font-size:16px">Demand of Rice(Qtl)</th>
-												<th style="font-size:16px">Demand of FRice(Qtl)</th>
+												<th style="font-size:15px">District</th>
+												<th style="font-size:15px">Name of FPS</th>
+												<th style="font-size:15px">FPS ID</th> 
+												<th style="font-size:15px">Motorable/Non-Motorable</th>
+												<th style="font-size:15px">Latitude</th>
+												<th style="font-size:15px">Longitude</th>
+												<th style="font-size:15px">Demand(Qtl)</th>
                                             </tr>
                                         </thead>
+                                        <tbody>
+										<?php
+										$chk = mysqli_query($con, "SHOW TABLES LIKE '" . mysqli_real_escape_string($con, $tablename) . "'");
+										if ($chk && mysqli_num_rows($chk) > 0) {
+											$query = "SELECT * FROM " . mysqli_real_escape_string($con, $tablename) . " WHERE 1";
+											$result = mysqli_query($con,$query);
+											if($result){
+												while($row = mysqli_fetch_array($result))
+												{
+													echo "<tr><td>{$row['district']}</td>".
+													"<td>{$row['name']}</td>".
+													"<td>{$row['id']}</td>".
+													"<td>{$row['type']}</td>".
+													"<td>{$row['latitude']}</td>".
+													"<td>{$row['longitude']}</td>".
+													"<td>{$row['demand']}</td></tr>";
+												}
+											}
+										}?>
+										</tbody>
 										 <tbody id="fps_table">
 										</tbody>
                                     </table>

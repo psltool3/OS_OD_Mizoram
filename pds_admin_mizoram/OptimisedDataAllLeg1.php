@@ -59,6 +59,18 @@ require('Header.php');
 								<div class="panel-heading">                                
                                     <h3 class="panel-title">Data</h3> 
                                 </div>
+								<div style="margin: 15px 15px 0 15px;">
+									<label for="yearFilter" style="font-size: 16px;">Filter by Year:</label>
+									<select id="yearFilter" class="form-control" style="width: 200px; display: inline-block; margin-left: 10px;" onchange="filterTableByYear()">
+										<?php
+										$year_query = "SELECT DISTINCT year FROM optimised_table_leg1 ORDER BY year DESC";
+										$year_res = mysqli_query($con, $year_query);
+										while ($y_row = mysqli_fetch_assoc($year_res)) {
+											echo "<option value='{$y_row['year']}'>{$y_row['year']}</option>";
+										}
+										?>
+									</select>
+								</div>
 								<button class='btn btn-success' style="float:right;margin-top:10px;margin-right:13px" onclick="send_all('all')">Send Email to All</button>
 								<div class="panel-body">
                                  <div class="table-responsive">
@@ -69,8 +81,9 @@ require('Header.php');
                                                 <th style="font-size:16px">Month</th>
                                                 <th style="font-size:16px">Applicable Month</th>
                                                 <th style="font-size:16px">Warehouse</th>
-                                                <th style="font-size:16px">FPS</th>
+                                                <th style="font-size:16px">FCI</th>
                                                 <th style="font-size:16px">Optimised Data</th>
+                                                <th style="font-size:16px">Generate Data</th>
                                             </tr>
                                         </thead>
                                         <tbody id="table_body">
@@ -86,8 +99,9 @@ require('Header.php');
 											 "<td>{$row['month']}</td>".
 											 "<td>{$row['applicable']}</td>".
 											 "<td> <button class='btn btn-info btn-rounded' onclick=\"warehouse_open('{$temp_id}')\">View Warehouses</button></td>".
-             								 "<td> <button class='btn btn-warning btn-rounded' onclick=\"fps_open('{$temp_id}')\">View FPS</button></td>".
-             								 "<td> <button class='btn btn-danger btn-rounded' onclick=\"optimised_open('{$temp_id}')\">View Data</button></td></tr>";
+											 "<td> <button class='btn btn-primary btn-rounded' onclick=\"fci_open('{$temp_id}')\">View FCI</button></td>".
+             								 "<td> <button class='btn btn-danger btn-rounded' onclick=\"optimised_open('{$temp_id}')\">View Data</button></td>".
+											 "<td> <button class='btn btn-success btn-rounded' onclick=\"generate_report('{$temp_id}')\">View Report</button></td></tr>";
              							}
 
 										?>
@@ -197,15 +211,19 @@ require('Header.php');
 		}
 
 		function warehouse_open(temp_id){
-			post({id:temp_id,step:"leg1"} ,"WarehouseView.php");
+			post({id:temp_id} ,"WarehouseViewLeg1.php");
 		}
 		
-		function fps_open(temp_id){
-			post({id:temp_id,step:"leg1"} ,"FpsView.php");
+		function fci_open(temp_id){
+			post({id:temp_id} ,"FciViewLeg1.php");
 		}
 		
 		function optimised_open(temp_id){
-			post({id:temp_id,step:"leg1"} ,"OptimisedDataView.php");
+			post({id:temp_id} ,"OptimisedDataViewLeg1.php");
+		}
+		
+		function generate_report(temp_id){
+			post({id:temp_id} ,"GenerateDataViewLeg1.php");
 		}
 		
 		function send_email(temp_id){	
@@ -246,6 +264,24 @@ require('Header.php');
             document.getElementById('popup').style.display = 'none';
         }
 		
+		function filterTableByYear() {
+			var selectedYear = document.getElementById("yearFilter").value;
+			var table = document.getElementById("export_table");
+			var tr = table.getElementsByTagName("tr");
+			for (var i = 1; i < tr.length; i++) {
+				var td = tr[i].getElementsByTagName("td")[0];
+				if (td) {
+					var yearValue = td.textContent || td.innerText;
+					if (selectedYear === "" || yearValue === selectedYear) {
+						tr[i].style.display = "";
+					} else {
+						tr[i].style.display = "none";
+					}
+				}
+			}
+		}
+		
+		window.onload = filterTableByYear;
 		
 		</script>	
     </body>

@@ -56,10 +56,20 @@ require('Header.php');
 
                             <!-- START SIMPLE DATATABLE -->
                             <div class="panel panel-default">
-								<div class="panel-heading">                                
-                                    <h3 class="panel-title">Mizoram Data</h3> 
-
+								<div class="panel-heading">                                                                    <h3 class="panel-title">Mizoram Data</h3> 
                                 </div>
+								<div style="margin: 15px 15px 0 15px;">
+									<label for="yearFilter" style="font-size: 16px;">Filter by Year:</label>
+									<select id="yearFilter" class="form-control" style="width: 200px; display: inline-block; margin-left: 10px;" onchange="filterTableByYear()">
+										<?php
+										$year_query = "SELECT DISTINCT year FROM optimised_table_leg1 ORDER BY year DESC";
+										$year_res = mysqli_query($con, $year_query);
+										while ($y_row = mysqli_fetch_assoc($year_res)) {
+											echo "<option value='{$y_row['year']}'>{$y_row['year']}</option>";
+										}
+										?>
+									</select>
+								</div>
 								<!--<button class='btn btn-success' style="float:right;margin-top:10px;margin-right:13px" onclick="send_all('all')">Send Email to All</button>-->
 								<div class="panel-body">
                                  <div class="table-responsive">
@@ -78,7 +88,7 @@ require('Header.php');
                                         <tbody id="table_body">
 								        <?php
 								        
-								        $query = "SELECT * FROM optimised_table WHERE 1";
+								        $query = "SELECT * FROM optimised_table_leg1 WHERE 1";
 								        $result = mysqli_query($con,$query);
 								        $numrows = mysqli_num_rows($result);
 								        while($row = mysqli_fetch_assoc($result))
@@ -86,20 +96,14 @@ require('Header.php');
 								        	$temp_id = (string)$row['id'];
 								        	$month = $row['month'];
 								        	
-								        	$query_leg1 = "SELECT * FROM optimised_table_leg1 WHERE month='$month'";
-								        	$result_leg1 = mysqli_query($con,$query_leg1);
-								        	$numrows_leg1 = mysqli_num_rows($result_leg1);
-								        	if($numrows_leg1>0){
-								        		$row_leg1 = mysqli_fetch_assoc($result_leg1);
-								        		$id_leg1 = $row_leg1['id'];
-								        		echo "<tr><td>{$row['year']}</td>".
+								        	echo "<tr><td>{$row['year']}</td>".
 								        		 "<td>{$row['month']}</td>".
 								        		 "<td>{$row['applicable']}</td>".
-								        		 "<td> <button class='btn btn-info btn-rounded' onclick=\"fci_open('{$temp_id}','{$id_leg1}')\">View FCI</button></td>".
-								        		 "<td> <button class='btn btn-warning btn-rounded' onclick=\"warehouse_open('{$temp_id}','{$id_leg1}')\">View Warehouses</button></td>".
-								        		 "<td> <button class='btn btn-danger btn-rounded' onclick=\"optimised_open('{$temp_id}','{$id_leg1}')\">View Data</button></td>".
-								        		 "<td> <button class='btn btn-success btn-rounded' onclick=\"generate_report('{$temp_id}','{$id_leg1}')\">View Report</button></td></tr>";
-								        	}
+								        		 "<td> <button class='btn btn-info btn-rounded' onclick=\"fci_open('{$temp_id}')\">View FCI</button></td>".
+								        		 "<td> <button class='btn btn-warning btn-rounded' onclick=\"warehouse_open('{$temp_id}')\">View Warehouses</button></td>".
+								        		 "<td> <button class='btn btn-danger btn-rounded' onclick=\"optimised_open('{$temp_id}')\">View Data</button></td>".
+								        		 "<td> <button class='btn btn-success btn-rounded' onclick=\"generate_report('{$temp_id}')\">View Report</button></td></tr>";
+								        	
              							}
 
 								        ?>
@@ -208,20 +212,20 @@ require('Header.php');
 			form.submit();
 		}
 
-		function fci_open(temp_id, leg_id){
-			post({id:leg_id, step:"leg1", legid:leg_id}, "FciView_leg1.php");
+		function fci_open(temp_id){
+			post({id:temp_id}, "FciView_leg1.php");
 		}
 		
-		function warehouse_open(temp_id, leg_id){
-			post({id:temp_id, step:"leg1", legid:leg_id}, "WarehouseView_leg1.php");
+		function warehouse_open(temp_id){
+			post({id:temp_id}, "WarehouseView_leg1.php");
 		}
 		
-		function optimised_open(temp_id, leg_id){
-			post({id:temp_id, step:"leg1", legid:leg_id}, "OptimisedDataView_leg1.php");
+		function optimised_open(temp_id){
+			post({id:temp_id}, "OptimisedDataView_leg1.php");
 		}
 		
-		function generate_report(temp_id, leg_id){
-			post({id:temp_id, step:"leg1", legid:leg_id}, "GenerateDataView_leg1.php");
+		function generate_report(temp_id){
+			post({id:temp_id}, "GenerateDataView_leg1.php");
 		}
 		
 		function send_email(temp_id){	
@@ -262,6 +266,24 @@ require('Header.php');
             document.getElementById('popup').style.display = 'none';
         }
 		
+		function filterTableByYear() {
+			var selectedYear = document.getElementById("yearFilter").value;
+			var table = document.getElementById("export_table");
+			var tr = table.getElementsByTagName("tr");
+			for (var i = 1; i < tr.length; i++) {
+				var td = tr[i].getElementsByTagName("td")[0];
+				if (td) {
+					var yearValue = td.textContent || td.innerText;
+					if (selectedYear === "" || yearValue === selectedYear) {
+						tr[i].style.display = "";
+					} else {
+						tr[i].style.display = "none";
+					}
+				}
+			}
+		}
+		
+		window.onload = filterTableByYear;
 		
 		</script>	
     </body>

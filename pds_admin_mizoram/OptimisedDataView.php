@@ -3,22 +3,25 @@ require('util/Connection.php');
 require('util/SessionCheck.php');
 require('Header.php');
 
-$id = $_POST['id'];
-$tablename = "optimiseddata_".$id;
-$tablename1 = "optimiseddata_".$id;
-$leg = 0;
-if(isset($_POST['step'])){
-	if($_POST['step']=="leg1"){
-		$leg = 1;
-		$tablename = "optimiseddata_leg1_".$id;
-		$tablename1 = "optimiseddata_leg1_".$id;
-	}
-	if($_POST['step']=="all"){
-		$leg = 2;
-		$leg_id = $_POST['legid'];
-		$tablename1 = "optimiseddata_".$id;
-		$tablename = "optimiseddata_leg1_".$leg_id;
-	}
+if (!function_exists('get_safe_table_name')) {
+    function get_safe_table_name($con, $prefix, $id) {
+        if (empty($id)) return "";
+        $id = preg_replace('/[^a-zA-Z0-9_-]/', '', $id);
+        $table_pattern = $prefix . $id . "%";
+        $query = "SHOW TABLES LIKE '" . mysqli_real_escape_string($con, $table_pattern) . "'";
+        $result = mysqli_query($con, $query);
+        if ($result && mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_array($result);
+            return $row[0];
+        }
+        return "";
+    }
+}
+
+$id = isset($_POST['id']) ? preg_replace('/[^a-zA-Z0-9_-]/', '', $_POST['id']) : '';
+$tablename = get_safe_table_name($con, "optimiseddata_", $id);
+if (empty($tablename)) {
+    $tablename = "optimiseddata";
 }
 
 ?>
@@ -137,118 +140,64 @@ if(isset($_POST['step'])){
                                         <tbody>
 										<?php
 										
-										if($leg==2){
-											$query = "SELECT * FROM ".$tablename1." WHERE 1";
+										$chk = mysqli_query($con, "SHOW TABLES LIKE '" . mysqli_real_escape_string($con, $tablename) . "'");
+										if ($chk && mysqli_num_rows($chk) > 0) {
+											$query = "SELECT * FROM " . mysqli_real_escape_string($con, $tablename) . " WHERE 1";
 											$result = mysqli_query($con,$query);
-											$numrows = mysqli_num_rows($result);
-											while($row = mysqli_fetch_array($result))
-											{
-												
-												if($row['new_id_admin']!=null or $row['new_id_admin']!=""){
-													$id = $row['new_id_admin'];
-													$query_warehouse = "SELECT latitude,longitude,district FROM warehouse WHERE id='$id'";
-													$result_warehouse = mysqli_query($con,$query_warehouse);
-													$numrows_warehouse = mysqli_num_rows($result_warehouse);
-													if($numrows_warehouse!=0){
-														$row_warehouse = mysqli_fetch_assoc($result_warehouse);
-														$row["from_lat"] = $row_warehouse['latitude'];
-														$row["from_long"] = $row_warehouse['longitude'];
-														$row["from_district"] = $row_warehouse['district'];
+											if($result){
+												while($row = mysqli_fetch_array($result))
+												{
+													
+													if($row['new_id_admin']!=null or $row['new_id_admin']!=""){
+														$id = $row['new_id_admin'];
+														$query_warehouse = "SELECT latitude,longitude,district FROM warehouse WHERE id='$id'";
+														$result_warehouse = mysqli_query($con,$query_warehouse);
+														$numrows_warehouse = mysqli_num_rows($result_warehouse);
+														if($numrows_warehouse!=0){
+															$row_warehouse = mysqli_fetch_assoc($result_warehouse);
+															$row["from_lat"] = $row_warehouse['latitude'];
+															$row["from_long"] = $row_warehouse['longitude'];
+															$row["from_district"] = $row_warehouse['district'];
+														}
+														$row["from_id"] = $row['new_id_admin'];
+														$row["from_name"] = $row['new_name_admin'];
+														$row["distance"] = $row['new_distance_admin'];
 													}
-													$row["from_id"] = $row['new_id_admin'];
-													$row["from_name"] = $row['new_name_admin'];
-													$row["distance"] = $row['new_distance_admin'];
-												}
-												else if(($row['new_id_district']!=null or $row['new_id_district']!="") and $row['admin_approve']=="yes"){
-													$id = $row['new_id_district'];
-													$query_warehouse = "SELECT latitude,longitude,district FROM warehouse WHERE id='$id'";
-													$result_warehouse = mysqli_query($con,$query_warehouse);
-													$numrows_warehouse = mysqli_num_rows($result_warehouse);
-													if($numrows_warehouse!=0){
-														$row_warehouse = mysqli_fetch_assoc($result_warehouse);
-														$row["from_lat"] = $row_warehouse['latitude'];
-														$row["from_long"] = $row_warehouse['longitude'];
-														$row["from_district"] = $row_warehouse['district'];
+													else if(($row['new_id_district']!=null or $row['new_id_district']!="") and $row['admin_approve']=="yes"){
+														$id = $row['new_id_district'];
+														$query_warehouse = "SELECT latitude,longitude,district FROM warehouse WHERE id='$id'";
+														$result_warehouse = mysqli_query($con,$query_warehouse);
+														$numrows_warehouse = mysqli_num_rows($result_warehouse);
+														if($numrows_warehouse!=0){
+															$row_warehouse = mysqli_fetch_assoc($result_warehouse);
+															$row["from_lat"] = $row_warehouse['latitude'];
+															$row["from_long"] = $row_warehouse['longitude'];
+															$row["from_district"] = $row_warehouse['district'];
+														}
+														$row["from_id"] = $row['new_id_district'];
+														$row["from_name"] = $row['new_name_district'];
+														$row["distance"] = $row['new_distance_district'];
 													}
-													$row["from_id"] = $row['new_id_district'];
-													$row["from_name"] = $row['new_name_district'];
-													$row["distance"] = $row['new_distance_district'];
+													echo "<tr><td>{$row['scenario']}</td>".
+														"<td>{$row['from']}</td>".
+														"<td>{$row['from_state']}</td>".
+														"<td>{$row['from_id']}</td>".
+														"<td>{$row['from_name']}</td>".
+														"<td>{$row['from_district']}</td>".
+														"<td>{$row['from_lat']}</td>".
+														"<td>{$row['from_long']}</td>".
+														"<td>{$row['to']}</td>".
+														"<td>{$row['to_state']}</td>".
+														"<td>{$row['to_id']}</td>".
+														"<td>{$row['to_name']}</td>".
+														"<td>{$row['to_district']}</td>".
+														"<td>{$row['to_lat']}</td>".
+														"<td>{$row['to_long']}</td>".
+														"<td>{$row['commodity']}</td>".
+														"<td>{$row['quantity']}</td>".
+														"<td>{$row['distance']}</td></tr>";
 												}
-												echo "<tr><td>{$row['scenario']}</td>".
-													"<td>{$row['from']}</td>".
-													"<td>{$row['from_state']}</td>".
-													"<td>{$row['from_id']}</td>".
-													"<td>{$row['from_name']}</td>".
-													"<td>{$row['from_district']}</td>".
-													"<td>{$row['from_lat']}</td>".
-													"<td>{$row['from_long']}</td>".
-													"<td>{$row['to']}</td>".
-													"<td>{$row['to_state']}</td>".
-													"<td>{$row['to_id']}</td>".
-													"<td>{$row['to_name']}</td>".
-													"<td>{$row['to_district']}</td>".
-													"<td>{$row['to_lat']}</td>".
-													"<td>{$row['to_long']}</td>".
-													"<td>{$row['commodity']}</td>".
-													"<td>{$row['quantity']}</td>".
-													"<td>{$row['distance']}</td></tr>";
 											}
-										}
-										
-										$query = "SELECT * FROM ".$tablename." WHERE 1";
-										$result = mysqli_query($con,$query);
-										$numrows = mysqli_num_rows($result);
-										while($row = mysqli_fetch_array($result))
-										{
-											
-											if($row['new_id_admin']!=null or $row['new_id_admin']!=""){
-												$id = $row['new_id_admin'];
-												$query_warehouse = "SELECT latitude,longitude,district FROM warehouse WHERE id='$id'";
-												$result_warehouse = mysqli_query($con,$query_warehouse);
-												$numrows_warehouse = mysqli_num_rows($result_warehouse);
-												if($numrows_warehouse!=0){
-													$row_warehouse = mysqli_fetch_assoc($result_warehouse);
-													$row["from_lat"] = $row_warehouse['latitude'];
-													$row["from_long"] = $row_warehouse['longitude'];
-													$row["from_district"] = $row_warehouse['district'];
-												}
-												$row["from_id"] = $row['new_id_admin'];
-												$row["from_name"] = $row['new_name_admin'];
-												$row["distance"] = $row['new_distance_admin'];
-											}
-											else if(($row['new_id_district']!=null or $row['new_id_district']!="") and $row['admin_approve']=="yes"){
-												$id = $row['new_id_district'];
-												$query_warehouse = "SELECT latitude,longitude,district FROM warehouse WHERE id='$id'";
-												$result_warehouse = mysqli_query($con,$query_warehouse);
-												$numrows_warehouse = mysqli_num_rows($result_warehouse);
-												if($numrows_warehouse!=0){
-													$row_warehouse = mysqli_fetch_assoc($result_warehouse);
-													$row["from_lat"] = $row_warehouse['latitude'];
-													$row["from_long"] = $row_warehouse['longitude'];
-													$row["from_district"] = $row_warehouse['district'];
-												}
-												$row["from_id"] = $row['new_id_district'];
-												$row["from_name"] = $row['new_name_district'];
-												$row["distance"] = $row['new_distance_district'];
-											}
-											echo "<tr><td>{$row['scenario']}</td>".
-												"<td>{$row['from']}</td>".
-												"<td>{$row['from_state']}</td>".
-												"<td>{$row['from_id']}</td>".
-												"<td>{$row['from_name']}</td>".
-												"<td>{$row['from_district']}</td>".
-												"<td>{$row['from_lat']}</td>".
-												"<td>{$row['from_long']}</td>".
-												"<td>{$row['to']}</td>".
-												"<td>{$row['to_state']}</td>".
-												"<td>{$row['to_id']}</td>".
-												"<td>{$row['to_name']}</td>".
-												"<td>{$row['to_district']}</td>".
-												"<td>{$row['to_lat']}</td>".
-												"<td>{$row['to_long']}</td>".
-												"<td>{$row['commodity']}</td>".
-												"<td>{$row['quantity']}</td>".
-												"<td>{$row['distance']}</td></tr>";
 										}
 										
 										?>

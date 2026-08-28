@@ -3,21 +3,48 @@ require('util/Connection.php');
 require('util/SessionCheck.php');
 require('Header.php');
 
-$id = $_POST['id'];
-$tablename = "warehouse_".$id;
-$tablename1 = "warehouse_".$id;
+if (!function_exists('get_safe_table_name')) {
+    function get_safe_table_name($con, $prefix, $id) {
+        if (empty($id)) return "";
+        $id = preg_replace('/[^a-zA-Z0-9_-]/', '', $id);
+        $table_pattern = $prefix . $id . "%";
+        $query = "SHOW TABLES LIKE '" . mysqli_real_escape_string($con, $table_pattern) . "'";
+        $result = mysqli_query($con, $query);
+        if ($result && mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_array($result);
+            return $row[0];
+        }
+        return "";
+    }
+}
+
+$id = isset($_POST['id']) ? preg_replace('/[^a-zA-Z0-9_-]/', '', $_POST['id']) : '';
+$tablename = get_safe_table_name($con, "warehouse_", $id);
+if (empty($tablename)) {
+    $tablename = "warehouse_".$id;
+}
+$tablename1 = $tablename;
 $leg = 0;
 if(isset($_POST['step'])){
 	if($_POST['step']=="leg1"){
 		$leg = 1;
-		$tablename = "warehouse_leg1_".$id;
-		$tablename1 = "warehouse_leg1_".$id;
+		$tablename = get_safe_table_name($con, "warehouse_leg1_", $id);
+        if (empty($tablename)) {
+            $tablename = "warehouse_leg1_".$id;
+        }
+		$tablename1 = $tablename;
 	}
 	if($_POST['step']=="all"){
 		$leg = 2;
-		$leg_id = $_POST['legid'];
-		$tablename1 = "warehouse_".$id;
-		$tablename = "warehouse_leg1_".$leg_id;
+		$leg_id = preg_replace('/[^a-zA-Z0-9_-]/', '', $_POST['legid']);
+		$tablename1 = get_safe_table_name($con, "warehouse_", $id);
+        if (empty($tablename1)) {
+            $tablename1 = "warehouse_".$id;
+        }
+		$tablename = get_safe_table_name($con, "warehouse_leg1_", $leg_id);
+        if (empty($tablename)) {
+            $tablename = "warehouse_leg1_".$leg_id;
+        }
 	}
 }
 
@@ -73,42 +100,55 @@ if(isset($_POST['step'])){
                                             </tr>
                                         </thead>
                                         <tbody>
-										<?php
-										$query_leg1 = "SELECT * FROM ".$tablename." WHERE 1";
+										$chk_leg1 = mysqli_query($con, "SHOW TABLES LIKE '" . mysqli_real_escape_string($con, $tablename) . "'");
+										$chk_leg0 = mysqli_query($con, "SHOW TABLES LIKE '" . mysqli_real_escape_string($con, $tablename1) . "'");
 										
-										if($leg==2){
-											$query = "SELECT * FROM ".$tablename1." WHERE 1";								
+										if($leg==2 && $chk_leg0 && mysqli_num_rows($chk_leg0) > 0){
+											$query = "SELECT * FROM " . mysqli_real_escape_string($con, $tablename1) . " WHERE 1";								
 											$result = mysqli_query($con,$query);
-											$numrows = mysqli_num_rows($result);
-											while($row = mysqli_fetch_array($result))
-											{
-												echo "<tr><td>{$row['district']}</td>".
-												"<td>{$row['name']}</td>".
-												"<td>{$row['id']}</td>".
-												"<td>{$row['type']}</td>".
-												"<td>{$row['warehousetype']}</td>".
-												"<td>{$row['latitude']}</td>".
-												"<td>{$row['longitude']}</td>".
-												"<td>{$row['storage']}</td></tr>";
+											if($result){
+												while($row = mysqli_fetch_array($result))
+												{
+													echo "<tr><td>{$row['district']}</td>".
+													"<td>{$row['name']}</td>".
+													"<td>{$row['id']}</td>".
+													"<td>{$row['type']}</td>".
+													"<td>{$row['warehousetype']}</td>".
+													"<td>{$row['latitude']}</td>".
+													"<td>{$row['longitude']}</td>".
+													"<td>{$row['storage']}</td></tr>";
+												}
 											}
-											$query_leg1 = "SELECT * FROM " . $tablename . " t 
-															WHERE NOT EXISTS (
-															  SELECT 1 FROM " . $tablename1 . " t1 
-															  WHERE t.name = t1.name AND t.id = t1.id
-															)";
+											if ($chk_leg1 && mysqli_num_rows($chk_leg1) > 0) {
+												$query_leg1 = "SELECT * FROM " . mysqli_real_escape_string($con, $tablename) . " t 
+																WHERE NOT EXISTS (
+																  SELECT 1 FROM " . mysqli_real_escape_string($con, $tablename1) . " t1 
+																  WHERE t.name = t1.name AND t.id = t1.id
+																)";
+											} else {
+												$query_leg1 = "";
+											}
+										} else if ($chk_leg1 && mysqli_num_rows($chk_leg1) > 0) {
+											$query_leg1 = "SELECT * FROM " . mysqli_real_escape_string($con, $tablename) . " WHERE 1";
+										} else {
+											$query_leg1 = "";
 										}
-										$result = mysqli_query($con,$query_leg1);
-										$numrows = mysqli_num_rows($result);
-										while($row = mysqli_fetch_array($result))
-										{
-											echo "<tr><td>{$row['district']}</td>".
-											"<td>{$row['name']}</td>".
-											"<td>{$row['id']}</td>".
-											"<td>{$row['type']}</td>".
-											"<td>{$row['warehousetype']}</td>".
-											"<td>{$row['latitude']}</td>".
-											"<td>{$row['longitude']}</td>".
-											"<td>{$row['storage']}</td></tr>";
+										
+										if (!empty($query_leg1)) {
+											$result = mysqli_query($con,$query_leg1);
+											if($result){
+												while($row = mysqli_fetch_array($result))
+												{
+													echo "<tr><td>{$row['district']}</td>".
+													"<td>{$row['name']}</td>".
+													"<td>{$row['id']}</td>".
+													"<td>{$row['type']}</td>".
+													"<td>{$row['warehousetype']}</td>".
+													"<td>{$row['latitude']}</td>".
+													"<td>{$row['longitude']}</td>".
+													"<td>{$row['storage']}</td></tr>";
+												}
+											}
 										}
 										
 										?>

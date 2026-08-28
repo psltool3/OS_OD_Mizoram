@@ -6,5 +6,4 @@ date_default_timezone_set("Asia/Kolkata");
 $con = mysqli_connect('localhost','root','','mizoram');
 //$con = mysqli_connect('localhost','intrauser','Intrauser@123','pds');
 
-
 ?>

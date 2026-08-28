@@ -3,9 +3,26 @@ require('util/Connection.php');
 require('util/SessionCheck.php');
 require('Header.php');
 
-$id = $_POST['id'];
-$tablename = "fps_".$id;
+if (!function_exists('get_safe_table_name')) {
+    function get_safe_table_name($con, $prefix, $id) {
+        if (empty($id)) return "";
+        $id = preg_replace('/[^a-zA-Z0-9_-]/', '', $id);
+        $table_pattern = $prefix . $id . "%";
+        $query = "SHOW TABLES LIKE '" . mysqli_real_escape_string($con, $table_pattern) . "'";
+        $result = mysqli_query($con, $query);
+        if ($result && mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_array($result);
+            return $row[0];
+        }
+        return "";
+    }
+}
 
+$id = isset($_POST['id']) ? preg_replace('/[^a-zA-Z0-9_-]/', '', $_POST['id']) : '';
+$tablename = get_safe_table_name($con, "fps_", $id);
+if (empty($tablename)) {
+    $tablename = "fps_".$id;
+}
 ?>
 <style>
     td {
@@ -59,18 +76,22 @@ $tablename = "fps_".$id;
                                         <tbody>
 										<?php
 										
-										$query = "SELECT * FROM ".$tablename." WHERE 1";
-										$result = mysqli_query($con,$query);
-										$numrows = mysqli_num_rows($result);
-										while($row = mysqli_fetch_array($result))
-										{
-											echo "<tr><td>{$row['district']}</td>".
-											"<td>{$row['name']}</td>".
-											"<td>{$row['id']}</td>".
-											"<td>{$row['type']}</td>".
-											"<td>{$row['latitude']}</td>".
-											"<td>{$row['longitude']}</td>".
-											"<td>{$row['demand']}</td></tr>";
+										$chk = mysqli_query($con, "SHOW TABLES LIKE '" . mysqli_real_escape_string($con, $tablename) . "'");
+										if ($chk && mysqli_num_rows($chk) > 0) {
+											$query = "SELECT * FROM " . mysqli_real_escape_string($con, $tablename) . " WHERE 1";
+											$result = mysqli_query($con,$query);
+											if($result){
+												while($row = mysqli_fetch_array($result))
+												{
+													echo "<tr><td>{$row['district']}</td>".
+													"<td>{$row['name']}</td>".
+													"<td>{$row['id']}</td>".
+													"<td>{$row['type']}</td>".
+													"<td>{$row['latitude']}</td>".
+													"<td>{$row['longitude']}</td>".
+													"<td>{$row['demand']}</td></tr>";
+												}
+											}
 										}
 										
 										?>

@@ -125,29 +125,10 @@ $leg = 1;
 									<button id="downloadCSV" class="btn btn-warning" style="margin-bottom: 10px;" type="button">Download CSV</button>
 									<button id="downloadXLSX" class="btn btn-success" style="margin-bottom: 10px;" type="button">Download XLSX</button>
 								</div>
-								<div class="row" style="margin-top:30px;float:left">
-									<div class="col-md-8">
-									</div>
-									<div class="col-md-4">
-										<div class="form-group">
-											<label class="col-md-3 control-label">Districts</label>
-											<div class="col-md-9">  
-												<div class="input-group">
-												<span class="input-group-addon"><span class="fa fa-certificate"></span></span>						
-												<select class="form-control" id="district" name="district" onchange="fetchDataFromServer()">
-													<option value=''>Select</option>
-													<option value='all'>All</option>
-												</select>
-												</div>
-												<span class="help-block">All option will work only for download</span>
-											</div>
-										</div>
-									</div>
-								</div>
                                 <div class="panel-body">
                                  <div class="table-responsive">
 								 <div class="table-container">
-								<table id="export_table" class="table">
+                                    <table id="export_table" class="table">
                                         <thead>
                                             <tr>												
 												<th style="font-size:16px">Scenario</th>
@@ -165,15 +146,76 @@ $leg = 1;
 												<th style="font-size:16px">To_District</th>
 												<th style="font-size:16px">To_Lat</th>
 												<th style="font-size:16px">To_Long</th>
-												<th style="font-size:16px">Commodity</th>
-												<th style="font-size:16px">Quantity</th>
-												<th style="font-size:16px">Distance</th>
+												<th style="font-size:16px">commodity</th>
+												<th style="font-size:16px">quantity (Qtl)</th>
+												<th style="font-size:16px">Distance (Km)</th>
                                             </tr>
                                         </thead>
-										 <tbody id="optimised_table">
+                                        <tbody>
+										<?php
 										
-										</tbody>
+										$chk = mysqli_query($con, "SHOW TABLES LIKE '" . mysqli_real_escape_string($con, $tablename) . "'");
+										if ($chk && mysqli_num_rows($chk) > 0) {
+											$query = "SELECT * FROM " . mysqli_real_escape_string($con, $tablename) . " WHERE 1";
+											$result = mysqli_query($con,$query);
+											if($result){
+												while($row = mysqli_fetch_array($result))
+												{
+													
+													if($row['new_id_admin']!=null or $row['new_id_admin']!=""){
+														$id = $row['new_id_admin'];
+														$query_warehouse = "SELECT latitude,longitude,district FROM warehouse WHERE id='$id'";
+														$result_warehouse = mysqli_query($con,$query_warehouse);
+														$numrows_warehouse = mysqli_num_rows($result_warehouse);
+														if($numrows_warehouse!=0){
+															$row_warehouse = mysqli_fetch_assoc($result_warehouse);
+															$row["from_lat"] = $row_warehouse['latitude'];
+															$row["from_long"] = $row_warehouse['longitude'];
+															$row["from_district"] = $row_warehouse['district'];
+														}
+														$row["from_id"] = $row['new_id_admin'];
+														$row["from_name"] = $row['new_name_admin'];
+														$row["distance"] = $row['new_distance_admin'];
+													}
+													else if(($row['new_id_district']!=null or $row['new_id_district']!="") and $row['admin_approve']=="yes"){
+														$id = $row['new_id_district'];
+														$query_warehouse = "SELECT latitude,longitude,district FROM warehouse WHERE id='$id'";
+														$result_warehouse = mysqli_query($con,$query_warehouse);
+														$numrows_warehouse = mysqli_num_rows($result_warehouse);
+														if($numrows_warehouse!=0){
+															$row_warehouse = mysqli_fetch_assoc($result_warehouse);
+															$row["from_lat"] = $row_warehouse['latitude'];
+															$row["from_long"] = $row_warehouse['longitude'];
+															$row["from_district"] = $row_warehouse['district'];
+														}
+														$row["from_id"] = $row['new_id_district'];
+														$row["from_name"] = $row['new_name_district'];
+														$row["distance"] = $row['new_distance_district'];
+													}
+													echo "<tr><td>{$row['scenario']}</td>".
+														"<td>{$row['from']}</td>".
+														"<td>{$row['from_state']}</td>".
+														"<td>{$row['from_id']}</td>".
+														"<td>{$row['from_name']}</td>".
+														"<td>{$row['from_district']}</td>".
+														"<td>{$row['from_lat']}</td>".
+														"<td>{$row['from_long']}</td>".
+														"<td>{$row['to']}</td>".
+														"<td>{$row['to_state']}</td>".
+														"<td>{$row['to_id']}</td>".
+														"<td>{$row['to_name']}</td>".
+														"<td>{$row['to_district']}</td>".
+														"<td>{$row['to_lat']}</td>".
+														"<td>{$row['to_long']}</td>".
+														"<td>{$row['commodity']}</td>".
+														"<td>{$row['quantity']}</td>".
+														"<td>{$row['distance']}</td></tr>";
+												}
+											}
+										}
 										
+										?>
+                                        </tbody>
                                     </table>
 									</div>
                                   </div>
@@ -191,7 +233,7 @@ $leg = 1;
         </div>
         <!-- END PAGE CONTAINER -->
 
-		<?php  require('DistrictAutocomplete.php'); ?>
+
 
     <!-- START SCRIPTS -->
         <!-- START PLUGINS -->
@@ -228,10 +270,9 @@ $leg = 1;
 			try {
 				var tableName = '<?php echo $tablename ?>';
 				var tableName1 = '<?php echo $tablename1 ?>';
-				var district = document.getElementById('district').value;
-				const csvResponse = await fetch('api/DownloadOptimalDataOptimised.php?format=csv&tableName=' + tableName + '&tableName1=' + tableName1 + '&district=' + district);
+				const csvResponse = await fetch('api/DownloadOptimalDataOptimised.php?format=csv&tableName='+tableName+'&tableName1='+tableName1);
 				const csvBlob = await csvResponse.blob();
-				downloadFile(csvBlob, 'Optimised_Data_' + getDateString() + '.csv');
+				downloadFile(csvBlob, 'Optimiseddata_' + getDateString() + '.csv');
 			} catch (error) {
 				console.error('Error downloading CSV file:', error);
 			}
@@ -242,32 +283,13 @@ $leg = 1;
 			try {
 				var tableName = '<?php echo $tablename ?>';
 				var tableName1 = '<?php echo $tablename1 ?>';
-				var district = document.getElementById('district').value;
-				const excelResponse = await fetch('api/DownloadOptimalDataOptimised.php?format=xlsx&tableName=' + tableName + '&tableName1=' + tableName1 + '&district=' + district);
+				const excelResponse = await fetch('api/DownloadOptimalDataOptimised.php?format=xlsx&tableName='+tableName+'&tableName1='+tableName1);
 				const excelBlob = await excelResponse.blob();
-				downloadFile(excelBlob, 'Optimised_Data_' + getDateString() + '.xlsx');
+				downloadFile(excelBlob, 'Optimiseddata_' + getDateString() + '.xlsx');
 			} catch (error) {
 				console.error('Error downloading XLSX file:', error);
 			}
 		});
-
-		// Event listener for downloading PDF
-		/*document.getElementById('downloadPDF').addEventListener('click', async function() {
-			try {
-				var tableName = '<?php echo $tablename ?>';	
-				const pdfResponse = await fetch('api/DownloadOptimalDataOptimised.php?format=pdf&tableName='+tableName);
-				const pdfBlob = await pdfResponse.blob();
-
-				const url = window.URL.createObjectURL(pdfBlob);
-				const link = document.createElement('a');
-				link.href = url;
-				link.download = 'Optimised_Data_' + getDateString() + '.pdf';
-				link.click();
-				window.URL.revokeObjectURL(url);
-			} catch (error) {
-				console.error('Error downloading PDF file:', error);
-			}
-		});*/
 		
 		// Functions for file download and PDF generation (similar to previous code)
 		function downloadFile(blob, fileName) {
@@ -278,59 +300,6 @@ $leg = 1;
 			link.click();
 			window.URL.revokeObjectURL(url);
 		}
-		
-		function fetchDataFromServer(){
-			var districtElement = document.getElementById('district');
-			var district = districtElement.value;
-			
-			if(district==""){
-				var options = districtElement.options;
-				for (var i = 0; i < options.length; i++) {
-					if (options[i].value != "all" && options[i].value != "") {
-						districtElement.selectedIndex = i;
-						district = options[i].value ;
-						break;
-					}
-				}
-			}
-			
-			var dataString = "district=" + district + "&tablename=" + "<?php echo $tablename ?>" + "&tablename1=" + "<?php echo $tablename1 ?>";
-			
-			$.ajax({
-				type: "POST",
-				url: "api/fetchOptimisedDataView.php",
-				data: dataString,
-				cache: false,
-				error: function(){
-					alert("timeout");
-					$("#filter_button").attr("disabled",false);
-				},
-				timeout: 216000,
-				success: function(result){
-					//console.log(result);
-					try{
-						$('#optimised_table').empty();
-						var resultarray = JSON.parse(result);
-						var obj = resultarray["data"];
-						for (var datafield in obj){
-							var subpart = "<tr><td>" +  obj[datafield]["scenario"] +  "</td><td>"  + obj[datafield]["from"] +  "</td><td>"  + obj[datafield]["from_state"] +  "</td><td>"  + obj[datafield]["from_id"] +  "</td><td>"  + obj[datafield]["from_name"] +  "</td><td>"  + obj[datafield]["from_district"] +  "</td><td>"  + obj[datafield]["from_lat"] + "</td><td>" + obj[datafield]["From_long"] + "</td><td>" + obj[datafield]["to"] + "</td><td>" + obj[datafield]["to_state"] + "</td><td>" + obj[datafield]["to_id"] + "</td><td>" + obj[datafield]["to_name"] + "</td><td>" + obj[datafield]["to_district"] + "</td><td>" + obj[datafield]["to_lat"] + "</td><td>" + obj[datafield]["to_long"] + "</td><td>" + obj[datafield]["commodity"] + "</td><td>" + obj[datafield]["quantity"] + "</td><td>" + obj[datafield]["distance"] + "</td></tr>";
-							
-							$('#optimised_table').append(subpart);
-						}
-						var obj = resultarray["data1"];
-						for (var datafield in obj){
-							var subpart1 = "<tr><td>" +  obj[datafield]["scenario"] +  "</td><td>"  + obj[datafield]["from"] +  "</td><td>"  + obj[datafield]["from_state"] +  "</td><td>"  + obj[datafield]["from_id"] +  "</td><td>"  + obj[datafield]["from_name"] +  "</td><td>"  + obj[datafield]["from_district"] +  "</td><td>"  + obj[datafield]["from_lat"] + "</td><td>" + obj[datafield]["From_long"] + "</td><td>" + obj[datafield]["to"] + "</td><td>" + obj[datafield]["to_state"] + "</td><td>" + obj[datafield]["to_id"] + "</td><td>" + obj[datafield]["to_name"] + "</td><td>" + obj[datafield]["to_district"] + "</td><td>" + obj[datafield]["to_lat"] + "</td><td>" + obj[datafield]["to_long"] + "</td><td>" + obj[datafield]["commodity"] + "</td><td>" + obj[datafield]["quantity"] + "</td><td>" + obj[datafield]["distance"] + "</td></tr>";
-							
-							$('#optimised_table').append(subpart1);
-						}
-					}
-					catch (error) {
-					}
-				}
-			});
-		}
-		fetchDataFromServer();
-
 
 
 		</script>

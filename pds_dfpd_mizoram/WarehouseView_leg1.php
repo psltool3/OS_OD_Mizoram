@@ -3,9 +3,36 @@ require('util/Connection.php');
 require('util/SessionCheck.php');
 require('Header.php');
 
-$id = $_POST['id'];
-$tablename = "warehouse_".$id;
-$tablename1 = "warehouse_".$id;
+if (!function_exists('get_safe_table_name')) {
+    function get_safe_table_name($con, $prefix, $id) {
+        if (empty($id)) return "";
+        $id = preg_replace('/[^a-zA-Z0-9_-]/', '', $id);
+        $table_pattern = $prefix . $id . "%";
+        $query = "SHOW TABLES LIKE '" . mysqli_real_escape_string($con, $table_pattern) . "'";
+        $result = mysqli_query($con, $query);
+        if ($result && mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_array($result);
+            return $row[0];
+        }
+        return "";
+    }
+}
+
+$id = isset($_POST['id']) ? preg_replace('/[^a-zA-Z0-9_-]/', '', $_POST['id']) : '';
+if (empty($id)) {
+    $query = "SELECT * FROM optimised_table_leg1 ORDER BY last_updated DESC LIMIT 1";
+    $result = mysqli_query($con, $query);
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $id = $row["id"];
+    }
+}
+
+$tablename = get_safe_table_name($con, "warehouse_leg1_", $id);
+if (empty($tablename)) {
+    $tablename = "warehouse_leg1_".$id;
+}
+$tablename1 = $tablename;
 $leg = 1;
 
 ?>

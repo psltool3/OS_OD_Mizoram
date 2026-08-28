@@ -1,6 +1,22 @@
 <?php
 require('util/Connection.php');
 require('util/SessionCheck.php');
+require('Header.php');
+
+if (!function_exists('get_safe_table_name')) {
+    function get_safe_table_name($con, $prefix, $id) {
+        if (empty($id)) return "";
+        $id = preg_replace('/[^a-zA-Z0-9_-]/', '', $id);
+        $table_pattern = $prefix . $id . "%";
+        $query = "SHOW TABLES LIKE '" . mysqli_real_escape_string($con, $table_pattern) . "'";
+        $result = mysqli_query($con, $query);
+        if ($result && mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_array($result);
+            return $row[0];
+        }
+        return "";
+    }
+}
 require 'vendor/autoload.php';
 require('api/fpdf/fpdf.php');
 
@@ -10,27 +26,40 @@ $columns_pdf = ["scenario","from","from_state","from_id","from_name","from_distr
 
 $filename = 'Mizoram_table_data';
 
-$id     = $_POST['id'];
-$leg_id = $_POST['legid'];
+$id = isset($_POST['id']) ? preg_replace('/[^a-zA-Z0-9_-]/', '', $_POST['id']) : '';
+if (empty($id)) {
+    $query = "SELECT * FROM optimised_table_leg1 ORDER BY last_updated DESC LIMIT 1";
+    $result = mysqli_query($con, $query);
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $id = $row["id"];
+    }
+}
 
-// For leg1 view, both tablename and tablename1 use the leg1 table
-$tablename  = "optimiseddata_leg1_" . $leg_id;
-$tablename1 = "optimiseddata_leg1_" . $leg_id;
+$tablename = get_safe_table_name($con, "optimiseddata_leg1_", $id);
+if (empty($tablename)) {
+    $tablename = get_safe_table_name($con, "optimiseddata_", $id);
+}
+if (empty($tablename)) {
+    $tablename = "optimiseddata";
+}
+$tablename1 = $tablename;
+$leg = 1;
+$leg_id = "";
 
 $month = "";
-$date  = "";
-$cost  = "";
+$date = "";
+$cost = "";
 $cost1 = "";
 
-// Get month/date from the optimised_table_leg1 record
-$query = "SELECT * FROM optimised_table_leg1 WHERE id='$leg_id'";
+$query = "SELECT * FROM optimised_table_leg1 WHERE id='$id'";
 $result = mysqli_query($con,$query);
 $numrows = mysqli_num_rows($result);
 if($numrows>0){
 	while($row=mysqli_fetch_assoc($result)){
 		$month = $row["month"];
-		$date  = $row["last_updated"];
-		$cost1 = $row["cost"];
+		$date = $row["last_updated"];
+		$cost = $row["cost"];
 	}
 }
 
@@ -54,15 +83,15 @@ while($row = mysqli_fetch_assoc($result))
 	$allocation = $allocation + (float)$row["quantity"];
 	$qkm = $qkm + (float)$row["quantity"] * (float)$row["distance"];
 }
-if($allocation > 0){
-	$averagedistanceoptimised = round($qkm_optimised/$allocation,2);
-}
+$averagedistanceoptimised = round($qkm_optimised/$allocation,2);
 $qkm = round($qkm,2);
+
 
 $allocation1 = 0;
 $qkm1 = 0;
 $qkm_optimised1 = 0;
 $averagedistanceoptimised1 = 0;
+
 
 $data = null;
 $data1 = null;
@@ -109,48 +138,7 @@ while($row = mysqli_fetch_array($result))
 
 }
 
-if($tablename!=$tablename1){
-	$query = "SELECT * FROM ".$tablename1." WHERE 1";
-	$result = mysqli_query($con,$query);
-	$numrows = mysqli_num_rows($result);
-	while($row = mysqli_fetch_array($result))
-	{
-		
-		if($row['new_id_admin']!=null or $row['new_id_admin']!=""){
-			$id = $row['new_id_admin'];
-			$query_warehouse = "SELECT latitude,longitude,district FROM warehouse WHERE id='$id'";
-			$result_warehouse = mysqli_query($con,$query_warehouse);
-			$numrows_warehouse = mysqli_num_rows($result_warehouse);
-			if($numrows_warehouse!=0){
-				$row_warehouse = mysqli_fetch_assoc($result_warehouse);
-				$row["from_lat"] = $row_warehouse['latitude'];
-				$row["from_long"] = $row_warehouse['longitude'];
-				$row["from_district"] = $row_warehouse['district'];
-			}
-			$row["from_id"] = $row['new_id_admin'];
-			$row["from_name"] = $row['new_name_admin'];
-			$row["distance"] = $row['new_distance_admin'];
-		}
-		else if(($row['new_id_district']!=null or $row['new_id_district']!="") and $row['approve_admin']=="yes"){
-		
-			$id = $row['new_id_district'];
-			$query_warehouse = "SELECT latitude,longitude,district FROM warehouse WHERE id='$id'";
-			$result_warehouse = mysqli_query($con,$query_warehouse);
-			$numrows_warehouse = mysqli_num_rows($result_warehouse);
-			if($numrows_warehouse!=0){
-				$row_warehouse = mysqli_fetch_assoc($result_warehouse);
-				$row["from_lat"] = $row_warehouse['latitude'];
-				$row["from_long"] = $row_warehouse['longitude'];
-				$row["from_district"] = $row_warehouse['district'];
-			}
-			$row["from_id"] = $row['new_id_district'];
-			$row["from_name"] = $row['new_name_district'];
-			$row["distance"] = $row['new_distance_district'];
-		}
-		$data1[] = $row;
 
-	}
-}
 
 $tableData_pdf = array();
 array_push($tableData_pdf,$columns_pdf);
@@ -193,10 +181,10 @@ function addRow($pdf, $row, $colWidth, $isHeader = false) {
 // Add to lines
 $fontSize = 12;
 $pdf->SetFont('Arial', 'B', $fontSize);
-$text = "PDS report generated for state Mizoram (Leg 1) and applicable month ".ucfirst($month)." and Date ".$date;
+$text = "PDS report generated for state Mizoram and applicable month ".ucfirst($month)." and Date ".$date;
 $pdf->Cell(0, 10, $text, 0, 1);
 
-$text = "L1 Statistics";
+$text = "Cost saving for L2";
 $pdf->Cell(0, 10, $text, 0, 1);
 
 $pdf->Cell(40, 10, 'Qkm', 1);
@@ -205,11 +193,14 @@ $pdf->Cell(50, 10, 'Average Distance', 1);
 $pdf->Cell(40, 10, 'Cost', 1);
 $pdf->Ln();
 
+
 $pdf->Cell(40, 10, $qkm, 1);
 $pdf->Cell(40, 10, $allocation, 1);
 $pdf->Cell(50, 10, $averagedistanceoptimised, 1);
-$pdf->Cell(40, 10, $cost1, 1);
+$pdf->Cell(40, 10, $cost, 1);
 $pdf->Ln();
+
+
 $pdf->Ln();
 // Add the header
 addRow($pdf, $tableData_pdf[0], $colWidth, true);
@@ -258,7 +249,7 @@ if($data1!=null){
 			addRow($pdf, $tableData_pdf[0], $colWidth, true); // Add the header again on the new page
 		}
 		$temp = array();
-		for($j=0;$j<$data1[$i];$j++){
+		for($j=0;$j<count($data1[$i]);$j++){
 			$temp["scenario"] = $data1[$i]["scenario"];
 			$temp["from"] = $data1[$i]["from"];
 			$temp["from_state"] = $data1[$i]["from_state"];

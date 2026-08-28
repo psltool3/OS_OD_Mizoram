@@ -19,10 +19,21 @@ if (!function_exists('get_safe_table_name')) {
 }
 
 $id = isset($_POST['id']) ? preg_replace('/[^a-zA-Z0-9_-]/', '', $_POST['id']) : '';
-$tablename = get_safe_table_name($con, "warehouse_", $id);
-if (empty($tablename)) {
-    $tablename = "warehouse_".$id;
+if (empty($id)) {
+    $query = "SELECT * FROM optimised_table_leg1 ORDER BY last_updated DESC LIMIT 1";
+    $result = mysqli_query($con, $query);
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $id = $row["id"];
+    }
 }
+
+$tablename = get_safe_table_name($con, "warehouse_leg1_", $id);
+if (empty($tablename)) {
+    $tablename = "warehouse_leg1_".$id;
+}
+$tablename1 = $tablename;
+
 ?>
 <style>
      td {
@@ -76,7 +87,6 @@ if (empty($tablename)) {
                                         </thead>
                                         <tbody>
 										<?php
-										
 										$chk = mysqli_query($con, "SHOW TABLES LIKE '" . mysqli_real_escape_string($con, $tablename) . "'");
 										if ($chk && mysqli_num_rows($chk) > 0) {
 											$query = "SELECT * FROM " . mysqli_real_escape_string($con, $tablename) . " WHERE 1";
@@ -85,13 +95,13 @@ if (empty($tablename)) {
 												while($row = mysqli_fetch_array($result))
 												{
 													echo "<tr><td>{$row['district']}</td>".
-													"<td>{$row['name']}</td>".
-													"<td>{$row['id']}</td>".
-													"<td>{$row['type']}</td>".
-													"<td>{$row['warehousetype']}</td>".
-													"<td>{$row['latitude']}</td>".
-													"<td>{$row['longitude']}</td>".
-													"<td>{$row['storage']}</td></tr>";
+														"<td>{$row['name']}</td>".
+														"<td>{$row['id']}</td>".
+														"<td>{$row['type']}</td>".
+														"<td>{$row['warehousetype']}</td>".
+														"<td>{$row['latitude']}</td>".
+														"<td>{$row['longitude']}</td>".
+														"<td>{$row['storage']}</td></tr>";
 												}
 											}
 										}
@@ -156,7 +166,7 @@ if (empty($tablename)) {
 		document.getElementById('downloadCSV').addEventListener('click', async function() {
 			try {
 				var tableName = '<?php echo $tablename ?>';
-				const csvResponse = await fetch('api/DownloadOptimalDataWarehouse.php?format=csv&tableName='+tableName);
+				const csvResponse = await fetch('api/DownloadOptimalDataWarehouse.php?format=csv&tableName='+tableName+'&tableName1='+tableName1);
 				const csvBlob = await csvResponse.blob();
 				downloadFile(csvBlob, 'Mizoram_Warehouse_' + getDateString() + '.csv');
 			} catch (error) {
@@ -168,7 +178,7 @@ if (empty($tablename)) {
 		document.getElementById('downloadXLSX').addEventListener('click', async function() {
 			try {
 				var tableName = '<?php echo $tablename ?>';
-				const excelResponse = await fetch('api/DownloadOptimalDataWarehouse.php?format=xlsx&tableName='+tableName);
+				const excelResponse = await fetch('api/DownloadOptimalDataWarehouse.php?format=xlsx&tableName='+tableName+'&tableName1='+tableName1);
 				const excelBlob = await excelResponse.blob();
 				downloadFile(excelBlob, 'Mizoram_Warehouse_' + getDateString() + '.xlsx');
 			} catch (error) {
@@ -180,7 +190,7 @@ if (empty($tablename)) {
 		document.getElementById('downloadPDF').addEventListener('click', async function() {
 			try {
 				var tableName = '<?php echo $tablename ?>';	
-				const pdfResponse = await fetch('api/DownloadOptimalDataWarehouse.php?format=pdf&tableName='+tableName);
+				const pdfResponse = await fetch('api/DownloadOptimalDataWarehouse.php?format=pdf&tableName='+tableName+'&tableName1='+tableName1);
 				const pdfBlob = await pdfResponse.blob();
 
 				const url = window.URL.createObjectURL(pdfBlob);
