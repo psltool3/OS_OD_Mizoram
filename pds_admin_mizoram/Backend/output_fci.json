@@ -10133,13 +10133,13 @@
   "fci_data": [
     {
       "State Name": "",
-      "WH_District": "",
-      "WH_Name": "",
-      "WH_ID": "",
-      "Type of WH": "",
-      "WH_Lat": 0,
-      "WH_Long": 0,
-      "Storage_Capacity": 0,
+      "WH_District": "AIZAWL",
+      "WH_Name": "Anjawc",
+      "WH_ID": "WC16048bbbhhh",
+      "Type of WH": "MSWC",
+      "WH_Lat": "27.99097",
+      "WH_Long": "96.73109",
+      "Storage_Capacity": "6767",
       "Owned/Rented": "",
       "quantity of Wheat stored (Quintals)": ""
     }

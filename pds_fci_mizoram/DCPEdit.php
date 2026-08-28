@@ -112,7 +112,7 @@ else{
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="text" class="form-control" id="type" name="type" value="<?php echo $type ?>" required />
+                                                        <input type="text" class="form-control" id="type" name="type" value="FCI" readonly required />
                                                     </div>
                                                     <span class="help-block">Type of FCI</span>
                                                 </div>
@@ -167,13 +167,13 @@ else{
                                             </div>
 											
 											<div class="form-group">
-                                                <label class="col-md-3 control-label">Off Take Quantity FRice*</label>
+                                                <label class="col-md-3 control-label">Total FRice Offered*</label>
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
                                                         <input type="text" class="form-control" id="demand" name="demand" value="<?php echo $demand ?>" required />
                                                     </div>
-                                                    <span class="help-block">Off Take Quantity FRice</span>
+                                                    <span class="help-block">Total FRice Offered</span>
                                                 </div>
                                             </div>											
                                         </div>

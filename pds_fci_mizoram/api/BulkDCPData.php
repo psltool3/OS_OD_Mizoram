@@ -13,7 +13,7 @@ $mapData = [
     "Type" => "type",
     "Latitude" => "latitude",
     "Longitude" => "longitude",
-    "Off Take Quantity FRice" => "demand",
+    "Total FRice Offered" => "demand",
 	"Active/Not-Active" => "active"
 ];
 
@@ -95,6 +95,11 @@ try{
 
 				if(!in_array(strtoupper(trim($column[$district])), $districts)){
 					echo "Error : Check District Name: ".$column[$district];
+					echo "</br>";
+					$redirect = 0;
+				}
+				if(strtoupper(trim($column[$type])) !== 'FCI'){
+					echo "Error : Check Type (must be FCI): ".$column[$type];
 					echo "</br>";
 					$redirect = 0;
 				}
@@ -197,7 +202,7 @@ try{
 					$DCP->setLongitude($column[$longitude]);
 					$DCP->setName($column[$name]);
 					$DCP->setId($column[$id]);
-					$DCP->setType($column[$type]);
+					$DCP->setType("FCI");
 					$DCP->setDemand($column[$demand]);
 					$DCP->setActive($column[$active]);
 					while(true){

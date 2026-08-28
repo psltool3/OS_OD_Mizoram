@@ -108,8 +108,9 @@ $DCP->setLatitude($latitude);
 $DCP->setLongitude($longitude);
 $DCP->setName($name);
 $DCP->setId($id);
-$DCP->setType($type);
+$DCP->setType("FCI");
 $DCP->setDemand($demand);
+$DCP->setActive(1);
 
 $query_insert_check = $DCP->checkInsert($DCP);
 $query_insert_result = mysqli_query($con, $query_insert_check);

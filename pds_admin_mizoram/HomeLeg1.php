@@ -553,7 +553,7 @@ require('util/Logger.php');
 									<div class="card h-100"
 										style="background-color:#3FDBBC; color:white; padding:12px; font-weight: bold;">
 										<div style="font-size:20px" id="total_supply"></div>
-										<div style="font-size:14px">Total Capacity (Qtl)</div>
+										<div style="font-size:14px">Total FRice Offered</div>
 									</div>
 								</div>
 								<div class="col-md-2 mb-4">

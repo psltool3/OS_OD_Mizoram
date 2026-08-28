@@ -107,7 +107,7 @@ $DCP->setLatitude($latitude);
 $DCP->setLongitude($longitude);
 $DCP->setName($name);
 $DCP->setId($id);
-$DCP->setType($type);
+$DCP->setType("FCI");
 $DCP->setDemand($demand);
 $DCP->setActive($active);
 
