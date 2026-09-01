@@ -1,0 +1,43 @@
+Header always set X-Frame-Options "DENY"
+Header always set Access-Control-Allow-Origin "_"
+Header always set Access-Control-Allow-Methods "GET, POST"
+Header always set Access-Control-Allow-Headers "Content-Type"
+Header always set Content-Security-Policy "frame-ancestors 'none';"
+
+ErrorDocument 404 /404.php
+ErrorDocument 403 /403.php
+Options -Indexes
+DirectoryIndex Login.html
+Header unset X-Powered-By
+php_value max_input_vars 5000
+<LimitExcept GET POST>
+Deny from all
+</LimitExcept>
+<LimitExcept GET POST>
+Require all denied
+</LimitExcept>
+RewriteEngine On
+RewriteCond %{REQUEST_METHOD} ^(TRACE|HEAD) [NC]
+RewriteRule .\* - [F]
+
+<IfModule mod_headers.c>
+    Header edit Set-Cookie ^(.*)$ "$1; HttpOnly; SameSite=Strict"
+    Header set Permissions-Policy "geolocation=(), microphone=(), camera=(), fullscreen=(self), payment=()"
+    Header set X-Permitted-Cross-Domain-Policies "none"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Content-Security-Policy "default-src 'self'; connect-src 'self' http://35.207.196.1 http://localhost:* http://127.0.0.1:*; style-src 'self' 'unsafe-inline' http://fonts.googleapis.com https://fonts.googleapis.com https://cdnjs.cloudflare.com https://use.fontawesome.com; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://ajax.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://use.fontawesome.com data:;"
+    
+</IfModule>
+
+<Files "phpinfo.php">
+Order Allow,Deny
+Deny from all
+</Files>
+
+<FilesMatch "\.pl$">
+Require all denied
+</FilesMatch>
+
+
