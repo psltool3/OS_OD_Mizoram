@@ -17,6 +17,15 @@ else
   }
 
 session_start();
+
+$timeout_duration = 3600; // 1 hour
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $timeout_duration) {
+    session_unset();
+    session_destroy();
+} else {
+    $_SESSION['last_activity'] = time();
+}
+
 if(isset($_SESSION['user'])){
 	$user = $_SESSION['user'];
 	$token = $_SESSION['token'];
