@@ -201,10 +201,10 @@ require('Header.php');
 		<script type="text/javascript" src="js/plugins/tableexport/jspdf/libs/sprintf.js"></script>
 		<script type="text/javascript" src="js/plugins/tableexport/jspdf/jspdf.js"></script>
 		<script type="text/javascript" src="js/plugins/tableexport/jspdf/libs/base64.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.4/xlsx.full.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.3/jspdf.umd.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.4/xlsx.full.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.3/jspdf.umd.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.4/xlsx.full.min.js" integrity="sha384-09kBDLIPaNNGtnpJrcnmhgxeKsahxnJWXRoVY33CNLb7nHWtmUEGSFxNpailKqE0" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha384-JcnsjUPPylna1s1fvi1u12X5qjY5OL56iySh75FdtrwhO/SWXgMjoVqcKyIIWOLk" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.4/xlsx.full.min.js" integrity="sha384-09kBDLIPaNNGtnpJrcnmhgxeKsahxnJWXRoVY33CNLb7nHWtmUEGSFxNpailKqE0" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha384-JcnsjUPPylna1s1fvi1u12X5qjY5OL56iySh75FdtrwhO/SWXgMjoVqcKyIIWOLk" crossorigin="anonymous"></script>
 
 
 		<script type="text/javascript" src="js/plugins.js"></script>
