@@ -47,7 +47,7 @@ require('Header.php');
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="text" class="form-control" id="newusername" name="newusername" required />
+                                                        <input type="text" class="form-control" id="newusername" name="newusername" pattern="^[a-zA-Z0-9_@\.]+$" maxlength="50" required />
                                                     </div>
                                                     <span class="help-block">Unique Username</span>
                                                 </div>
@@ -77,7 +77,7 @@ require('Header.php');
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="text" class="form-control" id="newpassword" name="newpassword" required />
+                                                        <input type="text" class="form-control" id="newpassword" name="newpassword" maxlength="128" required />
                                                     </div>
                                                     <span class="help-block">Password</span>
                                                 </div>
@@ -102,7 +102,7 @@ require('Header.php');
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="text" class="form-control" id="username" name="username" required />
+                                                        <input type="text" class="form-control" id="username" name="username" pattern="^[a-zA-Z0-9_@\.]+$" maxlength="50" required />
                                                     </div>
                                                     <span class="help-block">Username</span>
                                                 </div>
@@ -118,7 +118,7 @@ require('Header.php');
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="password" autocomplete="off" class="form-control" id="password" name="password" required />
+                                                        <input type="password" autocomplete="off" class="form-control" id="password" name="password" maxlength="128" required />
                                                     </div>
                                                     <span class="help-block">Password</span>
                                                 </div>

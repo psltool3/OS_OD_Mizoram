@@ -52,10 +52,20 @@ if (!preg_match('/^[a-zA-Z0-9_@]+$/', $newusername)) {
     return;
 }
 
+if (!preg_match('/^[a-zA-Z0-9_@\.]{1,50}$/', $person->getUsername())) {
+    echo "Invalid admin username format.";
+    return;
+}
+
+$admin_username = $person->getUsername();
+
 // Query the database to get the stored hash for the username
-$query = "SELECT * FROM login WHERE username='".$person->getUsername()."'";
-$result = mysqli_query($con, $query);
-$row = mysqli_fetch_assoc($result);
+$stmt = $con->prepare("SELECT * FROM login WHERE username=?");
+$stmt->bind_param("s", $admin_username);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+$stmt->close();
 
 // Check if the username exists and verify the password using password_verify
 if ($row) {
@@ -68,28 +78,37 @@ if ($row) {
         $person->setRole($_POST["district"]);
         $uid = uniqid();
 		
-		$log_query = "select username  from login WHERE uid='$uid'";
-		$log_result = mysqli_query($con,$log_query);
-		if ($log_result && $row = $log_result->fetch_assoc()) {
-			$log_name =  $row['username'];
+		$log_stmt = $con->prepare("SELECT username FROM login WHERE uid=?");
+		$log_stmt->bind_param("s", $uid);
+		$log_stmt->execute();
+		$log_result = $log_stmt->get_result();
+		if ($log_result && $log_row = $log_result->fetch_assoc()) {
+			$log_name =  $log_row['username'];
 		}
-
+		$log_stmt->close();
 
         // Hash the new password before inserting it into the database
         $hashedPassword = password_hash($person->getPassword(), PASSWORD_DEFAULT);
 
         // Check if the new username already exists
-        $query = "SELECT * FROM login WHERE username='".$person->getUsername()."'";
-        $result = mysqli_query($con, $query);
-        $numrows = mysqli_num_rows($result);
+        $check_stmt = $con->prepare("SELECT * FROM login WHERE username=?");
+        $new_username = $person->getUsername();
+        $check_stmt->bind_param("s", $new_username);
+        $check_stmt->execute();
+        $check_result = $check_stmt->get_result();
+        $numrows = $check_result->num_rows;
+        $check_stmt->close();
 
         if($numrows == 1){
             echo "Error : Username already exists";
         } else {
             // Insert the new user with the hashed password
-            $query1 = "INSERT INTO login (username, password, uid, role, verified) 
-                       VALUES ('".$person->getUsername()."', '".$hashedPassword."', '$uid', '".strtolower($person->getRole())."', '1')";
-            mysqli_query($con, $query1);
+            $insert_stmt = $con->prepare("INSERT INTO login (username, password, uid, role, verified) VALUES (?, ?, ?, ?, '1')");
+            $role = strtolower($person->getRole());
+            $insert_stmt->bind_param("ssss", $new_username, $hashedPassword, $uid, $role);
+            $insert_stmt->execute();
+            $insert_stmt->close();
+            
             mysqli_close($con);
 			
 			$filteredPost = $_POST;

@@ -27,15 +27,24 @@ if (empty($_POST['captchainput']) ||$_SESSION['captcha'] !==  $_POST['captchainp
 }
 
 $person = new Login;
-$person->setUsername($_POST["username"]);
+$username = $_POST["username"];
+
+if (!preg_match('/^[a-zA-Z0-9_@\.]{1,50}$/', $username)) {
+    writeLog("Failed Login Attempt -> Invalid username format: " . $username);
+    die("Invalid username format.");
+}
+$person->setUsername($username);
 $nonceValue = 'nonce_value';
 
 $Encryption = new Encryption();
 $person->setPassword($Encryption->decrypt($_POST["password"], $nonceValue));
 
-$query = "SELECT * FROM login WHERE username='".$person->getUsername()."'";
-$result = mysqli_query($con, $query);
-$row = mysqli_fetch_assoc($result);
+$stmt = $con->prepare("SELECT * FROM login WHERE username=?");
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+$stmt->close();
 
 if (empty($row)) {
 	writeLog("Failed Login Attempt -> Username incorrect or does not exist for username: " . $person->getUsername());
@@ -67,8 +76,10 @@ if(password_verify($person->getPassword(), $dbHashedPassword)){
 	$authToken = md5($uniqueId);
 	$currentLoginTime = date("Y-m-d H:i:s");
 	
-	$queryUpdate = "UPDATE login SET token='$authToken', lastlogin='$currentLoginTime', count='$count', failed_attempts=0, locked_until=NULL WHERE username='".$person->getUsername()."'";
-	mysqli_query($con, $queryUpdate);
+	$queryUpdate = $con->prepare("UPDATE login SET token=?, lastlogin=?, count=?, failed_attempts=0, locked_until=NULL WHERE username=?");
+	$queryUpdate->bind_param("ssis", $authToken, $currentLoginTime, $count, $username);
+	$queryUpdate->execute();
+	$queryUpdate->close();
 
 	$_SESSION['district_user'] = $person->getUsername();
 	$_SESSION['district_password'] = $person->getPassword();
@@ -83,11 +94,13 @@ if(password_verify($person->getPassword(), $dbHashedPassword)){
 else{
     $failed_attempts = $row['failed_attempts'] + 1;
     if ($failed_attempts >= 5) {
-        $lock_query = "UPDATE login SET failed_attempts = $failed_attempts, locked_until = DATE_ADD(NOW(), INTERVAL 15 MINUTE) WHERE username='".$person->getUsername()."'";
+        $lock_query = $con->prepare("UPDATE login SET failed_attempts = ?, locked_until = DATE_ADD(NOW(), INTERVAL 15 MINUTE) WHERE username=?");
     } else {
-        $lock_query = "UPDATE login SET failed_attempts = $failed_attempts WHERE username='".$person->getUsername()."'";
+        $lock_query = $con->prepare("UPDATE login SET failed_attempts = ? WHERE username=?");
     }
-    mysqli_query($con, $lock_query);
+    $lock_query->bind_param("is", $failed_attempts, $username);
+    $lock_query->execute();
+    $lock_query->close();
 
     writeLog("Failed Login Attempt -> Password incorrect for username: " . $person->getUsername());
     echo "Error : Password or Username is incorrect";

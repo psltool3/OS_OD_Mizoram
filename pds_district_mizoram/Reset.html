@@ -92,7 +92,7 @@
                     <form action="api/Reset.php" class="form-horizontal" method="post" autocomplete="off" onsubmit="return verifyCaptcha()">
 					<div class="form-group">
                         <div class="col-md-12">
-                            <input type="text" id="username" name="username" class="form-control" placeholder="Username"/>
+                            <input type="text" id="username" name="username" class="form-control" placeholder="Username" pattern="^[a-zA-Z0-9_@\.]+$" maxlength="50" required />
                         </div>
                     </div>
                     
