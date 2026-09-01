@@ -1,4 +1,9 @@
 <?php
+require_once('../util/SessionFunction.php');
+if(!SessionCheck()){
+    die('Unauthorized');
+}
+
 require('../util/Connection.php');
 require('../structures/FPS.php');
 require('../util/SessionFunction.php');
@@ -320,4 +325,9 @@ else{
 }
 
 ?>
-<?php require('Fullui.php');  ?>
+<?php
+require_once('../util/SessionFunction.php');
+if(!SessionCheck()){
+    die('Unauthorized');
+}
+ require('Fullui.php');  ?>

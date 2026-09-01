@@ -1,4 +1,9 @@
 <?php
+require_once('../util/SessionFunction.php');
+if(!SessionCheck()){
+    die('Unauthorized');
+}
+
 require('../util/Connection.php');
 require('../structures/DCP.php');
 require('../util/SessionFunction.php');
@@ -306,4 +311,9 @@ catch(Exception $e){
 	echo "Error : Please check data in  .csv file";
 }
 ?>
-<?php require('Fullui.php');  ?>
+<?php
+require_once('../util/SessionFunction.php');
+if(!SessionCheck()){
+    die('Unauthorized');
+}
+ require('Fullui.php');  ?>

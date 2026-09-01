@@ -1,4 +1,9 @@
 <?php
+require_once('../util/SessionFunction.php');
+if(!SessionCheck()){
+    die('Unauthorized');
+}
+
 
 require('../util/Connection.php');
 require '../vendor/autoload.php';

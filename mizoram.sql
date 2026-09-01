@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 07, 2026 at 11:57 AM
+-- Generation Time: Sep 01, 2026 at 09:41 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -7921,33 +7921,35 @@ CREATE TABLE `login` (
   `token` varchar(255) NOT NULL,
   `lastlogin` varchar(255) NOT NULL,
   `count` int(11) NOT NULL DEFAULT 0,
-  `permission` varchar(100) NOT NULL
+  `permission` varchar(100) NOT NULL,
+  `failed_attempts` int(11) DEFAULT 0,
+  `locked_until` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `login`
 --
 
-INSERT INTO `login` (`username`, `password`, `uid`, `verified`, `role`, `token`, `lastlogin`, `count`, `permission`) VALUES
-('admin@pds', '$2y$10$.HIRS7ZF3NrDoUqgzOcsA.3LfUSNkksCBgF3jSFM4nb4zGGEIVZuW', '67163a9d4e46e', '1', 'admin', 'd60f8b7da0037993970f39d4ba03d35f', '2026-08-07 14:48:59', 176, ''),
-('champhai@pds', '$2y$10$qQr6eg87PASSYFZgBylKOON4ojri0jLhFfwgdof4UB50ojfrRpqty', '69c64ec7334cd', '1', 'champhai', '', '', 0, ''),
-('hnahthial@pds', '$2y$10$JB2a9gUdkpad9.M7KbGWfOi2Rft4b5wd89TUjREZsSTOCDaD7UeRG', '69c64f6d083d0', '1', 'hnahthial', '', '', 0, ''),
-('khawzawl@pds', '$2y$10$j.Ax9K49WlFxJtvqEGkdBO1XBDdgyDk7Dtx/BuJ5GAuamhWsNrVlO', '69c64fb2a605a', '1', 'khawzawl', '', '', 0, ''),
-('kolasib@pds', '$2y$10$GcAirf9ed5rhkjsMhfkDReUbn0baKtIjJLYGEs0sxVUxcOfCpVRyi', '69c64fed033e5', '1', 'kolasib', '', '', 0, ''),
-('lawngtlai@pds', '$2y$10$aZbpZVDnzfvC.AHjBnewaO49xg/ZZDc/Lz6wCKMPQm0XBwcum7cDK', '69c650229120e', '1', 'lawngtlai', '', '', 0, ''),
-('lunglei@pds', '$2y$10$/sPecagsOAqx1egCYlFqrekLSHQBDfDXK8i2z8JRik8Xk.MRwA4wO', '69c650685959f', '1', 'lunglei', '', '', 0, ''),
-('mamit@pds', '$2y$10$BdtHn3T4RGLzmCXjGKG8tufjlsKTh08scjDDZxE/jZ5dJ.fP4pnee', '69c6509c78651', '1', 'mamit', '', '', 0, ''),
-('saiha@pds', '$2y$10$WzqbCtlMRraqDur2Xf3lNul26JWENTYhcUIuFDMilUzCXVm65BW7W', '69c650d21b788', '1', 'saiha', '', '', 0, ''),
-('saitual@pds', '$2y$10$j5soVVmr0JgAwKeRdQhMReCkwhiATG3VdXDsfcfljSFDtsqUGwYEW', '69c651032b64d', '1', 'saitual', '', '', 0, ''),
-('serchhip@pds', '$2y$10$FegZVvUxuQDANP/xp/sBCemKqRYkNIcI71CBM89CBDjEu9Jvr6eEO', '69c651324bd9c', '1', 'serchhip', '', '', 0, ''),
-('DINAKHIANGTE', '$2y$10$mBSYgiIcGYmYBYgO/Si2y.T5mmJ9T39hSdNcY2wl0BW4LvkTgSW6e', '69f07cf2ed69b', '1', 'admin', 'a162d85ec7171222ded6ace0b562936b', '2026-05-02 10:39:21', 4, ''),
-('rinngheta', '$2y$10$6UkoViZHdoJjUHWA1niex.h2R8XkpDsbbdS.PEEw0uIZeEVwH.y8G', '69f07d589b663', '1', 'admin', '', '', 0, ''),
-('hmaihmar', '$2y$10$dS2uz5cG0QCwTnBUEtaUBek80Rqu6a1UTAUbKSyhH5b3BIctfFjee', '69f07d96e2744', '1', 'admin', 'd9d3287fb295bfaf818eeeae9ba82105', '2026-04-29 16:17:43', 3, ''),
-('Fci@pds', '$2y$10$JPrhyq/GS4.XRV8JBxHbce6paxc/7dazyQmp85NVcrXNoW6KN2Dcm', '6a16cfd56d1a9', '1', 'fci', '57d97b1b1b6d2d58c5b7a90fcbb6c312', '2026-06-10 10:51:52', 2, ''),
-('fci1@pds', '$2y$10$PugAkLJ2NsQ.W.Q7xbYoCuaywiQ/L6aN/SDnXi7NIuuKr8EvXuLbu', '6a295350931a4', '1', 'fci', '9a830d4260ee59e4516f84c123c8376c', '2026-06-10 17:39:02', 1, ''),
-('aizawl@pds', '$2y$10$umYAMeMRSox4JCiAnil5EenT18hWGZ0wNsbGlpAK529xMXNkHOgCq', '6a7462c88aefd', '1', 'aizawl', '3df18656bde87d56e0ec37a50f3feeb5', '2026-08-06 17:33:05', 2, ''),
-('Fci@pds@123', '$2y$10$Qos2ZYGVtcsaJsOGKXPPxei..SqwQ8s/peacCEp/9wNcsejKOOKwS', '6a756d93863b0', '1', 'fci', 'a99e525ec7c677d1ede84f3854c5afc4', '2026-08-07 11:23:50', 1, ''),
-('Dfpd@pds@123', '$2y$10$SLYaGhCmYbY2PmN07OzAjuHnThLKAT4UdmdW5geOEv2doT.yWHHPu', '6a75826dac052', '1', 'dfpd', '365232316272a0f0557ec711f2842374', '2026-08-07 15:22:16', 5, '');
+INSERT INTO `login` (`username`, `password`, `uid`, `verified`, `role`, `token`, `lastlogin`, `count`, `permission`, `failed_attempts`, `locked_until`) VALUES
+('admin@pds', '$2y$10$.HIRS7ZF3NrDoUqgzOcsA.3LfUSNkksCBgF3jSFM4nb4zGGEIVZuW', '67163a9d4e46e', '1', 'admin', 'fb37d5a94ca49e49d1aaa8306cea6a4c', '2026-09-01 13:11:05', 192, '', 0, NULL),
+('champhai@pds', '$2y$10$qQr6eg87PASSYFZgBylKOON4ojri0jLhFfwgdof4UB50ojfrRpqty', '69c64ec7334cd', '1', 'champhai', '', '', 0, '', 0, NULL),
+('hnahthial@pds', '$2y$10$JB2a9gUdkpad9.M7KbGWfOi2Rft4b5wd89TUjREZsSTOCDaD7UeRG', '69c64f6d083d0', '1', 'hnahthial', '', '', 0, '', 0, NULL),
+('khawzawl@pds', '$2y$10$j.Ax9K49WlFxJtvqEGkdBO1XBDdgyDk7Dtx/BuJ5GAuamhWsNrVlO', '69c64fb2a605a', '1', 'khawzawl', '', '', 0, '', 0, NULL),
+('kolasib@pds', '$2y$10$GcAirf9ed5rhkjsMhfkDReUbn0baKtIjJLYGEs0sxVUxcOfCpVRyi', '69c64fed033e5', '1', 'kolasib', '', '', 0, '', 0, NULL),
+('lawngtlai@pds', '$2y$10$aZbpZVDnzfvC.AHjBnewaO49xg/ZZDc/Lz6wCKMPQm0XBwcum7cDK', '69c650229120e', '1', 'lawngtlai', '', '', 0, '', 0, NULL),
+('lunglei@pds', '$2y$10$/sPecagsOAqx1egCYlFqrekLSHQBDfDXK8i2z8JRik8Xk.MRwA4wO', '69c650685959f', '1', 'lunglei', '', '', 0, '', 0, NULL),
+('mamit@pds', '$2y$10$BdtHn3T4RGLzmCXjGKG8tufjlsKTh08scjDDZxE/jZ5dJ.fP4pnee', '69c6509c78651', '1', 'mamit', '', '', 0, '', 0, NULL),
+('saiha@pds', '$2y$10$WzqbCtlMRraqDur2Xf3lNul26JWENTYhcUIuFDMilUzCXVm65BW7W', '69c650d21b788', '1', 'saiha', '', '', 0, '', 0, NULL),
+('saitual@pds', '$2y$10$j5soVVmr0JgAwKeRdQhMReCkwhiATG3VdXDsfcfljSFDtsqUGwYEW', '69c651032b64d', '1', 'saitual', '', '', 0, '', 0, NULL),
+('serchhip@pds', '$2y$10$FegZVvUxuQDANP/xp/sBCemKqRYkNIcI71CBM89CBDjEu9Jvr6eEO', '69c651324bd9c', '1', 'serchhip', '', '', 0, '', 0, NULL),
+('DINAKHIANGTE', '$2y$10$mBSYgiIcGYmYBYgO/Si2y.T5mmJ9T39hSdNcY2wl0BW4LvkTgSW6e', '69f07cf2ed69b', '1', 'admin', 'a162d85ec7171222ded6ace0b562936b', '2026-05-02 10:39:21', 4, '', 0, NULL),
+('rinngheta', '$2y$10$6UkoViZHdoJjUHWA1niex.h2R8XkpDsbbdS.PEEw0uIZeEVwH.y8G', '69f07d589b663', '1', 'admin', '', '', 0, '', 0, NULL),
+('hmaihmar', '$2y$10$dS2uz5cG0QCwTnBUEtaUBek80Rqu6a1UTAUbKSyhH5b3BIctfFjee', '69f07d96e2744', '1', 'admin', 'd9d3287fb295bfaf818eeeae9ba82105', '2026-04-29 16:17:43', 3, '', 0, NULL),
+('Fci@pds', '$2y$10$JPrhyq/GS4.XRV8JBxHbce6paxc/7dazyQmp85NVcrXNoW6KN2Dcm', '6a16cfd56d1a9', '1', 'fci', '57d97b1b1b6d2d58c5b7a90fcbb6c312', '2026-06-10 10:51:52', 2, '', 0, NULL),
+('fci1@pds', '$2y$10$PugAkLJ2NsQ.W.Q7xbYoCuaywiQ/L6aN/SDnXi7NIuuKr8EvXuLbu', '6a295350931a4', '1', 'fci', '9a830d4260ee59e4516f84c123c8376c', '2026-06-10 17:39:02', 1, '', 0, NULL),
+('aizawl@pds', '$2y$10$umYAMeMRSox4JCiAnil5EenT18hWGZ0wNsbGlpAK529xMXNkHOgCq', '6a7462c88aefd', '1', 'aizawl', '56a06d714ec8dba20d1feb5804f02d8c', '2026-08-10 13:40:19', 3, '', 0, NULL),
+('Fci@pds@123', '$2y$10$Qos2ZYGVtcsaJsOGKXPPxei..SqwQ8s/peacCEp/9wNcsejKOOKwS', '6a756d93863b0', '1', 'fci', 'b2af5cfa579f891c3ed2b6a62548ef99', '2026-09-01 10:26:18', 3, '', 0, NULL),
+('Dfpd@pds@123', '$2y$10$SLYaGhCmYbY2PmN07OzAjuHnThLKAT4UdmdW5geOEv2doT.yWHHPu', '6a75826dac052', '1', 'dfpd', '365232316272a0f0557ec711f2842374', '2026-08-07 15:22:16', 5, '', 0, NULL);
 
 -- --------------------------------------------------------
 

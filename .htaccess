@@ -40,4 +40,6 @@ Deny from all
 Require all denied
 </FilesMatch>
 
-
+<FilesMatch "\.(php~|bak|old|inc)$">
+Require all denied
+</FilesMatch>

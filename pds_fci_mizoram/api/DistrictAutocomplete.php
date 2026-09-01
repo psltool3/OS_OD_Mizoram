@@ -1,4 +1,9 @@
 <?php
+require_once('../util/SessionFunction.php');
+if(!SessionCheck()){
+    die('Unauthorized');
+}
+
 
 require('util/Connection.php');
 
@@ -9,6 +14,11 @@ require('util/Connection.php');
 var x = document.getElementById("district");
 
 <?php
+require_once('../util/SessionFunction.php');
+if(!SessionCheck()){
+    die('Unauthorized');
+}
+
 $query = "SELECT * FROM districts ORDER BY name";
 $result = mysqli_query($con,$query);
 $numrows = mysqli_num_rows($result);
