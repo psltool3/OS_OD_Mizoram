@@ -34,6 +34,12 @@ $person->setPassword($_POST["password"]);
 //     return;
 // }
 
+$passwordPattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}$/';
+if (!preg_match($passwordPattern, $_POST["newpassword"])) {
+    echo "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
+    return;
+}
+
 $Encryption = new Encryption();
 $person->setPassword($Encryption->decrypt($_POST["password"], $nonceValue));
 

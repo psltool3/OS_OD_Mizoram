@@ -550,7 +550,7 @@ require('util/Logger.php');
 						&nbsp
 						<div class="row">
 							<div
-								style="font-size: 20px; font-weight: 700; margin-top: 0px; padding: 5px; margin-bottom: 20px;">
+								style="font-size: 20px; font-weight: 700; margin-top: 0px; padding: 5px; margin-bottom: 20px; color: #000000">
 								<i class="fa fa-info-circle" aria-hidden="true"></i> Pre-Analysis
 							</div>
 							<div class="row">

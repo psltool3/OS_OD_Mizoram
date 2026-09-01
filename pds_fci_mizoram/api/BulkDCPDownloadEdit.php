@@ -8,7 +8,7 @@ $mapData = [
     "Type" => "type",
     "Latitude" => "latitude",
     "Longitude" => "longitude",
-    "Total FRice Offered" => "demand",
+    "Offered Quantity FRice (Qtl)" => "demand",
 	"Active/Not-Active" => "active"
 ];
 

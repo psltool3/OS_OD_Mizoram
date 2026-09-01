@@ -1,5 +1,10 @@
 <?php
 session_start();
+require('../util/Logger.php');
+
+if (isset($_SESSION['user'])) {
+    writeLog("Successful Logout -> User logged out: " . $_SESSION['user']);
+}
 
 // Unset all session variables
 $_SESSION = array();

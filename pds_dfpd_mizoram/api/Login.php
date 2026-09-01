@@ -5,6 +5,7 @@ require('../util/Security.php');
 require ('../util/Encryption.php');
 $nonceValue = 'nonce_value';
 session_start();
+require('../util/Logger.php');
 
 if (empty($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
         die("Something went wrong. Request denied.");
@@ -24,6 +25,7 @@ $result = mysqli_query($con,$query);
 $row = mysqli_fetch_assoc($result);
 
 if(empty($row)){
+ writeLog("Failed Login Attempt -> Username incorrect or does not exist for username: " . $person->getUsername());
  die("Invalid Credentials");
 }
 
@@ -41,11 +43,13 @@ if(password_verify($person->getPassword(), $dbHashedPassword)){
 		$_SESSION['user'] = $person->getUsername();
 		$_SESSION['token'] = $authToken;
 		
+		writeLog("Successful Login Attempt for user: " . $person->getUsername());
 		mysqli_close($con);
 		 echo "<script>window.location.href = '../OptimisedDataAll.php';</script>";
     }
 } 
 else{
+    writeLog("Failed Login Attempt -> Password incorrect for username: " . $person->getUsername());
     echo "Error : Password or Username is incorrect";
 }
 

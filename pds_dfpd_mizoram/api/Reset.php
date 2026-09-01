@@ -21,9 +21,9 @@ if($newpassword !== $confirmpassword){
 	return;
 }
 
-$pattern = '/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/';
+$pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}$/';
 if (!preg_match($pattern, $newpassword)) {
-    echo "<script>alert('Error: Password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character.'); window.history.back();</script>";
+    echo "<script>alert('Error: Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.'); window.history.back();</script>";
     return;
 }
 

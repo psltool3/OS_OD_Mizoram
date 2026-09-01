@@ -34,6 +34,18 @@
 				var readableString = document.getElementById("oldpassword").value;
 				var readableString1 = document.getElementById("newpassword").value;
 				var readableString2 = document.getElementById("confirmpassword").value;
+
+                if (readableString1 !== readableString2) {
+                    alert("New password and confirm password do not match.");
+                    return false;
+                }
+
+                var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}$/;
+                if (!passwordRegex.test(readableString1)) {
+                    alert("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
+                    return false;
+                }
+
 				var nonceValue = "nonce_value";
 
 				let encryption = new Encryption();

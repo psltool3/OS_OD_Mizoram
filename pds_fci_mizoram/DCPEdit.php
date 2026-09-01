@@ -167,13 +167,13 @@ else{
                                             </div>
 											
 											<div class="form-group">
-                                                <label class="col-md-3 control-label">Total FRice Offered*</label>
+                                                <label class="col-md-3 control-label">Offered Quantity FRice (Qtl)*</label>
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
                                                         <input type="text" class="form-control" id="demand" name="demand" value="<?php echo $demand ?>" required />
                                                     </div>
-                                                    <span class="help-block">Total FRice Offered</span>
+                                                    <span class="help-block">Offered Quantity FRice (Qtl)</span>
                                                 </div>
                                             </div>											
                                         </div>
