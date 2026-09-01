@@ -110,7 +110,7 @@ require('util/SessionCheck.php');
             <div class="form-group">
               <div class="col-md-12">
                 <input
-                  type="password"
+                  type="password" autocomplete="off"
                   id="oldpassword"
                   name="oldpassword"
                   class="form-control"
@@ -121,7 +121,7 @@ require('util/SessionCheck.php');
             <div class="form-group">
               <div class="col-md-12">
                 <input
-                  type="password"
+                  type="password" autocomplete="off"
                   id="newpassword"
                   name="newpassword"
                   class="form-control"
@@ -132,7 +132,7 @@ require('util/SessionCheck.php');
             <div class="form-group">
               <div class="col-md-12">
                 <input
-                  type="password"
+                  type="password" autocomplete="off"
                   id="confirmpassword"
                   name="confirmpassword"
                   class="form-control"
