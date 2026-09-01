@@ -1,5 +1,10 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) { session_start(); }
+if (session_status() === PHP_SESSION_NONE) {
+    ini_set('session.cookie_httponly', 1);
+    ini_set('session.cookie_secure', 1);
+    ini_set('session.cookie_samesite', 'Strict');
+    session_start();
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $current_script = basename($_SERVER['SCRIPT_NAME']);

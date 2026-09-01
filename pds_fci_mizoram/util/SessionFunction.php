@@ -3,6 +3,9 @@
 function SessionCheck(){
 	require('Connection.php');
 	ini_set('session.gc_maxlifetime', 20000);
+	ini_set('session.cookie_httponly', 1);
+	ini_set('session.cookie_secure', 1);
+	ini_set('session.cookie_samesite', 'Strict');
 	session_set_cookie_params(20000);
 	session_start();
 
