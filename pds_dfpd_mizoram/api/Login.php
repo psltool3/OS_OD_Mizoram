@@ -29,6 +29,12 @@ if(empty($row)){
  die("Invalid Credentials");
 }
 
+if ($row['locked_until'] !== null && strtotime($row['locked_until']) > time()) {
+    $remaining_seconds = strtotime($row['locked_until']) - time();
+    $remaining_minutes = ceil($remaining_seconds / 60);
+    die("Error: Account is temporarily locked due to 5 failed attempts. Please try again in $remaining_minutes min.");
+}
+
 $dbHashedPassword = $row['password'];
 if(password_verify($person->getPassword(), $dbHashedPassword)){
  if($row['role']=="dfpd"){
@@ -37,7 +43,7 @@ if(password_verify($person->getPassword(), $dbHashedPassword)){
 		$uniqueId = uniqid();
 		$authToken = md5($uniqueId);
 		$currentLoginTime = date("Y-m-d H:i:s");
-		$queryUpdate = "UPDATE login SET token='$authToken',lastlogin='$currentLoginTime',count='$count' WHERE username='".$person->getUsername()."'";
+		$queryUpdate = "UPDATE login SET token='$authToken',lastlogin='$currentLoginTime',count='$count',failed_attempts=0,locked_until=NULL WHERE username='".$person->getUsername()."'";
 		mysqli_query($con,$queryUpdate);
 		
 		$_SESSION['user'] = $person->getUsername();
@@ -49,6 +55,14 @@ if(password_verify($person->getPassword(), $dbHashedPassword)){
     }
 } 
 else{
+    $failed_attempts = $row['failed_attempts'] + 1;
+    if ($failed_attempts >= 5) {
+        $lock_query = "UPDATE login SET failed_attempts = $failed_attempts, locked_until = DATE_ADD(NOW(), INTERVAL 15 MINUTE) WHERE username='".$person->getUsername()."'";
+    } else {
+        $lock_query = "UPDATE login SET failed_attempts = $failed_attempts WHERE username='".$person->getUsername()."'";
+    }
+    mysqli_query($con, $lock_query);
+
     writeLog("Failed Login Attempt -> Password incorrect for username: " . $person->getUsername());
     echo "Error : Password or Username is incorrect";
 }

@@ -36,6 +36,13 @@ if (empty($row)) {
     return;
 }
 
+if ($row['locked_until'] !== null && strtotime($row['locked_until']) > time()) {
+    $remaining_seconds = strtotime($row['locked_until']) - time();
+    $remaining_minutes = ceil($remaining_seconds / 60);
+    echo "<script>alert('Error: Account is temporarily locked due to 5 failed attempts. Please try again in $remaining_minutes min.'); window.history.back();</script>";
+    return;
+}
+
 if ($row['role'] !== 'fci') {
     echo "<script>alert('Error: Unauthorized role for this module.'); window.history.back();</script>";
     return;
@@ -43,6 +50,14 @@ if ($row['role'] !== 'fci') {
 
 $dbHashedPassword = $row['password'];
 if (!password_verify($oldpassword, $dbHashedPassword)) {
+    $failed_attempts = $row['failed_attempts'] + 1;
+    if ($failed_attempts >= 5) {
+        $lock_query = "UPDATE login SET failed_attempts = $failed_attempts, locked_until = DATE_ADD(NOW(), INTERVAL 15 MINUTE) WHERE username='$username'";
+    } else {
+        $lock_query = "UPDATE login SET failed_attempts = $failed_attempts WHERE username='$username'";
+    }
+    mysqli_query($con, $lock_query);
+
     echo "<script>alert('Error: Old password is incorrect.'); window.history.back();</script>";
     return;
 }
@@ -59,7 +74,7 @@ if ($historyResult) {
 }
 
 $newHashedPassword = password_hash($newpassword, PASSWORD_DEFAULT);
-$updateQuery = "UPDATE login SET password='$newHashedPassword' WHERE username='$username'";
+$updateQuery = "UPDATE login SET password='$newHashedPassword', failed_attempts=0, locked_until=NULL WHERE username='$username'";
 mysqli_query($con, $updateQuery);
 
 $insertHistoryQuery = "INSERT INTO password_history (username, password_hash) VALUES ('$username', '$newHashedPassword')";
