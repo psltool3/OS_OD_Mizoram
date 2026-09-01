@@ -1,4 +1,18 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) { session_start(); }
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $current_script = basename($_SERVER['SCRIPT_NAME']);
+    if ($current_script !== 'Login.php') {
+        if (!isset($_POST['form_nonce']) || !isset($_SESSION['form_nonces']) || !in_array($_POST['form_nonce'], $_SESSION['form_nonces'])) {
+            die("Error: Invalid or expired form submission (Nonce verification failed).");
+        }
+        $nonce_key = array_search($_POST['form_nonce'], $_SESSION['form_nonces']);
+        if ($nonce_key !== false) {
+            unset($_SESSION['form_nonces'][$nonce_key]);
+        }
+    }
+}
 
 // Function to sanitize and escape HTML characters
 function escapeHTML($input) {

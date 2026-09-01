@@ -1,4 +1,13 @@
-<?php		
+<?php
+if (session_status() === PHP_SESSION_NONE) { session_start(); }
+if (!isset($_SESSION['form_nonces'])) {
+    $_SESSION['form_nonces'] = [];
+}
+$form_nonce = bin2hex(random_bytes(32));
+$_SESSION['form_nonces'][] = $form_nonce;
+if (count($_SESSION['form_nonces']) > 50) {
+    array_shift($_SESSION['form_nonces']);
+}
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
 <!DOCTYPE html>
@@ -13,6 +22,16 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f" crossorigin="anonymous"></script>
+		<script>
+		$(document).ready(function() {
+			var formNonce = "<?php echo $form_nonce; ?>";
+			$('form').on('submit', function() {
+				if (!$(this).find('input[name="form_nonce"]').length) {
+					$(this).append('<input type="hidden" name="form_nonce" value="' + formNonce + '">');
+				}
+			});
+		});
+		</script>
 		<script> var pythonUrl = "http://localhost:5024/"; var directory = "" </script>
 								
 		<style>

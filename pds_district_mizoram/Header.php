@@ -1,4 +1,13 @@
-<?php	
+<?php
+if (session_status() === PHP_SESSION_NONE) { session_start(); }
+if (!isset($_SESSION['form_nonces'])) {
+    $_SESSION['form_nonces'] = [];
+}
+$form_nonce = bin2hex(random_bytes(32));
+$_SESSION['form_nonces'][] = $form_nonce;
+if (count($_SESSION['form_nonces']) > 50) {
+    array_shift($_SESSION['form_nonces']);
+}
 
 require("util/Connection.php");
 
@@ -29,6 +38,16 @@ if($numrows>0){
 		<meta name="theme-color" content="#ffffff">
         <link rel="stylesheet" type="text/css" id="theme" href="css/theme-black.css"/>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f" crossorigin="anonymous"></script>
+		<script>
+		$(document).ready(function() {
+			var formNonce = "<?php echo $form_nonce; ?>";
+			$('form').on('submit', function() {
+				if (!$(this).find('input[name="form_nonce"]').length) {
+					$(this).append('<input type="hidden" name="form_nonce" value="' + formNonce + '">');
+				}
+			});
+		});
+		</script>
     </head>
     <body>
         <!-- START PAGE CONTAINER -->
