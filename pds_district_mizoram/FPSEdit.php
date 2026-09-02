@@ -97,7 +97,7 @@ else{
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="text" class="form-control" id="name" name="name" value="<?php echo $name ?>" required />
+                                                        <input type="text" class="form-control" id="name" name="name" value="<?php echo $name ? maxlength="255">" required />
                                                     </div>
                                                     <span class="help-block">FPS Name</span>
                                                 </div>
@@ -125,7 +125,7 @@ else{
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="text" class="form-control" id="latitude" name="latitude" value="<?php echo $latitude ?>" required />
+                                                        <input type="text" class="form-control" id="latitude" name="latitude" value="<?php echo $latitude ? maxlength="255">" required />
                                                     </div>
                                                     <span class="help-block">Latitude of FPS</span>
                                                 </div>
@@ -136,7 +136,7 @@ else{
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="text" class="form-control" id="longitude" name="longitude" value="<?php echo $longitude ?>"required />
+                                                        <input type="text" class="form-control" id="longitude" name="longitude" value="<?php echo $longitude ? maxlength="255">"required />
                                                     </div>
                                                     <span class="help-block">Longitude of FPS</span>
                                                 </div>
@@ -162,7 +162,7 @@ else{
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                       <input type="text" class="form-control" id="id" name="id" value="<?php echo $id ?>" style="color: black; font-weight: bold;"readonly required />
+                                                       <input type="text" class="form-control" id="id" name="id" value="<?php echo $id ? maxlength="255">" style="color: black; font-weight: bold;"readonly required />
                                                     </div>
                                                     <span class="help-block">FPS ID</span>
                                                 </div>
@@ -173,7 +173,7 @@ else{
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="text" class="form-control" id="demand" name="demand" value="<?php echo $demand ?>" required />
+                                                        <input type="text" class="form-control" id="demand" name="demand" value="<?php echo $demand ? maxlength="255">" required />
                                                     </div>
                                                     <span class="help-block">Demand in Quintals</span>
                                                 </div>
@@ -194,7 +194,7 @@ else{
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="text" class="form-control" id="username" name="username" required />
+                                                        <input type="text" class="form-control" id="username" name="username" required  maxlength="255" />
                                                     </div>
                                                     <span class="help-block">Username</span>
                                                 </div>
@@ -206,7 +206,7 @@ else{
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="password" autocomplete="off" class="form-control" id="password" name="password" required />
+                                                        <input type="password" autocomplete="off" class="form-control" id="password" name="password" required  maxlength="255" />
                                                     </div>
                                                     <span class="help-block">Password</span>
                                                 </div>

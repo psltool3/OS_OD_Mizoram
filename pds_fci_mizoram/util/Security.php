@@ -97,4 +97,25 @@ foreach ($_GET as $key => $value) {
     $_GET[$key] = validateAndDecode($value);
 }
 
+function enforceBoundaryLimit($input) {
+    if (is_array($input)) {
+        foreach ($input as $k => $v) {
+            $input[$k] = enforceBoundaryLimit($v);
+        }
+        return $input;
+    }
+    if (is_string($input)) {
+        return strlen($input) > 2500 ? substr($input, 0, 2500) : $input;
+    }
+    return $input;
+}
+
+foreach ($_POST as $key => $value) {
+    $_POST[$key] = enforceBoundaryLimit($value);
+}
+
+foreach ($_GET as $key => $value) {
+    $_GET[$key] = enforceBoundaryLimit($value);
+}
+
 ?>

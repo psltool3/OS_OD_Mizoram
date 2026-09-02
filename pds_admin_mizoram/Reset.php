@@ -103,7 +103,7 @@ require('util/SessionCheck.php');
                   name="username"
                   class="form-control"
                   placeholder="Username"
-                />
+                 maxlength="255" />
               </div>
             </div>
 
@@ -115,7 +115,7 @@ require('util/SessionCheck.php');
                   name="oldpassword"
                   class="form-control"
                   placeholder="Current Password"
-                />
+                 maxlength="255" />
               </div>
             </div>
             <div class="form-group">
@@ -126,7 +126,7 @@ require('util/SessionCheck.php');
                   name="newpassword"
                   class="form-control"
                   placeholder="New Password"
-                />
+                 maxlength="255" />
               </div>
             </div>
             <div class="form-group">
@@ -137,7 +137,7 @@ require('util/SessionCheck.php');
                   name="confirmpassword"
                   class="form-control"
                   placeholder="Confirm Password"
-                />
+                 maxlength="255" />
               </div>
             </div>
             <div class="form-group">
@@ -149,7 +149,7 @@ require('util/SessionCheck.php');
                   class="form-control"
                   placeholder="Captcha Code"
                   required
-                />
+                 maxlength="255" />
               </div>
             </div>
 

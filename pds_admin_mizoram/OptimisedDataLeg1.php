@@ -307,7 +307,7 @@ if($currentTimestamp >= $targetTimestamp) {
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="text" class="form-control" id="username" name="username" required />
+                                                        <input type="text" class="form-control" id="username" name="username" required  maxlength="255" />
                                                     </div>
                                                     <span class="help-block">Username</span>
                                                 </div>
@@ -323,7 +323,7 @@ if($currentTimestamp >= $targetTimestamp) {
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="password" autocomplete="off" class="form-control" id="password" name="password" required />
+                                                        <input type="password" autocomplete="off" class="form-control" id="password" name="password" required  maxlength="255" />
                                                     </div>
                                                     <span class="help-block">Password</span>
                                                 </div>
@@ -759,7 +759,7 @@ if($currentTimestamp >= $targetTimestamp) {
 								}
 								
 								if(distance_admin==null || distance_admin==""){
-									var newdistance = "<td><input type='text' onchange='handleDistanceChange(\"" + uniqueid_iddistance + "\")' id='" + uniqueid_iddistance + "' name='" + uniqueid_iddistance + "' disabled required /></td>";
+									var newdistance = "<td><input type='text' onchange='handleDistanceChange(\"" + uniqueid_iddistance + "\")' id='" + uniqueid_iddistance + "' name='" + uniqueid_iddistance + "' disabled required  maxlength="255" /></td>";
 								}
 								else{
 									var newdistance = "<td>" + distance_admin + "</td>"

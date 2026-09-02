@@ -50,7 +50,7 @@ $district = ucfirst($_SESSION["district_district"]);
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="text" class="form-control" id="name" name="name" required />
+                                                        <input type="text" class="form-control" id="name" name="name" required  maxlength="255" />
                                                     </div>
                                                     <span class="help-block">FPS Name</span>
                                                 </div>
@@ -75,7 +75,7 @@ $district = ucfirst($_SESSION["district_district"]);
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="text" class="form-control" id="latitude" name="latitude" required />
+                                                        <input type="text" class="form-control" id="latitude" name="latitude" required  maxlength="255" />
                                                     </div>
                                                     <span class="help-block">Latitude of FPS</span>
                                                 </div>
@@ -86,7 +86,7 @@ $district = ucfirst($_SESSION["district_district"]);
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="text" class="form-control" id="longitude" name="longitude" required />
+                                                        <input type="text" class="form-control" id="longitude" name="longitude" required  maxlength="255" />
                                                     </div>
                                                     <span class="help-block">Longitude of FPS</span>
                                                 </div>
@@ -101,7 +101,7 @@ $district = ucfirst($_SESSION["district_district"]);
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="text" class="form-control" id="district" name="district" value="<?php echo $district ?>" readonly />
+                                                        <input type="text" class="form-control" id="district" name="district" value="<?php echo $district ? maxlength="255">" readonly />
                                                     </div>
                                                     <span class="help-block">District</span>
                                                 </div>
@@ -112,7 +112,7 @@ $district = ucfirst($_SESSION["district_district"]);
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="text" class="form-control" id="id" name="id" pattern="[A-Za-z0-9]+" title="Only letters and numbers allowed" required />
+                                                        <input type="text" class="form-control" id="id" name="id" pattern="[A-Za-z0-9]+" title="Only letters and numbers allowed" required  maxlength="255" />
                                                     </div>
                                                     <span class="help-block">FPS ID</span>
                                                 </div>
@@ -124,7 +124,7 @@ $district = ucfirst($_SESSION["district_district"]);
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="text" class="form-control" id="demand" name="demand" required />
+                                                        <input type="text" class="form-control" id="demand" name="demand" required  maxlength="255" />
                                                     </div>
                                                     <span class="help-block">Demand in Quintals</span>
                                                 </div>
@@ -149,7 +149,7 @@ $district = ucfirst($_SESSION["district_district"]);
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="text" class="form-control" id="username" name="username" required />
+                                                        <input type="text" class="form-control" id="username" name="username" required  maxlength="255" />
                                                     </div>
                                                     <span class="help-block">Username</span>
                                                 </div>
@@ -165,7 +165,7 @@ $district = ucfirst($_SESSION["district_district"]);
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="password" autocomplete="off" class="form-control" id="password" name="password" required />
+                                                        <input type="password" autocomplete="off" class="form-control" id="password" name="password" required  maxlength="255" />
                                                     </div>
                                                     <span class="help-block">Password</span>
                                                 </div>

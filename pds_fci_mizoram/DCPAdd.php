@@ -47,7 +47,7 @@ require('Header.php');
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="text" class="form-control" id="name" name="name" required />
+                                                        <input type="text" class="form-control" id="name" name="name" required  maxlength="255" />
                                                     </div>
                                                     <span class="help-block">FCI Name</span>
                                                 </div>
@@ -58,7 +58,7 @@ require('Header.php');
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="text" class="form-control" id="type" name="type" value="FCI" readonly required />
+                                                        <input type="text" class="form-control" id="type" name="type" value="FCI" readonly required  maxlength="255" />
                                                     </div>
                                                     <span class="help-block">Type</span>
                                                 </div>
@@ -71,7 +71,7 @@ require('Header.php');
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="text" class="form-control" id="latitude" name="latitude" required />
+                                                        <input type="text" class="form-control" id="latitude" name="latitude" required  maxlength="255" />
                                                     </div>
                                                     <span class="help-block">Latitude of FCI</span>
                                                 </div>
@@ -82,7 +82,7 @@ require('Header.php');
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="text" class="form-control" id="longitude" name="longitude" required />
+                                                        <input type="text" class="form-control" id="longitude" name="longitude" required  maxlength="255" />
                                                     </div>
                                                     <span class="help-block">Longitude of FCI</span>
                                                 </div>
@@ -109,7 +109,7 @@ require('Header.php');
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="text" class="form-control" id="id" name="id" pattern="[A-Za-z0-9]+" title="Only letters and numbers allowed" required />
+                                                        <input type="text" class="form-control" id="id" name="id" pattern="[A-Za-z0-9]+" title="Only letters and numbers allowed" required  maxlength="255" />
                                                     </div>
                                                     <span class="help-block">FCI ID</span>
                                                 </div>
@@ -121,7 +121,7 @@ require('Header.php');
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="text" class="form-control" id="demand" name="demand" required />
+                                                        <input type="text" class="form-control" id="demand" name="demand" required  maxlength="255" />
                                                     </div>
                                                     <span class="help-block"> Offered Quantity FRice (Qtl)</span>
                                                 </div>
@@ -146,7 +146,7 @@ require('Header.php');
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="text" class="form-control" id="username" name="username" required />
+                                                        <input type="text" class="form-control" id="username" name="username" required  maxlength="255" />
                                                     </div>
                                                     <span class="help-block">Username</span>
                                                 </div>
@@ -162,7 +162,7 @@ require('Header.php');
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="password" autocomplete="off" class="form-control" id="password" name="password" required />
+                                                        <input type="password" autocomplete="off" class="form-control" id="password" name="password" required  maxlength="255" />
                                                     </div>
                                                     <span class="help-block">Password</span>
                                                 </div>

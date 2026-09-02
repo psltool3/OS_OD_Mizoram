@@ -40,7 +40,7 @@ require('Header.php');
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="text" class="form-control datepicker" id="date" name="date" required />
+                                                        <input type="text" class="form-control datepicker" id="date" name="date" required  maxlength="255" />
                                                     </div>
                                                     <span class="help-block">Deadline date</span>
                                                 </div>
