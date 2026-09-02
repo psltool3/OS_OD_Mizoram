@@ -801,7 +801,7 @@ if($currentTimestamp >= $targetTimestamp) {
 									}
 									
 									if(distance_district==null || distance_district==""){
-										var newdistance = "<td><input type='text' onchange='handleDistanceChange(\"" + uniqueid_iddistance + "\")' id='" + uniqueid_iddistance + "' name='" + uniqueid_iddistance + "' disabled required  maxlength="255" /></td>";
+										var newdistance = "<td><input type='text' onchange='handleDistanceChange(\"" + uniqueid_iddistance + "\")' id='" + uniqueid_iddistance + "' name='" + uniqueid_iddistance + "' disabled required  maxlength='255' /></td>";
 									}
 									else{
 										var newdistance = "<td>" + distance_district + "</td>"

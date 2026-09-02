@@ -101,7 +101,7 @@ $district = ucfirst($_SESSION["district_district"]);
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="text" class="form-control" id="district" name="district" value="<?php echo $district ? maxlength="255">" readonly />
+                                                        <input type="text" class="form-control" id="district" name="district" value="<?php echo $district ? maxlength='255'>" readonly />
                                                     </div>
                                                     <span class="help-block">District</span>
                                                 </div>

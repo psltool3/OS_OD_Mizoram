@@ -776,7 +776,7 @@ while($row = mysqli_fetch_array($result))
 								}
 								
 								if(distance_admin==null || distance_admin==""){
-									var distance_admin_part = "<td><input type='text' onchange='handleDistanceChange(\"" + uniqueid_iddistance + "\")' id='" + uniqueid_iddistance + "' name='" + uniqueid_iddistance + "' disabled required  maxlength="255" /></td>";
+									var distance_admin_part = "<td><input type='text' onchange='handleDistanceChange(\"" + uniqueid_iddistance + "\")' id='" + uniqueid_iddistance + "' name='" + uniqueid_iddistance + "' disabled required maxlength='255' /></td>";
 								}
 								else{
 									var distance_admin_part = "<td>" + distance_admin + "</td>"
@@ -932,6 +932,11 @@ while($row = mysqli_fetch_array($result))
 		function fetchCardDataFromServer(){
 			var district = document.getElementById("district").value;
 			var month = document.getElementById("month").value;
+			
+			// Don't proceed if month isn't populated yet
+			if(month == "" || month.indexOf('_') === -1){
+				return;
+			}
 			
 			if(district==""){
 				district = "";

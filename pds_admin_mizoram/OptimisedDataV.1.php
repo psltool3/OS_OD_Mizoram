@@ -539,7 +539,7 @@ require('Header.php');
 								}
 								
 								if(new_distance==null || new_distance==""){
-									var newdistance = "<td><input type='text' onchange='handleDistanceChange(\"" + uniqueid_iddistance + "\")' id='" + uniqueid_iddistance + "' name='" + uniqueid_iddistance + "' disabled required  maxlength="255" /></td>";
+									var newdistance = "<td><input type='text' onchange='handleDistanceChange(\"" + uniqueid_iddistance + "\")' id='" + uniqueid_iddistance + "' name='" + uniqueid_iddistance + "' disabled required  maxlength='255' /></td>";
 								}
 								else{
 									var newdistance = "<td>" + new_distance + "</td>"

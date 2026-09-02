@@ -7,8 +7,18 @@ if(!SessionCheck()){
 	return;
 }
 
-$month = $_POST['month'];
+$month = isset($_POST['month']) ? trim($_POST['month']) : '';
 $parts = explode('_', $month);
+
+if (count($parts) < 2 || $parts[0] === '' || $parts[1] === '') {
+	$resultarray = [];
+	$resultarray["totalids"] = 0;
+	$resultarray["totalidsreviewed"] = 0;
+	$resultarray["totalidsrequested"] = 0;
+	$resultarray["totalidsapproved"] = 0;
+	echo json_encode($resultarray);
+	exit();
+}
 
 $month = $parts[0];
 $year = $parts[1]; 
