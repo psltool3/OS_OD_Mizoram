@@ -10,6 +10,7 @@ Options -Indexes
 DirectoryIndex Login.html
 Header unset X-Powered-By
 php_value max_input_vars 5000
+php_value session.name rotnz
 <LimitExcept GET POST>
 Deny from all
 </LimitExcept>
