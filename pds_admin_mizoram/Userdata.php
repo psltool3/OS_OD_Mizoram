@@ -173,6 +173,10 @@ require('Header.php');
 			
 			method = "post"; 
 			path = file;
+
+			if (typeof formNonce !== 'undefined' && !params.hasOwnProperty('form_nonce')) {
+				params['form_nonce'] = formNonce;
+			}
 			
 			var form = document.createElement("form");
 			form.setAttribute("method", method);

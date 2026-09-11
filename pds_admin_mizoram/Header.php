@@ -23,14 +23,29 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f" crossorigin="anonymous"></script>
 		<script>
+		var formNonce = "<?php echo $form_nonce; ?>";
+		window.formNonce = formNonce;
 		$(document).ready(function() {
-			var formNonce = "<?php echo $form_nonce; ?>";
 			$('form').on('submit', function() {
 				if (!$(this).find('input[name="form_nonce"]').length) {
 					$(this).append('<input type="hidden" name="form_nonce" value="' + formNonce + '">');
 				}
 			});
 		});
+
+		(function() {
+			var originalSubmit = HTMLFormElement.prototype.submit;
+			HTMLFormElement.prototype.submit = function() {
+				if (window.formNonce && !this.querySelector('input[name="form_nonce"]')) {
+					var nonceInput = document.createElement('input');
+					nonceInput.type = 'hidden';
+					nonceInput.name = 'form_nonce';
+					nonceInput.value = window.formNonce;
+					this.appendChild(nonceInput);
+				}
+				return originalSubmit.apply(this, arguments);
+			};
+		})();
 		</script>
 		<script> var pythonUrl = "http://localhost:5024/"; var directory = "" </script>
 								

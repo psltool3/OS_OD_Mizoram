@@ -42,7 +42,7 @@ if($numrows == 1){
 	echo "Error : Username already exist";
 }
 else if($numrows == 0){
-	$query1 = "INSERT INTO login (username,password,uid,role,verified) VALUES ('".$person->getUsername()."','".$person->getPassword()."','$uid','".strtolower($person->getRole())."','0')";
+	$query1 = "INSERT INTO login (username,password,uid,role,verified,token,lastlogin,permission) VALUES ('".$person->getUsername()."','".$person->getPassword()."','$uid','".strtolower($person->getRole())."','0','','','')";
 	mysqli_query($con,$query1);
 
 	mysqli_close($con);

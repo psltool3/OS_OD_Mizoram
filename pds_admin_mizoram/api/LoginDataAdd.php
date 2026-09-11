@@ -47,8 +47,8 @@ $person->setPassword($Encryption->decrypt($_POST["password"], $nonceValue));
 $newusername = htmlspecialchars($_POST["newusername"], ENT_QUOTES, 'UTF-8');
 
 // Ensure the new username doesn't contain special characters (optional)
-if (!preg_match('/^[a-zA-Z0-9_@]+$/', $newusername)) {
-    echo "Username can only contain letters, numbers, underscores and @.";
+if (!preg_match('/^[a-zA-Z0-9_@\.]+$/', $newusername)) {
+    echo "Username can only contain letters, numbers, underscores, dots and @.";
     return;
 }
 
@@ -103,7 +103,7 @@ if ($row) {
             echo "Error : Username already exists";
         } else {
             // Insert the new user with the hashed password
-            $insert_stmt = $con->prepare("INSERT INTO login (username, password, uid, role, verified) VALUES (?, ?, ?, ?, '1')");
+            $insert_stmt = $con->prepare("INSERT INTO login (username, password, uid, role, verified, token, lastlogin, permission) VALUES (?, ?, ?, ?, '1', '', '', '')");
             $role = strtolower($person->getRole());
             $insert_stmt->bind_param("ssss", $new_username, $hashedPassword, $uid, $role);
             $insert_stmt->execute();

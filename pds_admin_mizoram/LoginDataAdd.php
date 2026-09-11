@@ -8,11 +8,17 @@ require('Header.php');
 
 <script>
     function verifyCaptcha() {
+        var adminUser = document.getElementById("username").value;
         var readableString = document.getElementById("password").value;
+        if (!adminUser.trim() || !readableString.trim()) {
+            alert("Please enter both your Admin username and password for verification.");
+            return false;
+        }
         var nonceValue = 'nonce_value';
         let encryption = new Encryption();
         var encrypted = encryption.encrypt(readableString, nonceValue);
         document.getElementById("password").value = encrypted;
+        return true;
     }
  </script>
 
@@ -93,18 +99,19 @@ require('Header.php');
                                 </div>
 								<div id="popup" class="popup">
 										<a class="close" onclick="hidePopup()" style="font-size:25px">×</a>
-										</br></br>
+										<h4 style="margin-top:0px;margin-bottom:15px;color:#333;">Confirm Admin Credentials</h4>
+										<p style="color:#666;font-size:13px;margin-bottom:15px;">Please enter your logged-in administrator username and password to authorize adding this user.</p>
 										
 										<div class="col-md-6">
 										
 											<div class="form-group">
-                                                <label class="col-md-3 control-label">Username*</label>
+                                                <label class="col-md-3 control-label">Admin User*</label>
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="text" class="form-control" id="username" name="username" pattern="^[a-zA-Z0-9_@\.]+$" maxlength="50" required />
+                                                        <input type="text" class="form-control" id="username" name="username" pattern="^[a-zA-Z0-9_@\.]+$" maxlength="50" placeholder="Current Admin Username" required />
                                                     </div>
-                                                    <span class="help-block">Username</span>
+                                                    <span class="help-block">Current Admin Username</span>
                                                 </div>
                                             </div>
 											
@@ -114,20 +121,20 @@ require('Header.php');
 										
 										
 											<div class="form-group">
-                                                <label class="col-md-3 control-label">Password*</label>
+                                                <label class="col-md-3 control-label">Admin Password*</label>
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="password" autocomplete="off" class="form-control" id="password" name="password" maxlength="128" required />
+                                                        <input type="password" autocomplete="off" class="form-control" id="password" name="password" maxlength="128" placeholder="Current Admin Password" required />
                                                     </div>
-                                                    <span class="help-block">Password</span>
+                                                    <span class="help-block">Current Admin Password</span>
                                                 </div>
                                             </div>
 											
 											
                                         </div>
 										
-										<center><button class="btn btn-primary" onclick="verifyCaptcha()">Verify</button></center>
+										<center><button class="btn btn-primary" onclick="return verifyCaptcha()">Verify & Create</button></center>
 								</div>
                             </div>
                             </form>
