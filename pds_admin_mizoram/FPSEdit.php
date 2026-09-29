@@ -97,7 +97,7 @@ else{
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-info"></span></span>
-                                                        <input type="text" class="form-control" id="name" name="name" value="<?php echo $name ? maxlength='255'>" required />
+                                                        <input type="text" class="form-control" id="name" name="name" value="<?php echo $name; ?>" maxlength='255' required />
                                                     </div>
                                                     <span class="help-block">FPS Name</span>
                                                 </div>
