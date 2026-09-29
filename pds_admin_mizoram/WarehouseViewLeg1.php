@@ -166,6 +166,7 @@ $tablename1 = $tablename;
 		document.getElementById('downloadCSV').addEventListener('click', async function() {
 			try {
 				var tableName = '<?php echo $tablename ?>';
+				var tableName1 = '<?php echo $tablename1 ?>';
 				const csvResponse = await fetch('api/DownloadOptimalDataWarehouse.php?format=csv&tableName='+tableName+'&tableName1='+tableName1);
 				const csvBlob = await csvResponse.blob();
 				downloadFile(csvBlob, 'Mizoram_Warehouse_' + getDateString() + '.csv');
@@ -178,6 +179,7 @@ $tablename1 = $tablename;
 		document.getElementById('downloadXLSX').addEventListener('click', async function() {
 			try {
 				var tableName = '<?php echo $tablename ?>';
+				var tableName1 = '<?php echo $tablename1 ?>';
 				const excelResponse = await fetch('api/DownloadOptimalDataWarehouse.php?format=xlsx&tableName='+tableName+'&tableName1='+tableName1);
 				const excelBlob = await excelResponse.blob();
 				downloadFile(excelBlob, 'Mizoram_Warehouse_' + getDateString() + '.xlsx');
@@ -190,6 +192,7 @@ $tablename1 = $tablename;
 		document.getElementById('downloadPDF').addEventListener('click', async function() {
 			try {
 				var tableName = '<?php echo $tablename ?>';	
+				var tableName1 = '<?php echo $tablename1 ?>';
 				const pdfResponse = await fetch('api/DownloadOptimalDataWarehouse.php?format=pdf&tableName='+tableName+'&tableName1='+tableName1);
 				const pdfBlob = await pdfResponse.blob();
 

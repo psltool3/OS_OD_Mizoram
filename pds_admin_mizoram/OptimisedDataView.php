@@ -23,6 +23,7 @@ $tablename = get_safe_table_name($con, "optimiseddata_", $id);
 if (empty($tablename)) {
     $tablename = "optimiseddata";
 }
+$tablename1 = isset($tablename1) ? $tablename1 : $tablename;
 
 ?>
 <style>
