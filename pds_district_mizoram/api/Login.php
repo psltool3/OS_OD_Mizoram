@@ -6,8 +6,8 @@ require('../util/Security.php');
 
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
-require('../util/Logger.php');
 }
+require('../util/Logger.php');
 
 if (!isset($_SESSION['captcha']) || !isset($_SESSION['csrf_token'])) {
     die("Sowething went wrong.");
@@ -89,7 +89,7 @@ if(password_verify($person->getPassword(), $dbHashedPassword)){
 		
 	writeLog("Successful Login -> User logged in: " . $person->getUsername());
 	mysqli_close($con);
-	echo "<script>window.location.href = '../DistrictView.php';</script>";
+	echo "<script>window.location.href = '../Home.php';</script>";
 } 
 else{
     $failed_attempts = $row['failed_attempts'] + 1;

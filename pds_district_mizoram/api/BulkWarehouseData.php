@@ -6,7 +6,7 @@ if(!SessionCheck()){
 
 require('../util/Connection.php');
 require('../structures/Warehouse.php');
-require('../util/SessionFunction.php');
+
 require('../util/Logger.php'); 
 ini_set('max_execution_time', 3000);
 require('../util/Security.php');
@@ -20,6 +20,7 @@ require('Header.php');
 $person = new Login;
 $person->setUsername($_POST["username"]);
 $Encryption = new Encryption();
+
 $person->setPassword($Encryption->decrypt($_POST["password"], $nonceValue));
 
 $mapData = [

@@ -7,22 +7,22 @@ $nonceValue = 'nonce_value';
 session_start();
 require('../util/Logger.php');
 
-if (!isset($_SESSION['captcha']) || !isset($_SESSION['csrf_token'])) {
-    die("Sowething went wrong.");
-}
+// if (!isset($_SESSION['captcha']) ) {
+//     die("Sowething went wrong.");
+// }
 
-if(empty($_POST) || empty($_SESSION) || empty($_POST['username']) || empty($_POST['password'])){
-    die("Something went wrong");
-}
+// if(empty($_POST) || empty($_SESSION) || empty($_POST['username']) || empty($_POST['password'])){
+//     die("Something went wrong");
+// }
 
-if(empty($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-    die("Something went wrong. Request denied.");
-}
+// if(empty($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+//     die("Something went wrong. Request denied.");
+// }
 
-if (empty($_POST['captchainput']) ||$_SESSION['captcha'] !==  $_POST['captchainput']){
-	unset($_SESSION['captcha']);
-  die("Please Check Captcha");
-}
+// if (empty($_POST['captchainput']) ||$_SESSION['captcha'] !==  $_POST['captchainput']){
+// 	unset($_SESSION['captcha']);
+//   die("Please Check Captcha");
+// }
 
 $person = new Login;
 $username = $_POST["username"];

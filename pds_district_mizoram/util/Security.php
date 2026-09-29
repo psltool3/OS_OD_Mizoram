@@ -34,13 +34,13 @@ function escapeHTML($input) {
 
 function whitelistInput($input) {
     // Define a whitelist of allowed characters for alphanumeric and spaces
-	$allowedCharacters = "/[^a-zA-Z0-9@\.\s\-_#\$]+/";
+	$allowedCharacters = "/[^a-zA-Z0-9@\.\s\-_#\$\+\/\=]+/";
     
     // Remove disallowed characters from the input
     $sanitizedInput = preg_replace($allowedCharacters, "", $input);
 
     // Return the sanitized input
-    return $sanitizedInput;;
+    return $sanitizedInput;
 }
 
 
@@ -59,6 +59,7 @@ function validateAndDecode($input) {
 
 // Apply positive input validation to all elements in $_POST
 foreach ($_POST as $key => $value) {
+    if ($key === 'password') continue;
     //$_POST[$key] = removeWhiteSpace($value);
 }
 
@@ -69,6 +70,7 @@ foreach ($_GET as $key => $value) {
 
 // Check and sanitize all elements in $_POST
 foreach ($_POST as $key => $value) {
+    if ($key === 'password') continue;
     //$_POST[$key] = escapeHTML($value);
 }
 
@@ -79,6 +81,7 @@ foreach ($_GET as $key => $value) {
 
 // Apply positive input validation to all elements in $_POST
 foreach ($_POST as $key => $value) {
+    if ($key === 'password') continue;
     $_POST[$key] = whitelistInput($value);
 }
 
@@ -89,7 +92,8 @@ foreach ($_GET as $key => $value) {
 
 // Apply HTML and URL decoding followed by validation to all elements in $_POST
 foreach ($_POST as $key => $value) {
-   $_POST[$key] = validateAndDecode($value);
+    if ($key === 'password') continue;
+    $_POST[$key] = validateAndDecode($value);
 }
 
 // Apply HTML and URL decoding followed by validation to all elements in $_GET
@@ -111,6 +115,7 @@ function enforceBoundaryLimit($input) {
 }
 
 foreach ($_POST as $key => $value) {
+    if ($key === 'password') continue;
     $_POST[$key] = enforceBoundaryLimit($value);
 }
 
