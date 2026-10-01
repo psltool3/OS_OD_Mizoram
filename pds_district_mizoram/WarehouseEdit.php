@@ -177,7 +177,7 @@ else{
                                             </div>
 											
 											<div class="form-group">
-                                                <label class="col-md-3 control-label">Type of Warehouse ( SWC, CWC, FCI, CAP, other)</label>
+                                                <label class="col-md-3 control-label">Type of Warehouse ( SWC, CWC, FCI, CAP, MLSP, other)</label>
                                                 <div class="col-md-9">
                                                     <div class="input-group">
 												   <span class="input-group-addon"><span class="fa fa-arrow-down"></span></span>
@@ -186,6 +186,7 @@ else{
 													<option value="cwc">CWC</option>
 													<option value="fci">FCI</option>
 													<option value="cap">CAP</option>
+													<option value="MLSP">MLSP</option>
 													<option value="other">Other</option>
                                                     </select>
 													</div>

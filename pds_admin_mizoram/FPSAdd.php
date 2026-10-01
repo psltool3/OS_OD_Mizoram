@@ -54,16 +54,16 @@ require('Header.php');
                                             </div>
 											
 											<div class="form-group">
-                                                <label class="col-md-3 control-label">Model FPS/Normal FPS</label>
+                                                <label class="col-md-3 control-label">Smart FPS/Non Smart FPS</label>
                                                 <div class="col-md-9">
                                                     <div class="input-group">
 												   <span class="input-group-addon"><span class="fa fa-arrow-down"></span></span>
                                                     <select class="form-control" id="type" name="type">
-													<option value="Model FPS">Model FPS</option>
-													<option value="Normal FPS">Normal FPS</option>
+													<option value="Smart FPS">Smart FPS</option>
+													<option value="Non Smart FPS">Non Smart FPS</option>
                                                     </select>
 													</div>
-                                                    <span class="help-block">Model FPS/Normal FPS</span>
+                                                    <span class="help-block">Smart FPS/Non Smart FPS</span>
                                                 </div>
                                             </div>
 											

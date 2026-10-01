@@ -41,6 +41,7 @@ td {
 								<a href="BulkWarehouseData.php" style="float:right;margin-top:10px;margin-right:13px"><button type="button" class="btn btn-info">Bulk Data Add</button></a>
 								<span style="float:right;margin-top:10px;margin-right:13px"><button type="button" onclick="delete_all()"  class="btn btn-danger">Delete All</button></span>
 								<a href="WarehouseAdd.php" style="float:right;margin-top:10px;margin-right:13px"><button type="button" class="btn btn-success">Add New</button></a>
+								<a href="LoadWarehouse.php" style="float:right;margin-top:10px;margin-right:13px"><button type="button" class="btn btn-info">Load Warehouse</button></a>
                                <a href="api/BulkWarehouseDownloadEdit.php" style="float:right;margin-top:10px;margin-right:13px"><button type="button" class="btn btn-info">Download Data</button></a>
                             <div class="panel-body">
                                  <div class="table-responsive">

@@ -38,24 +38,24 @@ if(password_verify($person->getPassword(), $dbHashedPassword)){
 	$status = $_POST["status"];
 	$fpstype = $_POST["fpstype"];
 	
-	if($fpstype=='Model FPS'){
+	if($fpstype=='Smart FPS'){
 		if($status=='active'){
-			$query = "UPDATE fps SET active='1' WHERE district='$district' AND type='Model FPS'";
-			writeLog("User ->" ." Model FPS Active -> ". $_SESSION['user'] . "| " . $district);
+			$query = "UPDATE fps SET active='1' WHERE district='$district' AND type='Smart FPS'";
+			writeLog("User ->" ." Smart FPS Active -> ". $_SESSION['user'] . "| " . $district);
 		}
 		else{
-			$query = "UPDATE fps SET active='0' WHERE district='$district' AND type='Model FPS'";
-			writeLog("User ->" ." Model FPS InActive -> ". $_SESSION['user'] . "| " . $district);
+			$query = "UPDATE fps SET active='0' WHERE district='$district' AND type='Smart FPS'";
+			writeLog("User ->" ." Smart FPS InActive -> ". $_SESSION['user'] . "| " . $district);
 		}
 	}
 	else{
 		if($status=='active'){
-			$query = "UPDATE fps SET active='1' WHERE district='$district' AND type='Normal FPS'";
-			writeLog("User ->" ." Normal FPS Active -> ". $_SESSION['user'] . "| " . $district);
+			$query = "UPDATE fps SET active='1' WHERE district='$district' AND type='Non Smart FPS'";
+			writeLog("User ->" ." Non Smart FPS Active -> ". $_SESSION['user'] . "| " . $district);
 		}
 		else{
-			$query = "UPDATE fps SET active='0' WHERE district='$district' AND type='Normal FPS'";
-			writeLog("User ->" ." Normal FPS InActive -> ". $_SESSION['user'] . "| " . $district);
+			$query = "UPDATE fps SET active='0' WHERE district='$district' AND type='Non Smart FPS'";
+			writeLog("User ->" ." Non Smart FPS InActive -> ". $_SESSION['user'] . "| " . $district);
 		}
 	}
 	mysqli_query($con, $query);

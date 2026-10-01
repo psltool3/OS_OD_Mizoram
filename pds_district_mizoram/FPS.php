@@ -42,11 +42,12 @@ td {
 								<a href="BulkFPSData.php" style="float:right;margin-top:10px;margin-right:13px"><button type="button" class="btn btn-info">Bulk Data Add</button></a>
 								<span style="float:right;margin-top:10px;margin-right:13px"><button type="button" onclick="delete_all()"  class="btn btn-danger">Delete All</button></span>
 								<a href="FPSAdd.php" style="float:right;margin-top:10px;margin-right:13px"><button type="button" class="btn btn-success">Add New</button></a>
+								<a href="LoadFPS.php" style="float:right;margin-top:10px;margin-right:13px"><button type="button" class="btn btn-warning">Load FPS</button></a>
                                 <a href="api/BulkFPSDownloadEdit.php" style="float:right;margin-top:10px;margin-right:13px"><button type="button" class="btn btn-info">Download Data</button></a>
                              <div>
 								</br></br></br></br></br>
-                                <a href="api/SmartFPSStatus.php" style="float:right;margin-top:10px;margin-right:13px"><button type="button" class="btn btn-warning">Model FPS Status Change</button></a>
-								<a href="api/NonSmartFPSStatus.php" style="float:right;margin-top:10px;margin-right:13px"><button type="button" class="btn btn-info">Normal FPS Status Change</button></a>
+                                <a href="api/SmartFPSStatus.php" style="float:right;margin-top:10px;margin-right:13px"><button type="button" class="btn btn-warning">Smart FPS Status Change</button></a>
+								<a href="api/NonSmartFPSStatus.php" style="float:right;margin-top:10px;margin-right:13px"><button type="button" class="btn btn-info">Non Smart FPS Status Change</button></a>
 								</div>
                                 <div class="panel-body">
                                  <div class="table-responsive">
@@ -56,7 +57,7 @@ td {
 												<th style="font-size:16px">District</th>
 												<th style="font-size:16px">Name of FPS</th>
 												<th style="font-size:16px">FPS ID</th>
-												<th style="font-size:16px">Model FPS/Normal FPS</th>
+												<th style="font-size:16px">Smart FPS/Non Smart FPS</th>
 												<th style="font-size:16px">Latitude</th>
 												<th style="font-size:16px">Longitude</th>
 												<th style="font-size:16px">Demand of FRice (Qtl)</th>

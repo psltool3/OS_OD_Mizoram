@@ -85,8 +85,8 @@ require('Header.php');
                                                     <div class="input-group">
 												   <span class="input-group-addon"><span class="fa fa-arrow-down"></span></span>
                                                     <select class="form-control" id="fpstype" name="fpstype">
-													<option value="Model FPS">Model FPS</option>
-													<option value="Normal FPS">Normal FPS</option>
+													<option value="Smart FPS">Smart FPS</option>
+													<option value="Non Smart FPS">Non Smart FPS</option>
                                                     </select>
 													</div>
                                                     <span class="help-block">FPS Type</span>

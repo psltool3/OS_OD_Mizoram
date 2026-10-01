@@ -11,7 +11,7 @@ if(!SessionCheck()){
 require('Header.php');
 
 
-$query = "SELECT * FROM fps WHERE type='Normal FPS'";
+$query = "SELECT * FROM fps WHERE type='Non Smart FPS'";
 $result = mysqli_query($con,$query);
 $numrows = mysqli_num_rows($result);
 
@@ -19,13 +19,13 @@ if($numrows>0){
 	$row = mysqli_fetch_assoc($result);
 	$status = $row['active'];
 	if($status==0){
-		$query = "UPDATE fps SET active='1' WHERE type='Normal FPS'";
-		writeLog("User ->" ." All Normal FPS Active -> ". $_SESSION['user']);
+		$query = "UPDATE fps SET active='1' WHERE type='Non Smart FPS'";
+		writeLog("User ->" ." All Non Smart FPS Active -> ". $_SESSION['user']);
 		mysqli_query($con,$query);
 	}
 	else{
-		$query = "UPDATE fps SET active='0' WHERE type='Normal FPS'";
-		writeLog("User ->" ." All Normal FPS InActive -> ". $_SESSION['user']);
+		$query = "UPDATE fps SET active='0' WHERE type='Non Smart FPS'";
+		writeLog("User ->" ." All Non Smart FPS InActive -> ". $_SESSION['user']);
 		mysqli_query($con,$query);
 	}
 }

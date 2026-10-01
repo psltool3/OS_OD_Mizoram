@@ -1,2 +1,14 @@
 logs/
 *.logs
+
+# GSD and related files
+.agent/
+.agents/
+.gemini/
+.gsd/
+adapters/
+scripts/
+GSD-STYLE.md
+model_capabilities.yaml
+PROJECT_RULES.md
+VERSION
