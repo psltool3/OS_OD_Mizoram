@@ -250,6 +250,7 @@ if($currentTimestamp >= $targetTimestamp) {
 								<button id="downloadCSV" class="btn btn-warning pull-right" style="margin-left: 10px;" type="button">Download CSV</button>
 								<button id="downloadXLSX" class="btn btn-success pull-right" style="margin-left: 10px;" type="button">Download XLSX</button>
 								<button id="downloadPDF" class="btn btn-danger pull-right" style="margin-left: 10px;" type="button">Download PDF</button>
+                                <button id="pushSCM" class="btn btn-primary pull-right" style="margin-left: 10px;" type="button" onclick="pushToSCM(1)">Push to SCMS</button>
 								</br></br>
 								<div class="table-container">
                                     <table id="export_table" class="table">
@@ -578,6 +579,43 @@ if($currentTimestamp >= $targetTimestamp) {
 			window.URL.revokeObjectURL(url);
 		}
 		
+        async function pushToSCM(leg) {
+            if(!confirm("Are you sure you want to push this data to SCMS?")) return;
+            
+            var dataString = 'leg=' + leg;
+            
+            var btn = document.getElementById("pushSCM");
+            var originalText = btn.innerText;
+            btn.disabled = true;
+            btn.innerText = "Pushing...";
+            
+            $.ajax({
+                type: "POST",
+                url: "api/PushOptimisedData.php",
+                data: dataString,
+                cache: false,
+                success: function(result){
+                    try {
+                        var res = typeof result === 'object' ? result : JSON.parse(result);
+                        if(res.status == 'success') {
+                            alert("Success: " + res.message);
+                        } else {
+                            alert("Error: " + res.message);
+                        }
+                    } catch(e) {
+                        alert("Error parsing response: " + JSON.stringify(result));
+                    }
+                    btn.disabled = false;
+                    btn.innerText = originalText;
+                },
+                error: function(){
+                    alert("Error connecting to server.");
+                    btn.disabled = false;
+                    btn.innerText = originalText;
+                }
+            });
+        }
+        
 		function fetchDataFromServer(){
 			var approved = document.getElementById("approved").value;
 			var dataStringFromId = 'approved='+ approved
