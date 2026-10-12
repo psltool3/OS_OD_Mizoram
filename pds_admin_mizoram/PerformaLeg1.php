@@ -41,7 +41,7 @@ require('Header.php');
 							</br></br>
 							
                                  <div class="table-responsive">
-									<form method="post" action="api/saveCostLeg1.php">
+									<form method="post" action="api/saveCostLeg1.php" id="costForm" onsubmit="return validateCostForm();">
                                     <table id="export_table" class="table">
                                         <thead>
                                             <tr>
@@ -101,11 +101,17 @@ require('Header.php');
 											$averagedistanceoptimised = round($qkm_optimised/$allocation,2);
 											$qkm = round($qkm,2);
 
+											// Auto-reset invalid negative cost from database if present
+											if(is_numeric($cost) && (float)$cost < 0){
+												mysqli_query($con, "UPDATE optimised_table_leg1 SET cost = '' WHERE id = '$id'");
+												$cost = "";
+											}
+
 											$reset = "<input class='btn btn-info btn-block' style='width:50%' onclick='resetFunction(\"".$id."\")' value='Reset'></input>";
 											
-											if($cost==null or $cost==""){
+											if($cost == null || $cost === ""){
 												$temp = "cost_".$id;
-												$cost = "<input type='text' id='".$temp."' name='".$temp."'  maxlength='255' />";
+												$cost = "<input type='number' min='0' step='any' id='".$temp."' name='".$temp."' class='form-control' style='width:120px; display:inline-block;' onkeydown='if(event.key === \"-\" || event.key === \"e\" || event.key === \"E\") return false;' oninput='if(this.value < 0) this.value = \"\";' placeholder='Enter Cost' />";
 												$reset = "";
 											}											
 											
@@ -237,7 +243,29 @@ require('Header.php');
 			});
 			
 		}
-		
+
+		function validateCostForm() {
+			var valid = true;
+			$("input[name^='cost_']").each(function() {
+				var val = $(this).val().trim();
+				if (val !== "") {
+					var num = parseFloat(val);
+					if (isNaN(num)) {
+						alert("Cost must be a valid number.");
+						$(this).focus();
+						valid = false;
+						return false;
+					}
+					if (num < 0) {
+						alert("Cost cannot be negative.");
+						$(this).focus();
+						valid = false;
+						return false;
+					}
+				}
+			});
+			return valid;
+		}
 
 		</script>
     </body>
