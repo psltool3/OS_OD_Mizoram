@@ -45,11 +45,22 @@ if (empty($row)) {
     return;
 }
 
-if ($row['locked_until'] !== null && strtotime($row['locked_until']) > time()) {
-    $remaining_seconds = strtotime($row['locked_until']) - time();
-    $remaining_minutes = ceil($remaining_seconds / 60);
-    echo "<script>alert('Error: Account is temporarily locked due to 5 failed attempts. Please try again in $remaining_minutes min.'); window.history.back();</script>";
-    return;
+if ($row['locked_until'] !== null) {
+    $lockedTime = strtotime($row['locked_until']);
+    if ($lockedTime > time()) {
+        $remaining_seconds = $lockedTime - time();
+        $remaining_minutes = ceil($remaining_seconds / 60);
+        echo "<script>alert('Error: Account is temporarily locked due to multiple failed attempts. Please try again in $remaining_minutes min.'); window.history.back();</script>";
+        return;
+    } else {
+        // Lockout expired: reset failed_attempts and clear locked_until
+        $reset_lock = $con->prepare("UPDATE login SET failed_attempts = 0, locked_until = NULL WHERE username = ?");
+        $reset_lock->bind_param("s", $username);
+        $reset_lock->execute();
+        $reset_lock->close();
+        $row['failed_attempts'] = 0;
+        $row['locked_until'] = null;
+    }
 }
 
 if ($row['role'] !== 'admin') {
@@ -61,16 +72,23 @@ $dbHashedPassword = $row['password'];
 if (!password_verify($oldpassword, $dbHashedPassword)) {
     $failed_attempts = $row['failed_attempts'] + 1;
     if ($failed_attempts >= 5) {
-        $lock_query = $con->prepare("UPDATE login SET failed_attempts = ?, locked_until = DATE_ADD(NOW(), INTERVAL 15 MINUTE) WHERE username=?");
-    } else {
-        $lock_query = $con->prepare("UPDATE login SET failed_attempts = ? WHERE username=?");
-    }
-    $lock_query->bind_param("is", $failed_attempts, $username);
-    $lock_query->execute();
-    $lock_query->close();
+        $lock_query = $con->prepare("UPDATE login SET failed_attempts = ?, locked_until = DATE_ADD(NOW(), INTERVAL 20 MINUTE) WHERE username=?");
+        $lock_query->bind_param("is", $failed_attempts, $username);
+        $lock_query->execute();
+        $lock_query->close();
 
-    echo "<script>alert('Error: Old password is incorrect.'); window.history.back();</script>";
-    return;
+        echo "<script>alert('Error: Account has been temporarily locked for 20 minutes due to $failed_attempts consecutive failed attempts.'); window.history.back();</script>";
+        return;
+    } else {
+        $remaining = 5 - $failed_attempts;
+        $lock_query = $con->prepare("UPDATE login SET failed_attempts = ? WHERE username=?");
+        $lock_query->bind_param("is", $failed_attempts, $username);
+        $lock_query->execute();
+        $lock_query->close();
+
+        echo "<script>alert('Error: Old password is incorrect. Attempts remaining: $remaining'); window.history.back();</script>";
+        return;
+    }
 }
 
 $historyStmt = $con->prepare("SELECT password_hash FROM password_history WHERE username=? ORDER BY changed_at DESC LIMIT 5");
