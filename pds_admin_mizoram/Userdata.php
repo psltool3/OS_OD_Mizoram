@@ -48,8 +48,7 @@ require('Header.php');
                                                 <th>Role/District</th>
                                                 <th>Login Count</th>
                                                 <th>Last Login</th>
-                                                <th>Verify</th>
-                                                <th>Block</th>
+                                                <th>Action</th>
                                                 <th>Delete</th>
                                             </tr>
                                         </thead>
@@ -69,14 +68,20 @@ require('Header.php');
 												$verified = "Verified";
 											}
 											
+											// Determine Action button based on verified status
+											if($verify == 1){
+												$actionBtn = "<button class='btn btn-warning btn-rounded' onclick=\"block_function('{$temp_id}')\">Block</button>";
+											} else {
+												$actionBtn = "<button class='btn btn-success btn-rounded' onclick=\"verify_funtion('{$temp_id}')\">Verify</button>";
+											}
+
 											echo "<tr><td>{$row['username']}</td>".
 											 "<td>{$row['password']}</td>".
 											 "<td>$verified</td>".
 											 "<td>{$row['role']}</td>".
 											 "<td>{$row['count']}</td>".
 											 "<td>{$row['lastlogin']}</td>".
-											 "<td> <button class='btn btn-success btn-rounded' onclick=\"verify_funtion('{$temp_id}')\">Verify</button></td>".
-											 "<td> <button class='btn btn-warning btn-rounded' onclick=\"block_function('{$temp_id}')\">Block</button></td>".
+											 "<td> $actionBtn</td>".
 											 "<td> <button class='btn btn-danger btn-rounded' onclick=\"delete_function('{$temp_id}')\">Delete</button></td></tr>";
              										
 										}
