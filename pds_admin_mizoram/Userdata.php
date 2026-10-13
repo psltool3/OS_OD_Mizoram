@@ -43,7 +43,7 @@ require('Header.php');
                                         <thead>
                                             <tr>
 												<th>User Id</th>
-												<th>Password</th>
+												<!-- <th>Password</th> -->
                                                 <th>Verified</th>
                                                 <th>Role/District</th>
                                                 <th>Login Count</th>
@@ -68,21 +68,18 @@ require('Header.php');
 												$verified = "Verified";
 											}
 											
-											// Determine Action button based on verified status
-											if($verify == 1){
-												$actionBtn = "<button class='btn btn-warning btn-rounded' onclick=\"block_function('{$temp_id}')\">Block</button>";
-											} else {
-												$actionBtn = "<button class='btn btn-success btn-rounded' onclick=\"verify_funtion('{$temp_id}')\">Verify</button>";
-											}
+											$action_btn = ($verify == 1)
+												? "<button class='btn btn-warning btn-rounded' onclick=\"block_function('{$temp_id}')\">Block</button>"
+												: "<button class='btn btn-success btn-rounded' onclick=\"verify_funtion('{$temp_id}')\">Verify</button>";
 
 											echo "<tr><td>{$row['username']}</td>".
-											 "<td>{$row['password']}</td>".
-											 "<td>$verified</td>".
-											 "<td>{$row['role']}</td>".
-											 "<td>{$row['count']}</td>".
-											 "<td>{$row['lastlogin']}</td>".
-											 "<td> $actionBtn</td>".
-											 "<td> <button class='btn btn-danger btn-rounded' onclick=\"delete_function('{$temp_id}')\">Delete</button></td></tr>";
+											 /* "<td>{$row['password']}</td>". */
+											 "	<td>$verified</td>".
+											 "	<td>{$row['role']}</td>".
+											 "	<td>{$row['count']}</td>".
+											 "	<td>{$row['lastlogin']}</td>".
+											 "	<td>$action_btn</td>".
+											 "	<td> <button class='btn btn-danger btn-rounded' onclick=\"delete_function('{$temp_id}')\">Delete</button></td></tr>";
              										
 										}
 

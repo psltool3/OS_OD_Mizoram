@@ -36,7 +36,7 @@ require('Header.php');
                     <div class="row">
                         <div class="col-md-12">
 
-                            <form action="api/LoginDataAdd.php" method="POST" class="form-horizontal" enctype = "multipart/form-data">
+                            <form id="mainForm" class="form-horizontal" enctype="multipart/form-data">
                             <div class="panel panel-default">
                                <div class="panel-body">
                                     <p>Fill this form to add new user.</p>
@@ -115,11 +115,9 @@ require('Header.php');
                                                 </div>
                                             </div>
 											
-											
                                         </div>
                                         <div class="col-md-6">
-										
-										
+
 											<div class="form-group">
                                                 <label class="col-md-3 control-label">Admin Password*</label>
                                                 <div class="col-md-9">
@@ -130,7 +128,6 @@ require('Header.php');
                                                     <span class="help-block">Current Admin Password</span>
                                                 </div>
                                             </div>
-											
 											
                                         </div>
 										
@@ -186,7 +183,6 @@ require('Header.php');
         <!-- END PAGE PLUGINS -->
 		<script>
 		function showPopup() {
-            
 			var username = document.getElementById('newusername').value;
             var password = document.getElementById('newpassword').value;
 			var district = document.getElementById('district').value;
@@ -201,14 +197,83 @@ require('Header.php');
                 alert('Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.');
                 return false;
             }
-			
+
+            // Reset error/success messages and clear admin fields each time popup opens
+            document.getElementById('popupError').style.display = 'none';
+            document.getElementById('popupSuccess').style.display = 'none';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('verifyBtn').disabled = false;
+            document.getElementById('verifyBtn').textContent = 'Verify';
             document.getElementById('popup').style.display = 'block';
         }
 		
 		function hidePopup() {
             document.getElementById('popup').style.display = 'none';
         }
-		
+
+        function submitVerify() {
+            var adminUser = document.getElementById('username').value.trim();
+            var adminPass = document.getElementById('password').value;
+
+            if (adminUser === '' || adminPass === '') {
+                showPopupError('Please enter your admin username and password.');
+                return;
+            }
+
+            // Encrypt password before sending
+            var nonceValue = 'nonce_value';
+            var encryption = new Encryption();
+            var encryptedPass = encryption.encrypt(adminPass, nonceValue);
+
+            var btn = document.getElementById('verifyBtn');
+            btn.disabled = true;
+            btn.textContent = 'Verifying...';
+            document.getElementById('popupError').style.display = 'none';
+            document.getElementById('popupSuccess').style.display = 'none';
+
+            var formData = new FormData();
+            formData.append('username', adminUser);
+            formData.append('password', encryptedPass);
+            formData.append('newusername', document.getElementById('newusername').value);
+            formData.append('newpassword', document.getElementById('newpassword').value);
+            formData.append('district', document.getElementById('district').value);
+
+            fetch('api/VerifyAndAddUser.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                if (data.success) {
+                    showPopupSuccess(data.message);
+                    setTimeout(function() {
+                        window.location.href = 'Userdata.php';
+                    }, 1500);
+                } else {
+                    showPopupError(data.message);
+                    btn.disabled = false;
+                    btn.textContent = 'Verify';
+                }
+            })
+            .catch(function() {
+                showPopupError('A network error occurred. Please try again.');
+                btn.disabled = false;
+                btn.textContent = 'Verify';
+            });
+        }
+
+        function showPopupError(msg) {
+            var el = document.getElementById('popupError');
+            el.textContent = msg;
+            el.style.display = 'block';
+        }
+
+        function showPopupSuccess(msg) {
+            var el = document.getElementById('popupSuccess');
+            el.textContent = msg;
+            el.style.display = 'block';
+        }
 		</script>	
 
     </body>

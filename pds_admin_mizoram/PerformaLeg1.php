@@ -111,7 +111,7 @@ require('Header.php');
 											
 											if($cost == null || $cost === ""){
 												$temp = "cost_".$id;
-												$cost = "<input type='number' min='0' step='any' id='".$temp."' name='".$temp."' class='form-control' style='width:120px; display:inline-block;' onkeydown='if(event.key === \"-\" || event.key === \"e\" || event.key === \"E\") return false;' oninput='if(this.value < 0) this.value = \"\";' placeholder='Enter Cost' />";
+												$cost = "<input type='text' id='".$temp."' name='".$temp."'  maxlength='255' />";
 												$reset = "";
 											}											
 											
