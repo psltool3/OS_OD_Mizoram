@@ -1,6 +1,5 @@
 <?php
 require('../util/Connection.php');
-require('../structures/District.php');
 require('../util/SessionFunction.php');
 require('../structures/Login.php');
 

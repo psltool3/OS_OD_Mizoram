@@ -287,7 +287,6 @@ if($currentTimestamp >= $targetTimestamp) {
 										
 										</table>
 										</div>
-										<input type="hidden" id="district" name="district" value="<?php echo $district ?>" />
 										<?php
 										if($expired==0){
 											echo "<button class='btn btn-info pull-right' onClick='acceptAll()' type='button' style='margin-left:10px;'>Accept All</button><button class='btn btn-primary pull-right' onClick='sendData()' type='button'>Save</button>";
@@ -579,15 +578,17 @@ if($currentTimestamp >= $targetTimestamp) {
 		}
 		
 		function fetchDataFromServer(){
+			var districtElement = document.getElementById("district");
+			var district = districtElement ? districtElement.value : "";
 			var approved = document.getElementById("approved").value;
-			var dataStringFromId = 'approved='+ approved
+			var dataStringFromId = 'approved='+ approved;
 			$.ajax({
 				type: "POST",
 				url: "api/FetchFromIdLeg1.php",
 				data: dataStringFromId,
 				cache: false,
-				error: function(){
-					alert("timeout");
+				error: function(xhr, status, error){
+					console.error("FetchFromId error:", status, error);
 				},
 				timeout: 59000,
 				success: function(result){
@@ -627,8 +628,8 @@ if($currentTimestamp >= $targetTimestamp) {
 				url: "api/FetchToIdLeg1.php",
 				data: dataStringToId,
 				cache: false,
-				error: function(){
-					alert("timeout");
+				error: function(xhr, status, error){
+					console.error("FetchToId error:", status, error);
 				},
 				timeout: 59000,
 				success: function(result){
@@ -684,8 +685,8 @@ if($currentTimestamp >= $targetTimestamp) {
 					url: "api/FetchDbDataLeg1.php",
 					data: dataString,
 					cache: false,
-					error: function(){
-						alert("timeout");
+					error: function(xhr, status, error){
+						console.error("FetchDbData error:", status, error);
 						$("#filter_button").attr("disabled",false);
 					},
 					timeout: 59000,
