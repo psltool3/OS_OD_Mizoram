@@ -15,13 +15,14 @@ if(!SessionCheck()){
 require('Header.php');
 
 $person = new Login;
-$person->setUsername($_POST["username"]);
+$person->setUsername($_POST["username"] ?? "");
 $Encryption = new Encryption();
-$person->setPassword($Encryption->decrypt($_POST["password"], $nonceValue));
+$person->setPassword($Encryption->decrypt($_POST["password"] ?? "", $nonceValue));
 
-if($_SESSION['user']!=$person->getUsername()){
-	echo "User is logged in with different username and password";
-	return;
+if($_SESSION['user'] != $person->getUsername()){
+	echo "Error: User is logged in with different username and password";
+	require('Fullui.php');
+	exit();
 }
 
 $query = "SELECT * FROM login WHERE username='".$person->getUsername()."'";
@@ -30,13 +31,14 @@ $row = mysqli_fetch_assoc($result);
 
 if(empty($row) || !password_verify($person->getPassword(), $row['password'])){
 	echo "Error : Password or Username is incorrect";
-	return;
+	require('Fullui.php');
+	exit();
 }
 
-$district = $_POST["district"];
-$status = $_POST["status"];
+$district = $_POST["district"] ?? "";
+$status = $_POST["status"] ?? "";
 
-if($status=='active'){
+if($status == 'active'){
 	$query = "UPDATE dcp SET active='1' WHERE district='$district'";
 }
 else{
@@ -45,6 +47,5 @@ else{
 mysqli_query($con, $query);
 echo "<script>window.location.href = '../DCP.php';</script>";
 
-
 ?>
-<?php require('Fullui.php');  ?>
+<?php require('Fullui.php'); ?>

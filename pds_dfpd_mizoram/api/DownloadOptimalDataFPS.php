@@ -19,7 +19,8 @@ if (isset($_GET['format'])) {
     $columns = ["district","name","id","type","latitude","longitude","demand"];
     $tablename = $_GET['tableName'];
 	$tableData = array();
-    array_push($tableData,$columns);
+    $columnsName = ["District","Name of FPS","FPS ID","Smart FPS / Non-Smart FPS","Latitude","Longitude","Demand(Qtl)"];
+    array_push($tableData,$columnsName);
 
 	$query = "SELECT * FROM ".$tablename." WHERE 1";
     $result = mysqli_query($con,$query);

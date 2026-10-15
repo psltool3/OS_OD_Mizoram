@@ -20,6 +20,24 @@ if ($rolled_out != '1' || empty($id)) {
 	echo "<script>window.location.href = '$redirect';</script>";
 	exit();
 }
+
+// Check deadline expiry
+$query_timer = "SELECT * FROM timer WHERE 1";
+$result_timer = mysqli_query($con, $query_timer);
+$date = "";
+$time = "";
+while ($row_timer = mysqli_fetch_array($result_timer)) {
+	$date = $row_timer['deadline_date'];
+	$time = $row_timer['deadline_time'];
+}
+if (!empty($date) && !empty($time)) {
+	$targetTimestamp = strtotime($date . " " . $time);
+	if (time() >= $targetTimestamp) {
+		echo "<script>alert('Deadline has expired. Changes cannot be reset.'); window.location.href = '$redirect';</script>";
+		exit();
+	}
+}
+
 $tablename = "optimiseddata_".$id;
 
 foreach ($_POST as $key => $value) {

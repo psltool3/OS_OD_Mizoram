@@ -23,7 +23,7 @@ if($numrow>0){
 }
 
 $tablename = "optimiseddata_".$id;
-$result = $con->query("SELECT DISTINCT `to` from $tablename WHERE to_district='$district'");
+$result = $con->query("SELECT DISTINCT to_id,to_name from $tablename WHERE to_district='$district'");
 
 if ($result->num_rows > 0) {
     $rows = array();

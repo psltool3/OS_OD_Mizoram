@@ -37,6 +37,9 @@ if (isset($_GET['format'])) {
 	if($district=="" OR $district=="all"){
 		$query = "SELECT * FROM ".$tablename." WHERE 1";
 	}
+	if(isset($_GET['source']) && $_GET['source'] === 'rollout'){
+		$query .= " AND status='implemented' AND approve_admin IN ('yes', 'no') AND approve_district IN ('yes', 'no')";
+	}
     $result = mysqli_query($con,$query);
     $numrows = mysqli_num_rows($result);
     $tableData = array();

@@ -18,6 +18,24 @@ while($row = mysqli_fetch_array($result))
 {
 	$rolled_out= $row["rolled_out"];
 }
+
+//code to check the time expiry
+$query = "SELECT * FROM timer WHERE 1";
+$result = mysqli_query($con,$query);
+$date = "";
+$time = "";
+while($row = mysqli_fetch_array($result)){
+	$date = $row['deadline_date'];
+	$time = $row['deadline_time'];
+}
+$targetDateTime = $date." ".$time;
+$targetTimestamp = strtotime($targetDateTime);
+$currentTimestamp = time();
+$expired = 0; 
+
+if(!empty($date) && !empty($time) && $currentTimestamp >= $targetTimestamp) {
+    $expired = 1;
+}
 ?>
 <style>
 	body {
@@ -245,7 +263,7 @@ while($row = mysqli_fetch_array($result))
 												<option value=''>Select</option>
 											</select>
 											</div>
-											<span class="help-block">Select To</span>
+											<span class="help-block">Select FPS</span>
 										</div>
 									</div>
 								</div>
@@ -378,6 +396,7 @@ while($row = mysqli_fetch_array($result))
 
 		<script>
 		
+		var expired = <?php echo $expired; ?>;
 		var modifiedData = {};
 		var modifiedIdData = {};
 		var modifiedReasonData = {};
@@ -406,6 +425,10 @@ while($row = mysqli_fetch_array($result))
 		}
 
 		function saveRowData(uniqueid) {
+			if (typeof expired !== 'undefined' && expired == 1) {
+				alert("Deadline has expired. Changes cannot be saved.");
+				return;
+			}
 			var params = {};
 			
 			// Admin implementations often track uniqueid_bool
@@ -446,6 +469,10 @@ while($row = mysqli_fetch_array($result))
 		}
 
 		function resetRowData(uniqueid) {
+			if (typeof expired !== 'undefined' && expired == 1) {
+				alert("Deadline has expired. Changes cannot be reset.");
+				return;
+			}
 			var params = {};
 			params[uniqueid] = "reset";
 			post(params, "api/ResetRow.php");
@@ -835,8 +862,11 @@ while($row = mysqli_fetch_array($result))
 								else{
 									var newid_admin_part = "<td><select class='form-control' onchange='handleNewIdChange(\"" + uniqueid + "\")' id='" + uniqueid + "' name='" + uniqueid + "' disabled required><option value=''>Select Id</option>" + warehousepart + "</select></td>";
 								}
+								var is_expired = (typeof expired !== 'undefined' && expired == 1);
+								var save_disabled = is_expired ? "disabled" : "";
+								var reset_disabled = is_expired ? "disabled" : "";
 								if(approve_district==""){
-									var action_col = "<td><button class='btn btn-success' style='margin-bottom:5px;' onclick=\"saveRowData('" + uniqueid + "')\">Save</button><br><button class='btn btn-danger' onclick=\"resetRowData('" + uniqueid + "')\">Reset</button></td>";
+									var action_col = "<td><button class='btn btn-success' style='margin-bottom:5px;' onclick=\"saveRowData('" + uniqueid + "')\" " + save_disabled + ">Save</button><br><button class='btn btn-danger' onclick=\"resetRowData('" + uniqueid + "')\" " + reset_disabled + ">Reset</button></td>";
 									subpart1 = subpart1 + "<td>" + newid_district + "</td><td>" + reason_district + "</td><td>" + distance_district  + approve_district_part + "</td><td></td><td></td><td></td><td></td>" + action_col + "</tr>";
 								}
 								else{
@@ -850,7 +880,7 @@ while($row = mysqli_fetch_array($result))
 										var approve_admin_part = "<td><select class='form-control' onchange='enableDisable(\"" + uniqueid + "\")' id='" + uniqueid_bool + "' name='" + uniqueid_bool + "' required><option value=''>Select</option><option value='yes'>Approve District</option><option value='same'>Keep System Generated</option><option value='no'>Change ID</option></select></td>";
 										uniqueid_array.push(uniqueid_bool);
 									}
-									var action_col = "<td><button class='btn btn-success' style='margin-bottom:5px;' onclick=\"saveRowData('" + uniqueid + "')\">Save</button><br><button class='btn btn-danger' onclick=\"resetRowData('" + uniqueid + "')\">Reset</button></td>";
+									var action_col = "<td><button class='btn btn-success' style='margin-bottom:5px;' onclick=\"saveRowData('" + uniqueid + "')\" " + save_disabled + ">Save</button><br><button class='btn btn-danger' onclick=\"resetRowData('" + uniqueid + "')\" " + reset_disabled + ">Reset</button></td>";
 									subpart1 = subpart1 + "<td>" + newid_district + "</td><td>" + reason_district + "</td><td>" + distance_district + approve_district_part + approve_admin_part + admin_reason + newid_admin_part + distance_admin_part + action_col + "</tr>";
 								}
 								$('#table_body').append(subpart1);
@@ -956,13 +986,16 @@ while($row = mysqli_fetch_array($result))
 						if(result!=""){
 							var resultarray = JSON.parse(result);
 							var toidarray = resultarray.map(function(item) {
-								return item.to;
+								return item.to_id;
 							});
-							if (toidarray.length > 0) {
-								toidarray.forEach(function(toId) {
+							var toid_tonamearray = resultarray.map(function(item) {
+								return item.to_id.toString() + "_" + item.to_name.toString();
+							});
+							if (toid_tonamearray.length > 0) {
+								toid_tonamearray.forEach(function(toId_toName) {
 									var option = document.createElement("option");
-									option.text = toId;
-									option.value = toId;
+									option.text = toId_toName;
+									option.value = toId_toName.split('_')[0];
 									selectInput.appendChild(option);
 								});
 							}

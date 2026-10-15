@@ -67,10 +67,10 @@ if (empty($tablename)) {
 												<th style="font-size:16px">District</th>
 												<th style="font-size:16px">Name of FPS</th>
 												<th style="font-size:16px">FPS ID</th>
-												<th style="font-size:16px">Smart FPS/Non Smart FPS</th>
+												<th style="font-size:16px">Smart FPS / Non-Smart FPS</th>
 												<th style="font-size:16px">Latitude</th>
 												<th style="font-size:16px">Longitude</th>
-												<th style="font-size:16px">Demand of FRice (Qtl)</th>
+												<th style="font-size:16px">Demand(Qtl)</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -153,7 +153,7 @@ if (empty($tablename)) {
 				var tableName = '<?php echo $tablename ?>';
 				const csvResponse = await fetch('api/DownloadOptimalDataFPS.php?format=csv&tableName='+tableName);
 				const csvBlob = await csvResponse.blob();
-				downloadFile(csvBlob, 'Mizoraom_FPS_' + getDateString() + '.csv');
+				downloadFile(csvBlob, 'Mizoram_FPS_' + getDateString() + '.csv');
 			} catch (error) {
 				console.error('Error downloading CSV file:', error);
 			}

@@ -84,13 +84,13 @@ if (empty($tablename)) {
 												<th style="font-size:15px">District</th>
 												<th style="font-size:15px">Name of FPS</th>
 												<th style="font-size:15px">FPS ID</th> 
-												<th style="font-size:15px">Motorable/Non-Motorable</th>
+												<th style="font-size:15px">Smart FPS / Non-Smart FPS</th>
 												<th style="font-size:15px">Latitude</th>
 												<th style="font-size:15px">Longitude</th>
 												<th style="font-size:15px">Demand(Qtl)</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="fps_table">
 										<?php
 										$chk = mysqli_query($con, "SHOW TABLES LIKE '" . mysqli_real_escape_string($con, $tablename) . "'");
 										if ($chk && mysqli_num_rows($chk) > 0) {
@@ -109,8 +109,6 @@ if (empty($tablename)) {
 												}
 											}
 										}?>
-										</tbody>
-										 <tbody id="fps_table">
 										</tbody>
                                     </table>
                                   </div>
@@ -262,7 +260,7 @@ if (empty($tablename)) {
 							else{
 								status = "<span style='padding:5px' class='btn-danger btn-rounded'>InActive</span>";
 							}
-							var subpart = "<tr><td>" +  obj[datafield]["district"] +  "</td><td>"  + obj[datafield]["name"] +  "</td><td>"  + obj[datafield]["id"] +  "</td><td>"  + obj[datafield]["type"] +  "</td><td>"  + obj[datafield]["latitude"] +  "</td><td>"  + obj[datafield]["longitude"] +  "</td><td>"  + obj[datafield]["demand"] +"</td><td>"  + obj[datafield]["demand_rice"]+  "</td></tr>";
+							var subpart = "<tr><td>" +  obj[datafield]["district"] +  "</td><td>"  + obj[datafield]["name"] +  "</td><td>"  + obj[datafield]["id"] +  "</td><td>"  + obj[datafield]["type"] +  "</td><td>"  + obj[datafield]["latitude"] +  "</td><td>"  + obj[datafield]["longitude"] +  "</td><td>"  + obj[datafield]["demand"] + "</td></tr>";
 							$('#fps_table').append(subpart);
 						}
 					}

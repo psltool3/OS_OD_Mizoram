@@ -52,7 +52,7 @@ if(isset($_POST['reviewed'])){
 
 $query = "SELECT * FROM " . $tablename . " WHERE to_district='$district'";
 if($reviewed=="reviewed"){
-	$query = "SELECT * FROM ".$tablename." WHERE approve_district='yes' AND to_district='$district'";
+	$query = "SELECT * FROM ".$tablename." WHERE approve_district IN ('yes', 'no') AND to_district='$district'";
 }
 else if($reviewed=="notreviewed"){
 	$query = "SELECT * FROM ".$tablename." WHERE (approve_district = '' OR approve_district IS NULL) AND to_district='$district'";
@@ -67,7 +67,7 @@ else if($approved=="notapproved"){
 if($from_id!=""){
 	$query = "SELECT * FROM ".$tablename." WHERE to_district='$district' AND from_id='$from_id'";
 	if($reviewed=="reviewed"){
-		$query = "SELECT * FROM ".$tablename." WHERE approve_district='yes' AND to_district='$district' AND from_id='$from_id'";
+		$query = "SELECT * FROM ".$tablename." WHERE approve_district IN ('yes', 'no') AND to_district='$district' AND from_id='$from_id'";
 	}
 	else if($reviewed=="notreviewed"){
 		$query = "SELECT * FROM ".$tablename." WHERE (approve_district = '' OR approve_district IS NULL) AND to_district='$district' AND from_id='$from_id'";
@@ -83,7 +83,7 @@ if($from_id!=""){
 if($to_id!=""){
 	$query = "SELECT * FROM ".$tablename." WHERE to_district='$district' AND `to`='$to_id'";
 	if($reviewed=="reviewed"){
-		$query = "SELECT * FROM ".$tablename." WHERE approve_district='yes' AND to_district='$district' AND `to`='$to_id'";
+		$query = "SELECT * FROM ".$tablename." WHERE approve_district IN ('yes', 'no') AND to_district='$district' AND `to`='$to_id'";
 	}
 	else if($reviewed=="notreviewed"){
 		$query = "SELECT * FROM ".$tablename." WHERE (approve_district = '' OR approve_district IS NULL) AND to_district='$district' AND `to`='$to_id'";
@@ -99,7 +99,7 @@ if($to_id!=""){
 if($to_id!="" and $from_id!=""){
 	$query = "SELECT * FROM ".$tablename." WHERE to_district='$district' AND `to`='$to_id' AND from_id='$from_id'";
 	if($reviewed=="reviewed"){
-		$query = "SELECT * FROM ".$tablename." WHERE approve_district='yes' AND to_district='$district' AND `to`='$to_id' AND from_id='$from_id'";
+		$query = "SELECT * FROM ".$tablename." WHERE approve_district IN ('yes', 'no') AND to_district='$district' AND `to`='$to_id' AND from_id='$from_id'";
 	}
 	else if($reviewed=="notreviewed"){
 		$query = "SELECT * FROM ".$tablename." WHERE (approve_district = '' OR approve_district IS NULL) AND to_district='$district' AND `to`='$to_id' AND from_id='$from_id'";
@@ -119,10 +119,21 @@ while($row = mysqli_fetch_array($result))
 	$data[] = $row;
 }
 
+$warehouse = array();
 $query_warehouse = "SELECT * from warehouse WHERE district='$district' ";
 $result_warehouse = mysqli_query($con,$query_warehouse);
-while($row_warehouse = mysqli_fetch_array($result_warehouse)){
-	$warehouse[] = $row_warehouse;
+if($result_warehouse && mysqli_num_rows($result_warehouse) > 0){
+	while($row_warehouse = mysqli_fetch_array($result_warehouse)){
+		$warehouse[] = $row_warehouse;
+	}
+} else {
+	$query_warehouse = "SELECT * from warehouse WHERE 1";
+	$result_warehouse = mysqli_query($con,$query_warehouse);
+	if($result_warehouse){
+		while($row_warehouse = mysqli_fetch_array($result_warehouse)){
+			$warehouse[] = $row_warehouse;
+		}
+	}
 }
 $resultarray = [];
 if($data==null){

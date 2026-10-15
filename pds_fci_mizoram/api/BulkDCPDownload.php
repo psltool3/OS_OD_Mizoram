@@ -1,10 +1,9 @@
 <?php
-require_once('../util/SessionFunction.php');
+require('../util/Connection.php');
+require('../util/SessionFunction.php');
 if(!SessionCheck()){
     die('Unauthorized');
 }
-
-require('../util/Connection.php');
 
 $mapData = [
     "District" => "district",
@@ -20,14 +19,6 @@ $mapData = [
 // Reverse mapping
 $reverseMapData = array_flip($mapData);
 
-
-// Filter the excel data 
-function filterData(&$str){ 
-    $str = preg_replace("/\t/", "\\t", $str); 
-    $str = preg_replace("/\r?\n/", "\\n", $str); 
-    if(strstr($str, '"')) $str = '"' . str_replace('"', '""', $str) . '"'; 
-} 
- 
 // Excel file name for download 
 $fileName = "FCITemplate_" . date('d-m-Y') . ".csv"; 
 
@@ -38,7 +29,7 @@ $result = mysqli_query($con,$query);
 $numrows = mysqli_num_rows($result);
 if($numrows>0){
 	while($row = mysqli_fetch_array($result)){
-		if($row['Field']!="uniqueid" && $row['Field']!="demand_rice"){
+		if($row['Field']!="uniqueid" && $row['Field']!="demand_rice" && isset($reverseMapData[$row['Field']])){
 			array_push($columns,$reverseMapData[$row['Field']]);
 		}
 	}
@@ -47,10 +38,10 @@ if($numrows>0){
 // Display column names as first row 
 $excelDataColumns = implode(",", array_values($columns)) . "\n";
 
- 
 // Headers for download 
-header("Content-Type: application/vnd.ms-excel"); 
+header("Content-Type: text/csv"); 
 header("Content-Disposition: attachment; filename=\"$fileName\""); 
+header("Cache-Control: max-age=0");
  
 // Render excel data 
 echo $excelDataColumns; 

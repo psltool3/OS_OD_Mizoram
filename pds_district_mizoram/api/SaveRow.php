@@ -24,6 +24,22 @@ if ($rolled_out != '1' || empty($id)) {
 	exit();
 }
 
+// Check deadline expiry
+$query_timer = "SELECT * FROM timer WHERE 1";
+$result_timer = mysqli_query($con, $query_timer);
+$date = "";
+$time = "";
+while ($row_timer = mysqli_fetch_array($result_timer)) {
+	$date = $row_timer['deadline_date'];
+	$time = $row_timer['deadline_time'];
+}
+if (!empty($date) && !empty($time)) {
+	$targetTimestamp = strtotime($date . " " . $time);
+	if (time() >= $targetTimestamp) {
+		echo "<script>alert('Deadline has expired. Changes cannot be saved.'); window.location.href = '../Home.php';</script>";
+		exit();
+	}
+}
 
 $tablename = "optimiseddata_".$id;
 
@@ -54,7 +70,7 @@ foreach ($_POST as $key => $value) {
 		$name = $row_name['name'];
 		$reason = $_POST[$key."_idreason"];
 		$distance = $_POST[$key."_iddistance"];
-		$query = "UPDATE " . $tablename . " SET new_id_district='$value', new_name_district='$name', approve_district='yes', new_distance_district='$distance', reason_district='$reason' WHERE from_id='$fromid' AND to_id='$toid'";
+		$query = "UPDATE " . $tablename . " SET new_id_district='$value', new_name_district='$name', approve_district='no', new_distance_district='$distance', reason_district='$reason' WHERE from_id='$fromid' AND to_id='$toid'";
 		
 		writeLog("User ->" ." Save Data | district user change id ->". $_SESSION['district_user'] . "| " . $fromid . " - " . $toid .  " - " . $commodity . "| " . $value);
 		

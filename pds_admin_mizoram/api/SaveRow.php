@@ -19,8 +19,23 @@ while($row = mysqli_fetch_array($result))
 }
 
 $tablename = "optimiseddata_".$id;
-echo $tablename;
-echo "</br>";
+
+// Check deadline expiry
+$query_timer = "SELECT * FROM timer WHERE 1";
+$result_timer = mysqli_query($con, $query_timer);
+$date = "";
+$time = "";
+while ($row_timer = mysqli_fetch_array($result_timer)) {
+	$date = $row_timer['deadline_date'];
+	$time = $row_timer['deadline_time'];
+}
+if (!empty($date) && !empty($time)) {
+	$targetTimestamp = strtotime($date . " " . $time);
+	if (time() >= $targetTimestamp) {
+		echo "<script>alert('Deadline has expired. Changes cannot be saved.'); window.location.href = '../OptimisedData.php';</script>";
+		exit();
+	}
+}
 foreach ($_POST as $key => $value) {
 	echo $value;
 	echo "</br>";
@@ -76,7 +91,7 @@ foreach ($_POST as $key => $value) {
 		$name = $row_name['name'];
 		$reason = $_POST[$key."_idreason"];
 		$distance = $_POST[$key."_iddistance"];
-		$query = "UPDATE " . $tablename . " SET new_id_admin='$value', new_name_admin='$name', approve_admin='yes', new_distance_admin='$distance', reason_admin='$reason' WHERE from_id='$fromid' AND to_id='$toid'";
+		$query = "UPDATE " . $tablename . " SET new_id_admin='$value', new_name_admin='$name', approve_admin='no', new_distance_admin='$distance', reason_admin='$reason' WHERE from_id='$fromid' AND to_id='$toid'";
 		writeLog("User ->" ." Save Data | approve district change id ->". $_SESSION['user'] . "| " . $fromid . " - " . $toid . "| " . $value);
 	}
 	mysqli_query($con,$query);

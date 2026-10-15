@@ -119,7 +119,7 @@ if(isset($_POST['step'])){
 												<span class="input-group-addon"><span class="fa fa-certificate"></span></span>						
 												<select class="form-control" id="district" name="district" onchange="fetchDataFromServer()">
 													<option value=''>Select</option>
-													<option value='all'>All</option>
+													<!-- <option value='all'>All</option> -->
 												</select>
 												</div>
 												<span class="help-block">All option will work only for download</span>
@@ -296,13 +296,13 @@ if(isset($_POST['step'])){
 						var resultarray = JSON.parse(result);
 						var obj = resultarray["data"];
 						for (var datafield in obj){
-							var subpart = "<tr><td>" +  obj[datafield]["scenario"] +  "</td><td>"  + obj[datafield]["from"] +  "</td><td>"  + obj[datafield]["from_state"] +  "</td><td>"  + obj[datafield]["from_id"] +  "</td><td>"  + obj[datafield]["from_name"] +  "</td><td>"  + obj[datafield]["from_district"] +  "</td><td>"  + obj[datafield]["from_lat"] + "</td><td>" + obj[datafield]["From_long"] + "</td><td>" + obj[datafield]["to"] + "</td><td>" + obj[datafield]["to_state"] + "</td><td>" + obj[datafield]["to_id"] + "</td><td>" + obj[datafield]["to_name"] + "</td><td>" + obj[datafield]["to_district"] + "</td><td>" + obj[datafield]["to_lat"] + "</td><td>" + obj[datafield]["to_long"] + "</td><td>" + obj[datafield]["commodity"] + "</td><td>" + obj[datafield]["quantity"] + "</td><td>" + obj[datafield]["distance"] + "</td></tr>";
+							var subpart = "<tr><td>" +  obj[datafield]["scenario"] +  "</td><td>"  + obj[datafield]["from"] +  "</td><td>"  + obj[datafield]["from_state"] +  "</td><td>"  + obj[datafield]["from_id"] +  "</td><td>"  + obj[datafield]["from_name"] +  "</td><td>"  + obj[datafield]["from_district"] +  "</td><td>"  + obj[datafield]["from_lat"] + "</td><td>" + obj[datafield]["from_long"] + "</td><td>" + obj[datafield]["to"] + "</td><td>" + obj[datafield]["to_state"] + "</td><td>" + obj[datafield]["to_id"] + "</td><td>" + obj[datafield]["to_name"] + "</td><td>" + obj[datafield]["to_district"] + "</td><td>" + obj[datafield]["to_lat"] + "</td><td>" + obj[datafield]["to_long"] + "</td><td>" + obj[datafield]["commodity"] + "</td><td>" + obj[datafield]["quantity"] + "</td><td>" + obj[datafield]["distance"] + "</td></tr>";
 							
 							$('#optimised_table').append(subpart);
 						}
 						var obj = resultarray["data1"];
 						for (var datafield in obj){
-							var subpart1 = "<tr><td>" +  obj[datafield]["scenario"] +  "</td><td>"  + obj[datafield]["from"] +  "</td><td>"  + obj[datafield]["from_state"] +  "</td><td>"  + obj[datafield]["from_id"] +  "</td><td>"  + obj[datafield]["from_name"] +  "</td><td>"  + obj[datafield]["from_district"] +  "</td><td>"  + obj[datafield]["from_lat"] + "</td><td>" + obj[datafield]["From_long"] + "</td><td>" + obj[datafield]["to"] + "</td><td>" + obj[datafield]["to_state"] + "</td><td>" + obj[datafield]["to_id"] + "</td><td>" + obj[datafield]["to_name"] + "</td><td>" + obj[datafield]["to_district"] + "</td><td>" + obj[datafield]["to_lat"] + "</td><td>" + obj[datafield]["to_long"] + "</td><td>" + obj[datafield]["commodity"] + "</td><td>" + obj[datafield]["quantity"] + "</td><td>" + obj[datafield]["distance"] + "</td></tr>";
+							var subpart1 = "<tr><td>" +  obj[datafield]["scenario"] +  "</td><td>"  + obj[datafield]["from"] +  "</td><td>"  + obj[datafield]["from_state"] +  "</td><td>"  + obj[datafield]["from_id"] +  "</td><td>"  + obj[datafield]["from_name"] +  "</td><td>"  + obj[datafield]["from_district"] +  "</td><td>"  + obj[datafield]["from_lat"] + "</td><td>" + obj[datafield]["from_long"] + "</td><td>" + obj[datafield]["to"] + "</td><td>" + obj[datafield]["to_state"] + "</td><td>" + obj[datafield]["to_id"] + "</td><td>" + obj[datafield]["to_name"] + "</td><td>" + obj[datafield]["to_district"] + "</td><td>" + obj[datafield]["to_lat"] + "</td><td>" + obj[datafield]["to_long"] + "</td><td>" + obj[datafield]["commodity"] + "</td><td>" + obj[datafield]["quantity"] + "</td><td>" + obj[datafield]["distance"] + "</td></tr>";
 							
 							$('#optimised_table').append(subpart1);
 						}

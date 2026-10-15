@@ -100,6 +100,7 @@ if(isset($_POST['step'])){
                                             </tr>
                                         </thead>
                                         <tbody>
+										<?php
 										$chk_leg1 = mysqli_query($con, "SHOW TABLES LIKE '" . mysqli_real_escape_string($con, $tablename) . "'");
 										$chk_leg0 = mysqli_query($con, "SHOW TABLES LIKE '" . mysqli_real_escape_string($con, $tablename1) . "'");
 										

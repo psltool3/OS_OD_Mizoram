@@ -83,35 +83,35 @@ if ($result && $result->num_rows > 0) {
 		}
 	}
 	if($to_id!=""){
-		$query = "SELECT * FROM ".$tablename." WHERE to_district='$district' AND `to`='$to_id'";
+		$query = "SELECT * FROM ".$tablename." WHERE to_district='$district' AND to_id='$to_id'";
 		if($reviewed=="reviewed"){
-			$query = "SELECT * FROM ".$tablename." WHERE approve_district='yes' AND to_district='$district' AND `to`='$to_id'";
+			$query = "SELECT * FROM ".$tablename." WHERE approve_district='yes' AND to_district='$district' AND to_id='$to_id'";
 		}
 		else if($reviewed=="notreviewed"){
-			$query = "SELECT * FROM ".$tablename." WHERE (approve_district = '' OR approve_district IS NULL) AND to_district='$district' AND `to`='$to_id'";
+			$query = "SELECT * FROM ".$tablename." WHERE (approve_district = '' OR approve_district IS NULL) AND to_district='$district' AND to_id='$to_id'";
 		}
 
 		if($approved=="approved"){
-			$query = "SELECT * FROM ".$tablename." WHERE approve_admin='yes' AND to_district='$district' AND `to`='$to_id'";
+			$query = "SELECT * FROM ".$tablename." WHERE approve_admin='yes' AND to_district='$district' AND to_id='$to_id'";
 		}
 		else if($approved=="notapproved"){
-			$query = "SELECT * FROM ".$tablename." WHERE (approve_admin='no' or approve_admin IS NULL) AND to_district='$district' AND `to`='$to_id'";
+			$query = "SELECT * FROM ".$tablename." WHERE (approve_admin='no' or approve_admin IS NULL) AND to_district='$district' AND to_id='$to_id'";
 		}
 	}
 	if($to_id!="" and $from_id!=""){
-		$query = "SELECT * FROM ".$tablename." WHERE to_district='$district' AND `to`='$to_id' AND from_id='$from_id'";
+		$query = "SELECT * FROM ".$tablename." WHERE to_district='$district' AND to_id='$to_id' AND from_id='$from_id'";
 		if($reviewed=="reviewed"){
-			$query = "SELECT * FROM ".$tablename." WHERE approve_district='yes' AND to_district='$district' AND `to`='$to_id' AND from_id='$from_id'";
+			$query = "SELECT * FROM ".$tablename." WHERE approve_district='yes' AND to_district='$district' AND to_id='$to_id' AND from_id='$from_id'";
 		}
 		else if($reviewed=="notreviewed"){
-			$query = "SELECT * FROM ".$tablename." WHERE (approve_district = '' OR approve_district IS NULL) AND to_district='$district' AND `to`='$to_id' AND from_id='$from_id'";
+			$query = "SELECT * FROM ".$tablename." WHERE (approve_district = '' OR approve_district IS NULL) AND to_district='$district' AND to_id='$to_id' AND from_id='$from_id'";
 		}
 
 		if($approved=="approved"){
-			$query = "SELECT * FROM ".$tablename." WHERE approve_admin='yes' AND to_district='$district' AND `to`='$to_id' AND from_id='$from_id'";
+			$query = "SELECT * FROM ".$tablename." WHERE approve_admin='yes' AND to_district='$district' AND to_id='$to_id' AND from_id='$from_id'";
 		}
 		else if($approved=="notapproved"){
-			$query = "SELECT * FROM ".$tablename." WHERE (approve_admin='no' or approve_admin IS NULL) AND to_district='$district' AND `to`='$to_id' AND from_id='$from_id' ";
+			$query = "SELECT * FROM ".$tablename." WHERE (approve_admin='no' or approve_admin IS NULL) AND to_district='$district' AND to_id='$to_id' AND from_id='$from_id' ";
 		}
 	}
 	$result = mysqli_query($con,$query);
@@ -120,10 +120,24 @@ if ($result && $result->num_rows > 0) {
 		$data[] = $row;
 	}
 
-	$query_warehouse = "SELECT id from warehouse WHERE active='1'";
-	$result_warehouse = mysqli_query($con,$query_warehouse);
-	while($row_warehouse = mysqli_fetch_assoc($result_warehouse)){
-		$warehouse[] = $row_warehouse;
+	$warehouse = array();
+	if(!empty($district) && $district != "all"){
+		$query_warehouse = "SELECT id from warehouse WHERE district='$district'";
+		$result_warehouse = mysqli_query($con,$query_warehouse);
+		if($result_warehouse && mysqli_num_rows($result_warehouse) > 0){
+			while($row_warehouse = mysqli_fetch_assoc($result_warehouse)){
+				$warehouse[] = $row_warehouse;
+			}
+		}
+	}
+	if(empty($warehouse)){
+		$query_warehouse = "SELECT id from warehouse WHERE 1";
+		$result_warehouse = mysqli_query($con,$query_warehouse);
+		if($result_warehouse){
+			while($row_warehouse = mysqli_fetch_assoc($result_warehouse)){
+				$warehouse[] = $row_warehouse;
+			}
+		}
 	}
 	$resultarray = [];
 	if($data==null){

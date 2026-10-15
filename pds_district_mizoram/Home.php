@@ -13,7 +13,7 @@ $rolled_out = "0";
 while($row = mysqli_fetch_array($result))
 {
 	$id= $row["id"];
-	$rolled_out = isset($row["rolled_out"]) ? $row["rolled_out"] : "0";
+	$rolled_out = isset($row["rolled_out"]) ? trim((string)$row["rolled_out"]) : "0";
 }
 
 $totalids = 0;
@@ -21,14 +21,14 @@ $totalidsreviewed = 0;
 $totalidsrequested = 0;
 $totalidsapproved = 0;
 
-if($rolled_out == '1' && !empty($id)){
+if($rolled_out === '1' && !empty($id)){
 	$tablename = "optimiseddata_".$id;
 
 	$query = "SELECT to_district FROM ". $tablename ." WHERE to_district='$district'";
 	$result = mysqli_query($con,$query);
 	if($result) $totalids = mysqli_num_rows($result);
 
-	$query = "SELECT approve_district FROM ". $tablename ." WHERE to_district='$district' AND approve_district='yes'";
+	$query = "SELECT approve_district FROM ". $tablename ." WHERE to_district='$district' AND approve_district IN ('yes', 'no')";
 	$result = mysqli_query($con,$query);
 	if($result) $totalidsreviewed = mysqli_num_rows($result);
 
@@ -178,33 +178,34 @@ if($currentTimestamp >= $targetTimestamp) {
 								<div class="col-md-3 mb-4">
 									<div class="card h-100"
 										style="background-color:#56A5FF; color:white; padding:20px; font-weight: bold;">
-										<div style="font-size:25px"><?php echo $totalids; ?></div>
+										<div style="font-size:25px"><?php echo ($rolled_out === '1' ? $totalids : 0); ?></div>
 										<div style="font-size:15px">TOTAL TAGS</div>
 									</div>
 								</div>
 								<div class="col-md-3 mb-4">
 									<div class="card h-100"
 										style="background-color:#3FDBBC; color:white; padding:20px; font-weight: bold;">
-										<div style="font-size:25px"><?php echo $totalidsreviewed; ?></div>
+										<div style="font-size:25px"><?php echo ($rolled_out === '1' ? $totalidsreviewed : 0); ?></div>
 										<div style="font-size:15px">TOTAL REVIEWED</div>
 									</div>
 								</div>
 								<div class="col-md-3 mb-4">
 									<div class="card h-100"
 										style="background-color:#FFC167; color:white; padding:20px; font-weight: bold;">
-										<div style="font-size:25px"><?php echo $totalidsrequested; ?></div>
+										<div style="font-size:25px"><?php echo ($rolled_out === '1' ? $totalidsrequested : 0); ?></div>
 										<div style="font-size:15px">TOTAL TAGS CHANGED</div>
 									</div>
 								</div>
 								<div class="col-md-3 mb-4">
 									<div class="card h-100"
 										style="background-color:#F96981; color:white; padding:20px; font-weight: bold;">
-										<div style="font-size:25px"><?php echo $totalidsapproved; ?></div>
+										<div style="font-size:25px"><?php echo ($rolled_out === '1' ? $totalidsapproved : 0); ?></div>
 										<div style="font-size:15px">TOTAL TAGS APPROVED</div>
 									</div>
 								</div>
 							</div>
 							</br></br></br>
+							<?php if($rolled_out == '1'){ ?>
 							<div class="row">
 								<div class="col-md-3">
 									<div class="form-group">
@@ -264,6 +265,7 @@ if($currentTimestamp >= $targetTimestamp) {
 								</div>
 							</div>
 							</br></br></br>
+							<?php } ?>
                             <!-- END SIMPLE DATATABLE -->
 								<button id="downloadCSV" class="btn btn-warning pull-right" style="margin-left: 10px;" type="button">Download CSV</button>
 								<button id="downloadXLSX" class="btn btn-success pull-right" style="margin-left: 10px;" type="button">Download XLSX</button>
@@ -420,6 +422,10 @@ if($currentTimestamp >= $targetTimestamp) {
 		}
 
 		function saveRowData(uniqueid) {
+			if (typeof expired !== 'undefined' && expired == 1) {
+				alert("Deadline has expired. Changes cannot be saved.");
+				return;
+			}
 			var params = {};
 			
 			// Extract modified fields
@@ -459,6 +465,10 @@ if($currentTimestamp >= $targetTimestamp) {
 		}
 
 		function resetRowData(uniqueid) {
+			if (typeof expired !== 'undefined' && expired == 1) {
+				alert("Deadline has expired. Changes cannot be reset.");
+				return;
+			}
 			var params = {};
 			params[uniqueid] = "reset";
 			post(params, "api/ResetRow.php");
@@ -603,8 +613,13 @@ if($currentTimestamp >= $targetTimestamp) {
 		
 		
 		function fetchDataFromServer(){
-			var approved = document.getElementById("approved").value;
-			var reviewed = document.getElementById("reviewed").value;
+			var approvedEl = document.getElementById("approved");
+			var reviewedEl = document.getElementById("reviewed");
+			if (!approvedEl || !reviewedEl) {
+				return;
+			}
+			var approved = approvedEl.value;
+			var reviewed = reviewedEl.value;
 			var district = '<?php echo $district ?>';
 			
 			if(district=="" || district=="all"){
@@ -706,11 +721,18 @@ if($currentTimestamp >= $targetTimestamp) {
 		}
 		
 		function fetchDataFromServerId(){
-			var approved = document.getElementById("approved").value;
-			var reviewed = document.getElementById("reviewed").value;
+			var approvedEl = document.getElementById("approved");
+			var reviewedEl = document.getElementById("reviewed");
+			var fromIdEl = document.getElementById("from_id");
+			var toIdEl = document.getElementById("to_id");
+			if (!approvedEl || !reviewedEl) {
+				return;
+			}
+			var approved = approvedEl.value;
+			var reviewed = reviewedEl.value;
 			var district = '<?php echo $district ?>';
-			var from_id = document.getElementById("from_id").value;
-			var to_id = document.getElementById("to_id").value;
+			var from_id = fromIdEl ? fromIdEl.value : "";
+			var to_id = toIdEl ? toIdEl.value : "";
 			
 			var dataString = 'approved='+ approved + '&reviewed='+ reviewed + '&district=' + district + '&fromid=' + from_id + '&toid=' + to_id;
 			if(dataString=='')
@@ -789,7 +811,7 @@ if($currentTimestamp >= $targetTimestamp) {
 										var admin_approve = "<td></td>";
 									}
 									
-									if(approve_district=="yes"){
+									if(approve_district=="yes" || (approve_district=="no" && newid_district!="")){
 										var warehouse_id_part = "<td><button class='btn btn-info'>Reviewed</button></td><td>" + newid_district + "</td>";
 									}
 									else if(approve_district=="no"){
@@ -815,8 +837,10 @@ if($currentTimestamp >= $targetTimestamp) {
 									}
 									
 									var is_admin_approved = (approve_admin == "yes");
-									var reset_disabled = is_admin_approved ? "disabled" : "";
-									var action_col = "<td><button class='btn btn-success' style='margin-bottom:5px;' onclick=\"saveRowData('" + uniqueid + "')\">Save</button><br><button class='btn btn-danger' onclick=\"resetRowData('" + uniqueid + "')\" " + reset_disabled + ">Reset</button></td>";
+									var is_expired = (typeof expired !== 'undefined' && expired == 1);
+									var save_disabled = is_expired ? "disabled" : "";
+									var reset_disabled = (is_admin_approved || is_expired) ? "disabled" : "";
+									var action_col = "<td><button class='btn btn-success' style='margin-bottom:5px;' onclick=\"saveRowData('" + uniqueid + "')\" " + save_disabled + ">Save</button><br><button class='btn btn-danger' onclick=\"resetRowData('" + uniqueid + "')\" " + reset_disabled + ">Reset</button></td>";
 									
 									$('#table_body').append(subpart1 + warehouse_id_part + district_reason + newdistance  + admin_approve + action_col + "</tr>");
 								}
@@ -830,8 +854,11 @@ if($currentTimestamp >= $targetTimestamp) {
 				});
 			}
 		}
+		<?php if($rolled_out == '1'){ ?>
 		fetchDataFromServer();
+		<?php } ?>
 		
+		var expired = <?php echo $expired; ?>;
 		// Set the end time from PHP to JavaScript
 		var endTime = "<?php echo strtotime($date." ".$time); ?>";
 		

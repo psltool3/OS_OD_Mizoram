@@ -47,7 +47,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
 			};
 		})();
 		</script>
-		<script> var pythonUrl = "https://mzrot.in/api/"; var directory = "" </script>
+		<!-- <script> var pythonUrl = "https://mzrot.in/api/"; var directory = "" </script> -->
+		<script> var pythonUrl = "http://localhost:5024/"; var directory = "" </script>
 								
 		<style>
 		.popup {

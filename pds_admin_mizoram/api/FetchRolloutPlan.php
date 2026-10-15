@@ -46,7 +46,10 @@ $query = "SHOW TABLES LIKE '$tablename'";
 $result = $con->query($query);
 
 if ($result && $result->num_rows > 0) {
-	$query = "SELECT * FROM ".$tablename." WHERE to_district='$district'";
+	$query = "SELECT * FROM ".$tablename." WHERE to_district='$district' AND status='implemented' AND approve_admin IN ('yes', 'no') AND approve_district IN ('yes', 'no')";
+	if($district=="" OR $district=="all"){
+		$query = "SELECT * FROM ".$tablename." WHERE status='implemented' AND approve_admin IN ('yes', 'no') AND approve_district IN ('yes', 'no')";
+	}
 	$result = mysqli_query($con,$query);
 	$numrows = mysqli_num_rows($result);
 	while($row = mysqli_fetch_assoc($result))
@@ -128,8 +131,8 @@ if ($result && $result->num_rows > 0) {
 		$allocation = $allocation + (float)$row["quantity"];
 		$qkm = $qkm + ((float)$row["quantity"]) * (float)$row["distance"];
 	}
-	$averagedistance = $qkm/$allocation;
-	$averagedistanceoptimised = $qkm_optimised/$allocation;
+	$averagedistance = $allocation > 0 ? $qkm/$allocation : 0;
+	$averagedistanceoptimised = $allocation > 0 ? $qkm_optimised/$allocation : 0;
 	$tableData = array();
 	$tableData["WH_Used"] = count($warehouse);
 	$tableData["FPS_Used"] = count($fps);

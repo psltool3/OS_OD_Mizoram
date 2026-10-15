@@ -21,8 +21,8 @@ require('Header.php');
 
                 <!-- START BREADCRUMB -->
                 <ul class="breadcrumb">
-                    <li><a href="Warehouse.php">Home</a></li>
-                    <li class="active">Mill Status Change</li>
+                    <li><a href="DCP.php">Home</a></li>
+                    <li class="active">FCI Status Change</li>
                 </ul>
                 <!-- END BREADCRUMB -->
 
@@ -36,7 +36,7 @@ require('Header.php');
                             <form action="api/BulkDCPStatusChange.php" method="POST" class="form-horizontal" enctype = "multipart/form-data">
                             <div class="panel panel-default">
                                <div class="panel-body">
-                                    <p>Fill this form to edit Mill status district wise.</p>
+                                    <p>Fill this form to edit FCI status district wise.</p>
                                 </div>
 
                              <div class="panel-body">

@@ -88,7 +88,7 @@ else{
                             <form action="api/DCPEdit.php" method="POST" class="form-horizontal" enctype = "multipart/form-data">
                             <div class="panel panel-default">
                                <div class="panel-body">
-                                    <p>Fill this form to add new FCI.</p>
+                                    <p>Fill this form to edit FCI.</p>
                                 </div>
                              <div class="panel-body">
                                     <div class="row">

@@ -1,10 +1,9 @@
 <?php
-require_once('../util/SessionFunction.php');
+require('../util/Connection.php');
+require('../util/SessionFunction.php');
 if(!SessionCheck()){
     die('Unauthorized');
 }
-
-require('../util/Connection.php');
 
 $mapData = [
     "District" => "district",
@@ -37,7 +36,7 @@ $result = mysqli_query($con,$query);
 $numrows = mysqli_num_rows($result);
 if($numrows>0){
 	while($row = mysqli_fetch_array($result)){
-		if($row['Field']!="uniqueid" && $row['Field']!="demand_rice"){
+		if($row['Field']!="uniqueid" && $row['Field']!="demand_rice" && isset($reverseMapData[$row['Field']])){
 			array_push($columns,$reverseMapData[$row['Field']]);
 		}
 	}
@@ -46,13 +45,11 @@ if($numrows>0){
 // Display column names as first row 
 $excelDataColumns = implode(",", array_values($columns)) . "\n";
 
- 
 // Headers for download 
-header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-header('Content-Disposition: attachment;filename="' . $fileName . '"');
+header('Content-Type: text/csv');
+header('Content-Disposition: attachment; filename="' . $fileName . '"');
 header('Cache-Control: max-age=0');
 
- 
 // Render excel data 
 echo $excelDataColumns;
 
@@ -61,13 +58,15 @@ $result = mysqli_query($con,$query);
 $numrows = mysqli_num_rows($result);
 if($numrows>0){
 	while($row = mysqli_fetch_array($result)){
+		$line = array();
 		for($i=0;$i<count($columns);$i++){
             if ($columns[$i] !== "uniqueid") {
-				filterData($row[$mapData[$columns[$i]]]);
-				echo '"' . $row[$mapData[$columns[$i]]] . '",';
+				$val = $row[$mapData[$columns[$i]]];
+				filterData($val);
+				$line[] = '"' . $val . '"';
             }
         }
-		echo "\n";
+		echo implode(",", $line) . "\n";
 	}
 }
  

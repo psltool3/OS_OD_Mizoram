@@ -401,6 +401,10 @@ if($currentTimestamp >= $targetTimestamp) {
 		}
 
 		function saveRowData(uniqueid) {
+			if (typeof expired !== 'undefined' && expired == 1) {
+				alert("Deadline has expired. Changes cannot be saved.");
+				return;
+			}
 			var params = {};
 			
 			// Admin implementations often track uniqueid_bool
@@ -441,6 +445,10 @@ if($currentTimestamp >= $targetTimestamp) {
 		}
 
 		function resetRowData(uniqueid) {
+			if (typeof expired !== 'undefined' && expired == 1) {
+				alert("Deadline has expired. Changes cannot be reset.");
+				return;
+			}
 			var params = {};
 			params[uniqueid] = "reset";
 			post(params, "api/ResetRowLeg1.php");
@@ -810,7 +818,10 @@ if($currentTimestamp >= $targetTimestamp) {
 									var admin_reason = "<td><select class='form-control' onchange='handleReasonChange(\"" + uniqueid_idreason + "\")' id='" + uniqueid_idreason + "' name='" + uniqueid_idreason + "' disabled><option value=''>Select</option><option value='Road not accessible'>Road not accessible</option><option value='Road repair going on'>Road repair going on</option><option value='Pertaining to Distance'>Pertaining to Distance</option></select></td>";
 								}
 								
-								var action_col = "<td><button class='btn btn-success' style='margin-bottom:5px;' onclick=\"saveRowData('" + uniqueid + "')\">Save</button><br><button class='btn btn-danger' onclick=\"resetRowData('" + uniqueid + "')\">Reset</button></td>";
+								var is_expired = (typeof expired !== 'undefined' && expired == 1);
+								var save_disabled = is_expired ? "disabled" : "";
+								var reset_disabled = is_expired ? "disabled" : "";
+								var action_col = "<td><button class='btn btn-success' style='margin-bottom:5px;' onclick=\"saveRowData('" + uniqueid + "')\" " + save_disabled + ">Save</button><br><button class='btn btn-danger' onclick=\"resetRowData('" + uniqueid + "')\" " + reset_disabled + ">Reset</button></td>";
 								
 								$('#table_body').append(subpart1 + warehouse_id_part + admin_reason + newdistance  + admin_approve + action_col + "</tr>");
 							}
@@ -825,6 +836,7 @@ if($currentTimestamp >= $targetTimestamp) {
 		}
 		fetchDataFromServer();
 		
+		var expired = <?php echo $expired; ?>;
 		// Set the end time from PHP to JavaScript
 		var endTime = "<?php echo strtotime($date." ".$time); ?>";
 		

@@ -282,7 +282,7 @@ require('Header.php');
 		try {
 			var month = document.getElementById("month").value;
 			var district = document.getElementById("district").value;
-			const csvResponse = await fetch('api/DownloadOptimalData.php?format=csv&month=' + month + "&district=" + district);
+			const csvResponse = await fetch('api/DownloadOptimalData.php?format=csv&month=' + month + "&district=" + district + "&source=rollout");
 			const csvBlob = await csvResponse.blob();
 			downloadFile(csvBlob, 'RolloutPlan_' + getDateString() + '.csv');
 		} catch (error) {
@@ -294,7 +294,7 @@ require('Header.php');
 			try {
 				var month = document.getElementById("month").value;
 				var district = document.getElementById("district").value;
-				const csvResponse = await fetch('api/DownloadOptimalData.php?format=pdf&month=' + month + "&district=" + district);
+				const csvResponse = await fetch('api/DownloadOptimalData.php?format=pdf&month=' + month + "&district=" + district + "&source=rollout");
 				const csvBlob = await csvResponse.blob();
 				downloadFile(csvBlob, 'RolloutPlan__' + getDateString() + '.pdf');
 			} catch (error) {
@@ -307,7 +307,7 @@ require('Header.php');
 		try {
 			var month = document.getElementById("month").value;
 			var district = document.getElementById("district").value;
-			const excelResponse = await fetch('api/DownloadOptimalData1.php?format=xlsx&month=' + month + "&district=" + district);
+			const excelResponse = await fetch('api/DownloadOptimalData1.php?format=xlsx&month=' + month + "&district=" + district + "&source=rollout");
 			const excelBlob = await excelResponse.blob();
 			downloadFile(excelBlob, 'RolloutPlan_' + getDateString() + '.xlsx');
 		} catch (error) {

@@ -118,11 +118,11 @@ class DCP {
     }
 
     function update(DCP $dcp){
-     return  "UPDATE dcp SET district = '".$dcp->getDistrict()."',name = '".$dcp->getName()."',id = '".$dcp->getId()."',type = '".$dcp->getType()."',latitude = '".$dcp->getLatitude()."',longitude = '".$dcp->getLongitude()."',demand = '".$dcp->getDemand()."' WHERE uniqueid = '".$dcp->getUniqueid()."'";
+     return  "UPDATE dcp SET district = '".$dcp->getDistrict()."',name = '".$dcp->getName()."',id = '".$dcp->getId()."',type = '".$dcp->getType()."',latitude = '".$dcp->getLatitude()."',longitude = '".$dcp->getLongitude()."',demand = '".$dcp->getDemand()."',active = '".$dcp->getActive()."' WHERE uniqueid = '".$dcp->getUniqueid()."'";
     }
 	
 	function updateEdit(DCP $dcp){
-      return  "UPDATE dcp SET district = '".$dcp->getDistrict()."',name = '".$dcp->getName()."',id = '".$dcp->getId()."',type = '".$dcp->getType()."',latitude = '".$dcp->getLatitude()."',longitude = '".$dcp->getLongitude()."',demand = '".$dcp->getDemand()."' WHERE id = '".$dcp->getId()."'";
+      return  "UPDATE dcp SET district = '".$dcp->getDistrict()."',name = '".$dcp->getName()."',type = '".$dcp->getType()."',latitude = '".$dcp->getLatitude()."',longitude = '".$dcp->getLongitude()."',demand = '".$dcp->getDemand()."',active = '".$dcp->getActive()."' WHERE id = '".$dcp->getId()."'";
     }
 }  
 

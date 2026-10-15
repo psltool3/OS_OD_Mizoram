@@ -435,7 +435,7 @@ require('util/Logger.php');
 						<div class="col-md-2"></div>
 						<div class="col-md-9">  
 							<div class="input-group" style="width:100%;">					
-							<select class="form-control" id="type" name="type" style="border-radius:5px;font-weight:bold">
+							<select class="form-control" id="type" name="type" style="border-radius:5px;font-weight:bold" onchange="checkFeasibilityAndSetButton()">
 								<!-- <option value='' style="font-weight:bold;color:#000;">Select</option> -->
 								<!-- <option value='inter' style="font-weight:bold;color:#000;">Inter District</option> -->
 								<option value='intra' style="font-weight:bold;color:#000;">Intra District</option>
@@ -1159,15 +1159,52 @@ require('util/Logger.php');
 				});			
 	}
 	
+	var totalCapacity = 0;
+	var totalDemand = 0;
+
+	function checkFeasibilityAndSetButton() {
+		var button = document.getElementById("generateoptinizedplanbutton");
+		if (!button) return;
+
+		var type = document.getElementById("type") ? document.getElementById("type").value : "intra";
+		var stateCheckbox = document.getElementById("statewiseCheckbox");
+		var districtCheckbox = document.getElementById("districtwiseCheckbox");
+
+		// If state-wise checkbox is not checked, button should not be visible
+		if (!stateCheckbox || !stateCheckbox.checked) {
+			button.style.display = "none";
+			return;
+		}
+
+		// When total supply is less than total demand -> infeasible solution -> button should not be visible
+		if (totalCapacity <= 0 || totalDemand <= 0 || totalCapacity < totalDemand) {
+			button.style.display = "none";
+			return;
+		}
+
+		// When intra district movement is infeasible -> button should not be visible
+		if (type == "intra") {
+			if (!districtCheckbox || !districtCheckbox.checked) {
+				button.style.display = "none";
+				return;
+			}
+			if (typeof district_names !== 'undefined' && district_names && district_names["District_Name_All"] && district_names["District_Name_All"].length > 0) {
+				button.style.display = "none";
+				return;
+			}
+		}
+
+		button.style.display = "";
+	}
+
 	function handleDistrictCheckboxChange() {
 		var checkbox = document.getElementById("districtwiseCheckbox");
 		var type = document.getElementById("type").value;
 		if (checkbox.checked) {
-			document.getElementById("generateoptinizedplanbutton").style.display = "";
 			if(type=="intra"){
-				if (district_names["District_Name_All"].length > 0) {
+				if (typeof district_names !== 'undefined' && district_names && district_names["District_Name_All"] && district_names["District_Name_All"].length > 0) {
 					var concatenatedNames = district_names["District_Name_All"].join(', ');
-					document.getElementById("resultdistrict").innerHTML = "Intra district movement is infeasble- " + concatenatedNames;
+					document.getElementById("resultdistrict").innerHTML = "Intra district movement is infeasible- " + concatenatedNames;
 					document.getElementById("resultdistrict").style.color = "#ADFF2F"; 
 				} else {
 					document.getElementById("resultdistrict").innerHTML = "Intra scenario in every district is feasible";
@@ -1179,8 +1216,8 @@ require('util/Logger.php');
 			document.getElementById("resultdistrict").style.fontWeight = "bold";
 		} else {
 			document.getElementById("resultdistrict").innerHTML = "";
-			document.getElementById("generateoptinizedplanbutton").style.display = "none";
 		}
+		checkFeasibilityAndSetButton();
 	}
 	
 	let controller;
@@ -1382,8 +1419,8 @@ function handleStateCheckboxChange() {
 			.then(response => response.json())
 			.then(data => {
 				district_names = data.District_Name;
-				var totalCapacity = Object.values(data.District_Capacity).reduce((acc, capacity) => acc + capacity, 0);
-				var totalDemand = Object.values(data.District_Demand).reduce((acc, demand) => acc + demand, 0);
+				totalCapacity = Object.values(data.District_Capacity).reduce((acc, capacity) => acc + capacity, 0);
+				totalDemand = Object.values(data.District_Demand).reduce((acc, demand) => acc + demand, 0);
 				var month = document.getElementById("month").value;
 
 				// Format the total demand and total capacity values with commas
@@ -1432,7 +1469,7 @@ function handleStateCheckboxChange() {
 						labels: unionArray,
 						datasets: [
 							{
-								label: 'Wheat Demand',
+								label: 'FRice Demand',
 								backgroundColor: '#EFB838',
 								data: demands
 							},
@@ -1454,10 +1491,7 @@ function handleStateCheckboxChange() {
 						handleDistrictCheckboxChange();
 						firstStart = 1;
 					}else{
-						var type = document.getElementById("type").value;
-						if(type=="inter"){
-							document.getElementById("generateoptinizedplanbutton").style.display = "block";
-						}
+						checkFeasibilityAndSetButton();
 					}
 				}
 				else {

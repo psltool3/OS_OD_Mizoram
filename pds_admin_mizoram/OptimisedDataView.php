@@ -92,7 +92,7 @@ $tablename1 = isset($tablename1) ? $tablename1 : $tablename;
                 <!-- START BREADCRUMB -->
                 <ul class="breadcrumb">
                     <li><a href="#">Home</a></li>
-                    <li class="active">Optimised Data View</li>
+                    <li class="active">Optimised Data - Leg2 View</li>
                 </ul>
                 <!-- END BREADCRUMB -->
 
@@ -106,7 +106,7 @@ $tablename1 = isset($tablename1) ? $tablename1 : $tablename;
                             <!-- START SIMPLE DATATABLE -->
                             <div class="panel panel-default">
 							<div class="panel-heading">
-                                    <h3 class="panel-title">Optimised Data View</h3>
+                                    <h3 class="panel-title">Optimised Data - Leg2 View</h3>
                                 </div>
 								<div style="float:right" style="margin:10px">
 									<button id="downloadCSV" class="btn btn-warning" style="margin-bottom: 10px;" type="button">Download CSV</button>

@@ -282,7 +282,7 @@ if($rolled_out == '1' && !empty($id)){
 	document.getElementById('downloadCSV').addEventListener('click', async function() {
 		try {
 			var month = document.getElementById("month").value;
-			const csvResponse = await fetch('api/DownloadOptimalData.php?format=csv&month='+month);
+			const csvResponse = await fetch('api/DownloadOptimalData.php?format=csv&month='+month+'&source=rollout');
 			const csvBlob = await csvResponse.blob();
 			downloadFile(csvBlob, 'Downloaded_CSV.csv');
 		} catch (error) {
@@ -294,7 +294,7 @@ if($rolled_out == '1' && !empty($id)){
 	document.getElementById('downloadXLSX').addEventListener('click', async function() {
 		try {
 			var month = document.getElementById("month").value;
-			const excelResponse = await fetch('api/DownloadOptimalData.php?format=xlsx&month='+month);
+			const excelResponse = await fetch('api/DownloadOptimalData.php?format=xlsx&month='+month+'&source=rollout');
 			const excelBlob = await excelResponse.blob();
 			downloadFile(excelBlob, 'Downloaded_Excel.xlsx');
 		} catch (error) {
@@ -306,7 +306,7 @@ if($rolled_out == '1' && !empty($id)){
 	document.getElementById('downloadPDF').addEventListener('click', async function() {
 		try {
 			var month = document.getElementById("month").value;
-			const excelResponse = await fetch('api/DownloadOptimalData.php?format=pdf&month='+month);
+			const excelResponse = await fetch('api/DownloadOptimalData.php?format=pdf&month='+month+'&source=rollout');
 			const excelBlob = await excelResponse.blob();
 			downloadFile(excelBlob, 'Downloaded_Pdf.pdf');
 		} catch (error) {

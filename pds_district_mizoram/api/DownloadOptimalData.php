@@ -18,21 +18,47 @@ if (isset($_GET['format'])) {
 	$columns_pdf = ["scenario","from","from_id","from_name","from_district","from_lat","from_long","to","to_id","to_name","to_district","to_lat","to_long","commodity","quantity","distance"];
 
 	
-	$query = "SELECT * FROM optimised_table ORDER BY last_updated DESC LIMIT 1";
-	$result = mysqli_query($con,$query);
-	$numrow = mysqli_num_rows($result);
+	$month = "";
+	$year = "";
+	if (isset($_GET['month']) && !empty($_GET['month'])) {
+		$parts = explode('_', $_GET['month']);
+		$month = $parts[0];
+		if (isset($parts[1])) {
+			$year = $parts[1];
+		}
+	}
+
 	$id = "";
 	$rolled_out = "0";
-	if($numrow>0){
-		$row = mysqli_fetch_assoc($result);
-		$id = $row['id'];
-		$rolled_out = isset($row['rolled_out']) ? $row['rolled_out'] : "0";
+	if (!empty($month) && !empty($year)) {
+		$query = "SELECT * FROM optimised_table WHERE month='$month' AND year='$year'";
+		$result = mysqli_query($con,$query);
+		$numrow = mysqli_num_rows($result);
+		if($numrow>0){
+			$row = mysqli_fetch_assoc($result);
+			$id = $row['id'];
+			$rolled_out = isset($row['rolled_out']) ? trim((string)$row['rolled_out']) : "0";
+		}
+	}
+
+	if (empty($id)) {
+		$query = "SELECT * FROM optimised_table ORDER BY last_updated DESC LIMIT 1";
+		$result = mysqli_query($con,$query);
+		$numrow = mysqli_num_rows($result);
+		if($numrow>0){
+			$row = mysqli_fetch_assoc($result);
+			$id = $row['id'];
+			$rolled_out = isset($row['rolled_out']) ? trim((string)$row['rolled_out']) : "0";
+		}
 	}
 
 	$numrows = 0;
-	if($rolled_out == '1' && !empty($id)){
+	if($rolled_out === '1' && !empty($id)){
 		$tablename = "optimiseddata_".$id;
 		$query = "SELECT * FROM ".$tablename." WHERE to_district='$district'";
+		if(isset($_GET['source']) && $_GET['source'] === 'rollout'){
+			$query .= " AND approve_admin IN ('yes', 'no') AND approve_district IN ('yes', 'no')";
+		}
 		$result = mysqli_query($con,$query);
 		if($result) $numrows = mysqli_num_rows($result);
 	}
@@ -44,8 +70,8 @@ if (isset($_GET['format'])) {
     if($numrows>0){
         while($row = mysqli_fetch_array($result)){
 			if($row['new_id_admin']!=null or $row['new_id_admin']!=""){
-				$id = $row['new_id_admin'];
-				$query_warehouse = "SELECT latitude,longitude,district FROM warehouse WHERE id='$id'";
+				$wid = $row['new_id_admin'];
+				$query_warehouse = "SELECT latitude,longitude,district FROM warehouse WHERE id='$wid'";
 				$result_warehouse = mysqli_query($con,$query_warehouse);
 				$numrows_warehouse = mysqli_num_rows($result_warehouse);
 				if($numrows_warehouse!=0){
@@ -58,9 +84,9 @@ if (isset($_GET['format'])) {
 				$row["from_name"] = $row['new_name_admin'];
 				$row["distance"] = $row['new_distance_admin'];
 			}
-			else if(($row['new_id_district']!=null or $row['new_id_district']!="") and $row['admin_approve']=="yes"){
-				$id = $row['new_id_district'];
-				$query_warehouse = "SELECT latitude,longitude,district FROM warehouse WHERE id='$id'";
+			else if(($row['new_id_district']!=null or $row['new_id_district']!="") and isset($row['approve_admin']) and $row['approve_admin']=="yes"){
+				$wid = $row['new_id_district'];
+				$query_warehouse = "SELECT latitude,longitude,district FROM warehouse WHERE id='$wid'";
 				$result_warehouse = mysqli_query($con,$query_warehouse);
 				$numrows_warehouse = mysqli_num_rows($result_warehouse);
 				if($numrows_warehouse!=0){

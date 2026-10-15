@@ -17,7 +17,7 @@ if (isset($_GET['format'])) {
     $format = $_GET['format'];
     
     $columns = ["district","name","id","type","latitude","longitude","demand"];
-	$columnsName = ["district","name","id","type","latitude","longitude","Allocation FRice"];
+	$columnsName = ["District","Name of FPS","FPS ID","Smart FPS / Non-Smart FPS","Latitude","Longitude","Demand(Qtl)"];
     $tablename = $_GET['tableName'];
 	$tableData = array();
     array_push($tableData,$columnsName);

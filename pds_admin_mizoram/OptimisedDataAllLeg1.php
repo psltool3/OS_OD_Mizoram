@@ -71,7 +71,7 @@ require('Header.php');
 										?>
 									</select>
 								</div>
-								<button class='btn btn-success' style="float:right;margin-top:10px;margin-right:13px" onclick="send_all('all')">Send Email to All</button>
+								<!--<button class='btn btn-success' style="float:right;margin-top:10px;margin-right:13px" onclick="send_all('all')">Send Email to All</button>-->
 								<div class="panel-body">
                                  <div class="table-responsive">
                                     <table id="export_table" class="table">
