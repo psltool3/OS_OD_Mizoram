@@ -735,8 +735,25 @@ require('util/Logger.php');
 		if (statusEl) statusEl.textContent = msg;
 	}
 
-	function resetUIState() {
+	function resetUI() {
+		if (typeof isJobRunning !== 'undefined') isJobRunning = false;
 		window.isJobActive = false;
+		if (pollingInterval) {
+			clearInterval(pollingInterval);
+			pollingInterval = null;
+		}
+		document.getElementById("processingPopup").style.display = "none";
+		document.getElementById("cancel-request").style.display = "none";
+		resetUIState();
+	}
+
+	function resetUIState() {
+		if (typeof isJobRunning !== 'undefined') isJobRunning = false;
+		window.isJobActive = false;
+		if (pollingInterval) {
+			clearInterval(pollingInterval);
+			pollingInterval = null;
+		}
 		clearJobState(CG_JOB_KEY);
 		document.getElementById("processingPopup").style.display = "none";
 		document.getElementById("cancel-request").style.display = "none";
@@ -1194,22 +1211,26 @@ require('util/Logger.php');
 	}
 	
 	function cancelRequest() {
-		if (controller) {
+		if (typeof controller !== 'undefined' && controller) {
 			controller.abort();
+			console.log('Request cancelled.');
 		}
-		console.log('Request cancelled.');
 		const formData = new FormData();
 		fetch(pythonUrl + 'processCancel', {
 			method: 'POST',
 			body: formData
 		})
-		.then(response => response.json())
-		.then(data => {
-			resetUIState();
-		})
-		.catch(err => {
-			resetUIState();
-		});
+			.then(response => response.json())
+			.then(data => {
+				console.log('Cancel response:', data);
+				resetUI();
+				alert("Optimization process has been cancelled.");
+			})
+			.catch(error => {
+				console.error('Cancel error:', error);
+				// Still reset UI even if cancel request fails
+				resetUI();
+			});
 	}
 
 
