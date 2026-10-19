@@ -90,10 +90,10 @@ if($numrows>0){
                         </div>
                     </li>
 					<li <?php if ($currentFile == 'OptimisedDataAll.php') echo 'class="active"'; ?>>
-						<a href="OptimisedDataAll.php"> <span class="xn-text">Optimised Data View</span></a>
+						<a href="OptimisedDataAll.php"> <span class="xn-text">Optimised Data (LEG2) View</span></a>
 					</li>
 					<li <?php if ($currentFile == 'OptimisedDataAll_leg1.php') echo 'class="active"'; ?>>
-						<a href="OptimisedDataAll_leg1.php"> <span class="xn-text">Optimised Data LEG1 View</span></a>
+						<a href="OptimisedDataAll_leg1.php"> <span class="xn-text">Optimised Data (LEG1) View</span></a>
 					</li>
 					<!-- <li <?php if ($currentFile == 'RolloutPlan.php') echo 'class="active"'; ?>>
 						<a href="RolloutPlan.php"> <span class="xn-text">Rollout Plan</span></a>

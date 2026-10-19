@@ -799,11 +799,8 @@ if(!empty($date) && !empty($time) && $currentTimestamp >= $targetTimestamp) {
 								var subpart1 = "<tr><td>" +  obj[datafield]["scenario"] +  "</td><td>"  + obj[datafield]["from"] +  "</td><td>"  + obj[datafield]["from_state"] +  "</td><td>"  + obj[datafield]["from_id"] +  "</td><td>"  + obj[datafield]["from_name"] +  "</td><td>"  + obj[datafield]["from_district"] +  "</td><td>"  + obj[datafield]["from_lat"] +  "</td><td>"  + obj[datafield]["from_long"] +  "</td><td>"  + obj[datafield]["to"] +  "</td><td>"  + obj[datafield]["to_state"] +  "</td><td>"  + obj[datafield]["to_id"] +  "</td><td>"  + obj[datafield]["to_name"] +  "</td><td>"  + obj[datafield]["to_district"] +  "</td><td>"  + obj[datafield]["to_lat"] +  "</td><td>"  + obj[datafield]["to_long"] +  "</td><td>"  + obj[datafield]["commodity"] +  "</td><td>"  + obj[datafield]["quantity"] +  "</td><td>"  + obj[datafield]["distance"] + "</td>";
 								
 								
-								if(approve_district=="yes"){
+								if(approve_district=="yes" || approve_district=="no" || (newid_district != "" && newid_district != null)){
 									var approve_district_part = "<td><button class='btn btn-info'>Already Reviewed</button></td>";
-								}
-								else if(approve_district=="no"){
-									var approve_district_part = "<td><button class='btn btn-danger'>Not Approved</button></td>";
 								}
 								else if(approve_district==""){
 									var approve_district_part = "<td><button class='btn btn-warning'>Pending</button></td>";

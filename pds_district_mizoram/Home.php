@@ -36,7 +36,7 @@ if($rolled_out === '1' && !empty($id)){
 	$result = mysqli_query($con,$query);
 	if($result) $totalidsrequested = mysqli_num_rows($result);
 
-	$query = "SELECT approve_admin FROM ". $tablename ." WHERE to_district='$district' AND approve_admin='yes'";
+	$query = "SELECT approve_admin FROM ". $tablename ." WHERE to_district='$district' AND approve_admin='yes' AND (new_id_admin IS NULL OR new_id_admin='')";
 	$result = mysqli_query($con,$query);
 	if($result) $totalidsapproved = mysqli_num_rows($result);
 }
@@ -837,9 +837,10 @@ if($currentTimestamp >= $targetTimestamp) {
 									}
 									
 									var is_admin_approved = (approve_admin == "yes");
+									var is_admin_not_approved = (approve_admin == "no" || (approve_admin == "yes" && newid_district != ""));
 									var is_expired = (typeof expired !== 'undefined' && expired == 1);
-									var save_disabled = is_expired ? "disabled" : "";
-									var reset_disabled = (is_admin_approved || is_expired) ? "disabled" : "";
+									var save_disabled = (is_admin_not_approved || is_admin_approved || is_expired) ? "disabled" : "";
+									var reset_disabled = (is_admin_not_approved || is_admin_approved || is_expired) ? "disabled" : "";
 									var action_col = "<td><button class='btn btn-success' style='margin-bottom:5px;' onclick=\"saveRowData('" + uniqueid + "')\" " + save_disabled + ">Save</button><br><button class='btn btn-danger' onclick=\"resetRowData('" + uniqueid + "')\" " + reset_disabled + ">Reset</button></td>";
 									
 									$('#table_body').append(subpart1 + warehouse_id_part + district_reason + newdistance  + admin_approve + action_col + "</tr>");

@@ -27,15 +27,15 @@ if($rolled_out == '1' && !empty($id)){
 	$result = mysqli_query($con,$query);
 	if($result) $totalids = mysqli_num_rows($result);
 
-	$query = "SELECT approve_district FROM " . $tablename . " WHERE approve_district='yes'";
+	$query = "SELECT approve_district FROM " . $tablename . " WHERE approve_district IN ('yes', 'no')";
 	$result = mysqli_query($con,$query);
 	if($result) $totalidsreviewed = mysqli_num_rows($result);
 
-	$query = "SELECT new_id_district FROM " . $tablename . " WHERE new_id_district<>''";
+	$query = "SELECT new_id_district FROM " . $tablename . " WHERE new_id_district IS NOT NULL AND new_id_district<>''";
 	$result = mysqli_query($con,$query);
 	if($result) $totalidsrequested = mysqli_num_rows($result);
 
-	$query = "SELECT approve_admin FROM " . $tablename . " WHERE approve_admin='yes'";
+	$query = "SELECT approve_admin FROM " . $tablename . " WHERE approve_admin='yes' AND (new_id_admin IS NULL OR new_id_admin='')";
 	$result = mysqli_query($con,$query);
 	if($result) $totalidsapproved = mysqli_num_rows($result);
 }
