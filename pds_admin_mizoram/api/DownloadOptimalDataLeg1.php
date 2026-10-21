@@ -12,20 +12,28 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 $month = "";
-$query = "SELECT * FROM optimised_table_leg1 ORDER BY last_updated DESC LIMIT 1";
-$result = mysqli_query($con,$query);
-$response = array();
-while($row = mysqli_fetch_array($result))
-{
-	$month = $row["month"];
-	$year = $row["year"];
+$year = "";
+
+if (isset($_GET['month']) && !empty($_GET['month'])) {
+	$parts = explode('_', $_GET['month']);
+	$month = $parts[0];
+	$year = isset($parts[1]) ? $parts[1] : '';
+} else {
+	$query = "SELECT * FROM optimised_table_leg1 ORDER BY last_updated DESC LIMIT 1";
+	$result = mysqli_query($con,$query);
+	$response = array();
+	while($row = mysqli_fetch_array($result))
+	{
+		$month = $row["month"];
+		$year = $row["year"];
+	}
 }
 
 
 // Check if format is specified in GET request
 if (isset($_GET['format'])) {
     $format = $_GET['format'];
-	$district = $_GET['district'];
+	$district = isset($_GET['district']) ? $_GET['district'] : '';
     
     #$columns = ["scenario","from","from_state","from_id","from_name","from_district","from_lat","from_long","to","to_state","to_id","to_name","to_district","to_lat","to_long","commodity","quantity","distance","new_id_district","reason_district","new_distance_district","approve_district","approve_admin","reason_admin","new_id_admin","new_distance_admin"];
 	$columns = ["scenario","from","from_state","from_id","from_name","from_district","from_lat","from_long","to","to_state","to_id","to_name","to_district","to_lat","to_long","commodity","quantity","distance","status"];
@@ -45,6 +53,9 @@ if (isset($_GET['format'])) {
 	
 	if($district!="" and $district!="all"){
 		$query = "SELECT * FROM ".$tablename." WHERE to_district='$district'";
+	}
+	if(isset($_GET['source']) && $_GET['source'] === 'rollout'){
+		$query .= " AND TRIM(approve_admin) IN ('yes', 'no')";
 	}
     $result = mysqli_query($con,$query);
     $numrows = mysqli_num_rows($result);
@@ -70,7 +81,7 @@ if (isset($_GET['format'])) {
 				$row["from_name"] = $row['new_name_admin'];
 				$row["distance"] = $row['new_distance_admin'];
 			}
-			else if(($row['new_id_district']!=null or $row['new_id_district']!="") and $row['admin_approve']=="yes"){
+			else if(($row['new_id_district']!=null or $row['new_id_district']!="") and ($row['approve_admin']=="yes" or (isset($row['admin_approve']) and $row['admin_approve']=="yes"))){
 				$new_id = $row['new_id_district'];
 				$query_warehouse = "SELECT latitude,longitude,district FROM warehouse_leg1_".$id." WHERE id='$new_id'";
 				$result_warehouse = mysqli_query($con,$query_warehouse);

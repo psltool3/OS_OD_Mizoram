@@ -281,7 +281,7 @@ require('Header.php');
 		try {
 			var month = document.getElementById("month").value;
 			var district = document.getElementById("district").value;
-			const csvResponse = await fetch('api/DownloadOptimalDataLeg1.php?format=csv&month=' + month + "&district=" + district);
+			const csvResponse = await fetch('api/DownloadOptimalDataLeg1.php?format=csv&month=' + month + "&district=" + district + "&source=rollout");
 			const csvBlob = await csvResponse.blob();
 			downloadFile(csvBlob, 'RolloutPlan_Leg1_' + getDateString() + '.csv');
 		} catch (error) {
@@ -294,7 +294,7 @@ require('Header.php');
 		try {
 			var month = document.getElementById("month").value;
 			var district = document.getElementById("district").value;
-			const excelResponse = await fetch('api/DownloadOptimalDataLeg1.php?format=xlsx&month=' + month + "&district=" + district);
+			const excelResponse = await fetch('api/DownloadOptimalDataLeg1.php?format=xlsx&month=' + month + "&district=" + district + "&source=rollout");
 			const excelBlob = await excelResponse.blob();
 			downloadFile(excelBlob, 'RolloutPlan_Leg1_' + getDateString() + '.xlsx');
 		} catch (error) {
@@ -306,7 +306,7 @@ require('Header.php');
 		try {
 			var month = document.getElementById("month").value;
 			var district = document.getElementById("district").value;
-			const csvResponse = await fetch('api/DownloadOptimalDataLeg1.php?format=pdf&month=' + month + "&district=" + district);
+			const csvResponse = await fetch('api/DownloadOptimalDataLeg1.php?format=pdf&month=' + month + "&district=" + district + "&source=rollout");
 			const csvBlob = await csvResponse.blob();
 			downloadFile(csvBlob, 'RolloutPlan_Leg1_' + getDateString() + '.pdf');
 		} catch (error) {
@@ -461,6 +461,10 @@ require('Header.php');
 						var obj = resultarray["data"];
 						
 						for (var dataField in obj) {
+							var approve_admin = (obj[dataField]["approve_admin"] || "").toString().trim().toLowerCase();
+							if (approve_admin !== "yes" && approve_admin !== "no") {
+								continue;
+							}
 							var uniqueid = obj[dataField]["from_id"] + "_" + obj[dataField]["to_id"] + "_" + obj[dataField]["commodity"];
 							
 							var status = obj[dataField]["status"];

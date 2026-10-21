@@ -46,7 +46,11 @@ $query = "SHOW TABLES LIKE '$tablename'";
 $result = $con->query($query);
 
 if ($result && $result->num_rows > 0) {
-	$query = "SELECT * FROM ".$tablename." WHERE to_district='$district'";
+	$data = array();
+	$query = "SELECT * FROM ".$tablename." WHERE to_district='$district' AND TRIM(approve_admin) IN ('yes', 'no')";
+	if($district=="" OR $district=="all"){
+		$query = "SELECT * FROM ".$tablename." WHERE TRIM(approve_admin) IN ('yes', 'no')";
+	}
 	$result = mysqli_query($con,$query);
 	$numrows = mysqli_num_rows($result);
 	while($row = mysqli_fetch_assoc($result))
