@@ -3,6 +3,7 @@
 require('../util/Connection.php');
 require('../util/SessionFunction.php');
 require('../util/Logger.php'); 
+require('../util/Validation.php');
 
 if(!SessionCheck()){
 	return;
@@ -21,9 +22,15 @@ if($numrows>0){
 	$status = $row['active'];
 	$warehousename = $row['name'];
 	if($status==0){
-		$query = "UPDATE warehouse SET active='1' WHERE uniqueid='$id'";
-		writeLog("District User ->" ." Warehouse Active -> ". $_SESSION['district_user'] . "| " . $warehousename);
-		mysqli_query($con,$query);
+		if (isWarehouseValid($row['latitude'], $row['longitude'], $row['storage'])) {
+			$query = "UPDATE warehouse SET active='1' WHERE uniqueid='$id'";
+			writeLog("District User ->" ." Warehouse Active -> ". $_SESSION['district_user'] . "| " . $warehousename);
+			mysqli_query($con,$query);
+		} else {
+			writeLog("District User ->" ." Warehouse Activation Blocked (Invalid Data) -> ". $_SESSION['district_user'] . "| " . $warehousename);
+			echo "<script>alert('Cannot activate warehouse: Latitude must be 0-40, Longitude 65-180, Storage >= 0'); window.location.href = '../Warehouse.php';</script>";
+			exit();
+		}
 	}
 	else{
 		$query = "UPDATE warehouse SET active='0' WHERE uniqueid='$id'";

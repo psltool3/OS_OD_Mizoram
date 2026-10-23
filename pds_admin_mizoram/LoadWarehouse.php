@@ -18,11 +18,9 @@ function formatName($name) {
 }
 
 function isValidCoordinate($value, $type) {
-    if ($value === null || $value === '') return false;
-    if (!is_numeric($value)) return false;
+    if ($value === null || $value === '' || !is_numeric($value)) return false;
     $v = (float)$value;
-    // The API uses 1 for dummy coordinates, so we allow any value > 0
-    return $v > 0;
+    return $type === 'latitude' ? ($v > 0 && $v < 40) : ($v > 65 && $v <= 180);
 }
 
 // ✅ Mizoram API endpoint
@@ -127,12 +125,13 @@ foreach ($warehouseData as $data) {
         $lon = isset($data['longitude']) && is_numeric($data['longitude']) ? (float)$data['longitude'] : 0;
 
         $totalStorage = 0;
+        $storageValid = true;
         if (isset($data['storage'])) {
             $val = trim($data['storage']);
             if (is_numeric($val)) {
                 $totalStorage = (float)$val;
             } else {
-                $totalStorage = 0;
+                $storageValid = false;
             }
         }
 
@@ -140,16 +139,16 @@ foreach ($warehouseData as $data) {
         $hasError = false;
         $errorReasons = [];
 
-        // 1. Check coordinates
-        if ($lat == 0 || $lon == 0 || !isValidCoordinate($lat, 'latitude') || !isValidCoordinate($lon, 'longitude')) {
+        // 1. Check coordinates (lat 0-40 non-included, long 65-180)
+        if (!isValidCoordinate($lat, 'latitude') || !isValidCoordinate($lon, 'longitude')) {
             $hasError = true;
-            $errorReasons[] = "Latitude or Longitude is 0 or invalid (Lat: $lat, Lon: $lon)";
+            $errorReasons[] = "Latitude or Longitude is invalid (Lat: $lat, Lon: $lon)";
         }
 
-        // 2. Check invalid storage
-        if ($totalStorage <= 0) {
+        // 2. Check storage >= 0
+        if (!$storageValid || (float)$totalStorage < 0) {
             $hasError = true;
-            $errorReasons[] = "Storage Capacity is 0 or negative ($totalStorage)";
+            $errorReasons[] = "Storage Capacity is negative or invalid ($totalStorage)";
         }
 
         // 3. If invalid, mark inactive and log error

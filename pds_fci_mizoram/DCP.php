@@ -270,14 +270,22 @@ require('Header.php');
 						console.log(obj);
 						for (var datafield in obj){
 							var temp_id = obj[datafield]["uniqueid"];
-							var status = obj[datafield]["active"];
-							if(status==1){
+							var status = String(obj[datafield]["active"]).trim();
+							if(status === '1' || status == 1){
 								status = "<span style='padding:5px' class='btn-success btn-rounded'>Active</span>";
 							}
 							else{
 								status = "<span style='padding:5px' class='btn-danger btn-rounded'>InActive</span>";
 							}
-							var subpart = "<tr><td>" +  obj[datafield]["district"] +  "</td><td>"  + obj[datafield]["name"] +  "</td><td>"  + obj[datafield]["id"] +  "</td><td>"  + obj[datafield]["type"] +  "</td><td>"  + obj[datafield]["latitude"] +  "</td><td>"  + obj[datafield]["longitude"] +  "</td><td>"  + obj[datafield]["demand"] +  "</td><td>" + status + "</td><td> <button class='btn btn-info btn-rounded' onclick=\"change_status('"+ temp_id + "')\">Change Status</button></td><td> <button class='btn btn-warning btn-rounded' onclick=\"edit_entry('" + temp_id +  "')\">Edit</button></td><td> <button class='btn btn-danger btn-rounded' onclick=\"delete_entry('" + temp_id +"')\">Delete</button></td></tr>";
+							var lat = parseFloat(obj[datafield]["latitude"]);
+							var lon = parseFloat(obj[datafield]["longitude"]);
+							var demand = parseFloat(obj[datafield]["demand"]);
+							var isValid = !isNaN(lat) && !isNaN(lon) && !isNaN(demand) && (lat > 0 && lat < 40) && (lon > 65 && lon <= 180) && (demand >= 0);
+							var changeStatusBtn = isValid 
+								? "<button class='btn btn-info btn-rounded' onclick=\"change_status('"+ temp_id + "')\">Change Status</button>"
+								: "<button class='btn btn-info btn-rounded' disabled style='cursor: not-allowed; opacity: 0.5;' title='Status cannot be changed: Latitude must be 0-40, Longitude 65-180, Offered Quantity FRice >= 0'>Change Status</button>";
+
+							var subpart = "<tr><td>" +  obj[datafield]["district"] +  "</td><td>"  + obj[datafield]["name"] +  "</td><td>"  + obj[datafield]["id"] +  "</td><td>"  + obj[datafield]["type"] +  "</td><td>"  + obj[datafield]["latitude"] +  "</td><td>"  + obj[datafield]["longitude"] +  "</td><td>"  + obj[datafield]["demand"] +  "</td><td>" + status + "</td><td> " + changeStatusBtn + "</td><td> <button class='btn btn-warning btn-rounded' onclick=\"edit_entry('" + temp_id +  "')\">Edit</button></td><td> <button class='btn btn-danger btn-rounded' onclick=\"delete_entry('" + temp_id +"')\">Delete</button></td></tr>";
 							$('#fps_table').append(subpart);
 						}
 					}

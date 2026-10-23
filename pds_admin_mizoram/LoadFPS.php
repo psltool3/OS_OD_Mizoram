@@ -18,11 +18,9 @@ function formatName($name) {
 }
 
 function isValidCoordinate($value, $type) {
-    if ($value === null || $value === '') return false;
-    if (!is_numeric($value)) return false;
+    if ($value === null || $value === '' || !is_numeric($value)) return false;
     $v = (float)$value;
-    // The API uses 1 for dummy coordinates, so we allow any value > 0
-    return $v > 0;
+    return $type === 'latitude' ? ($v > 0 && $v < 40) : ($v > 65 && $v <= 180);
 }
 
 // ✅ Mizoram FPS API endpoint
@@ -127,29 +125,38 @@ foreach ($fpsData as $data) {
         $lon = isset($data['longitude']) && is_numeric($data['longitude']) ? (float)$data['longitude'] : 0;
 
         $totalDemand = 0;
+        $demandValid = true;
         if (isset($data['demands']) && is_array($data['demands'])) {
             foreach ($data['demands'] as $inv) {
-                $totalDemand += isset($inv['demand']) ? (float)$inv['demand'] : 0;
+                if (isset($inv['demand']) && is_numeric($inv['demand'])) {
+                    $totalDemand += (float)$inv['demand'];
+                } else if (isset($inv['demand'])) {
+                    $demandValid = false;
+                }
             }
         } else {
             // fallback
-            $totalDemand = (isset($data['demand']) && is_numeric($data['demand'])) ? (float)$data['demand'] : 0;
+            if (isset($data['demand']) && is_numeric($data['demand'])) {
+                $totalDemand = (float)$data['demand'];
+            } else if (isset($data['demand'])) {
+                $demandValid = false;
+            }
         }
 
         $isActive = $data['active'] ?? '1';
         $hasError = false;
         $errorReasons = [];
 
-        // 1. Check coordinates
-        if ($lat == 0 || $lon == 0 || !isValidCoordinate($lat, 'latitude') || !isValidCoordinate($lon, 'longitude')) {
+        // 1. Check coordinates (lat 0-40 non-included, long 65-180)
+        if (!isValidCoordinate($lat, 'latitude') || !isValidCoordinate($lon, 'longitude')) {
             $hasError = true;
-            $errorReasons[] = "Latitude or Longitude is 0 or invalid (Lat: $lat, Lon: $lon)";
+            $errorReasons[] = "Latitude or Longitude is invalid (Lat: $lat, Lon: $lon)";
         }
 
-        // 2. Check invalid demand
-        if ($totalDemand < 0) {
+        // 2. Check demand >= 0
+        if (!$demandValid || (float)$totalDemand < 0) {
             $hasError = true;
-            $errorReasons[] = "Demand is negative ($totalDemand)";
+            $errorReasons[] = "Demand is negative or invalid ($totalDemand)";
         }
 
         // 3. If invalid, mark inactive and log error

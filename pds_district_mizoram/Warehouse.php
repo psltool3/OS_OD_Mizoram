@@ -1,6 +1,7 @@
 <?php
 require('util/Connection.php');
 require('util/SessionCheck.php');
+require('util/Validation.php');
 require('Header.php');
 
 $district = $_SESSION['district_district'];
@@ -77,6 +78,14 @@ td {
 											else{
 												$status = "<span style='padding:5px' class='btn-danger btn-rounded'>InActive</span>";
 											}
+
+											$isValid = isWarehouseValid($row['latitude'], $row['longitude'], $row['storage']);
+											if ($isValid) {
+												$changeStatusBtn = "<button class='btn btn-info btn-rounded' onclick=\"change_status('{$temp_id}')\">Change Status</button>";
+											} else {
+												$changeStatusBtn = "<button class='btn btn-info btn-rounded' disabled style='cursor: not-allowed; opacity: 0.5;' title='Status cannot be changed: Latitude must be 0-40, Longitude 65-180, Storage >= 0'>Change Status</button>";
+											}
+
 											echo "<tr><td>{$row['district']}</td>".
 											"<td>{$row['name']}</td>".
 											"<td>{$row['id']}</td>".
@@ -86,7 +95,7 @@ td {
 											"<td>{$row['longitude']}</td>".
 											"<td>{$row['storage']}</td>".
 											"<td>$status</td>".
-											 "<td> <button class='btn btn-info btn-rounded' onclick=\"change_status('{$temp_id}')\">Change Status</button></td>".
+											 "<td> $changeStatusBtn</td>".
 											 "<td> <button class='btn btn-warning btn-rounded' onclick=\"edit_entry('{$temp_id}')\">Edit</button></td>".
 											 "<td> <button class='btn btn-danger btn-rounded' onclick=\"delete_entry('{$temp_id}')\">Delete</button></td></tr>";
 										}

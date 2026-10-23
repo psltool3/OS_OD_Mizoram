@@ -3,6 +3,7 @@
 require('../util/Connection.php');
 require('../util/SessionFunction.php');
 require('../util/Logger.php'); 
+require('../util/Validation.php');
 
 if(!SessionCheck()){
 	return;
@@ -22,9 +23,15 @@ if($numrows>0){
 	$status = $row['active'];
 	$fpsname = $row['name'];
 	if($status==0){
-		$query = "UPDATE fps SET active='1' WHERE uniqueid='$id'";
-		writeLog("User ->" ." FPS Active -> ". $_SESSION['user'] . "| " . $fpsname);
-		mysqli_query($con,$query);
+		if (isFPSValid($row['latitude'], $row['longitude'], $row['demand'])) {
+			$query = "UPDATE fps SET active='1' WHERE uniqueid='$id'";
+			writeLog("User ->" ." FPS Active -> ". $_SESSION['user'] . "| " . $fpsname);
+			mysqli_query($con,$query);
+		} else {
+			writeLog("User ->" ." FPS Activation Blocked (Invalid Data) -> ". $_SESSION['user'] . "| " . $fpsname);
+			echo "<script>alert('Cannot activate FPS: Latitude must be 0-40, Longitude 65-180, Demand of FRice >= 0'); window.location.href = '../FPS.php';</script>";
+			exit();
+		}
 	}
 	else{
 		$query = "UPDATE fps SET active='0' WHERE uniqueid='$id'";

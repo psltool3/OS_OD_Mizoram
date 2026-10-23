@@ -6,7 +6,8 @@ require('../util/SessionFunction.php');
 require('../structures/Login.php');
 require('../util/Logger.php');
 require('../util/Security.php');
-require ('../util/Encryption.php');
+require('../util/Encryption.php');
+require('../util/Validation.php');
 $nonceValue = 'nonce_value';
 
 
@@ -38,9 +39,10 @@ if(password_verify($person->getPassword(), $dbHashedPassword)){
 	$status = $_POST["status"];
 	$fpstype = $_POST["fpstype"];
 	
+	$validCond = getFPSValidSqlCondition();
 	if($fpstype=='Smart FPS'){
 		if($status=='active'){
-			$query = "UPDATE fps SET active='1' WHERE district='$district' AND type='Smart FPS'";
+			$query = "UPDATE fps SET active='1' WHERE district='$district' AND type='Smart FPS' AND $validCond";
 			writeLog("User ->" ." Smart FPS Active -> ". $_SESSION['user'] . "| " . $district);
 		}
 		else{
@@ -50,7 +52,7 @@ if(password_verify($person->getPassword(), $dbHashedPassword)){
 	}
 	else{
 		if($status=='active'){
-			$query = "UPDATE fps SET active='1' WHERE district='$district' AND type='Non Smart FPS'";
+			$query = "UPDATE fps SET active='1' WHERE district='$district' AND type='Non Smart FPS' AND $validCond";
 			writeLog("User ->" ." Non Smart FPS Active -> ". $_SESSION['user'] . "| " . $district);
 		}
 		else{

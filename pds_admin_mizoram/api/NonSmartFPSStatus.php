@@ -3,6 +3,7 @@ require('../util/Connection.php');
 require('../util/SessionFunction.php');
 require('../structures/Login.php');
 require('../util/Logger.php'); 
+require('../util/Validation.php');
 
 if(!SessionCheck()){
 	return;
@@ -19,7 +20,8 @@ if($numrows>0){
 	$row = mysqli_fetch_assoc($result);
 	$status = $row['active'];
 	if($status==0){
-		$query = "UPDATE fps SET active='1' WHERE type='Non Smart FPS'";
+		$validCond = getFPSValidSqlCondition();
+		$query = "UPDATE fps SET active='1' WHERE type='Non Smart FPS' AND $validCond";
 		writeLog("User ->" ." All Non Smart FPS Active -> ". $_SESSION['user']);
 		mysqli_query($con,$query);
 	}

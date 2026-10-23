@@ -6,6 +6,7 @@ require('../util/SessionFunction.php');
 require('../structures/Login.php');
 require('../util/Security.php');
 require('../util/Encryption.php');
+require('../util/Validation.php');
 $nonceValue = 'nonce_value';
 
 if(!SessionCheck()){
@@ -39,7 +40,8 @@ $district = $_POST["district"] ?? "";
 $status = $_POST["status"] ?? "";
 
 if($status == 'active'){
-	$query = "UPDATE dcp SET active='1' WHERE district='$district'";
+	$validCond = getDCPValidSqlCondition();
+	$query = "UPDATE dcp SET active='1' WHERE district='$district' AND $validCond";
 }
 else{
 	$query = "UPDATE dcp SET active='0' WHERE district='$district'";

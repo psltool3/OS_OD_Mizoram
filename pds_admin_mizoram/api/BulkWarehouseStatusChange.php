@@ -6,7 +6,8 @@ require('../util/SessionFunction.php');
 require('../structures/Login.php');
 require('../util/Logger.php'); 
 require('../util/Security.php');
-require ('../util/Encryption.php');
+require('../util/Encryption.php');
+require('../util/Validation.php');
 $nonceValue = 'nonce_value';
 
 
@@ -38,7 +39,8 @@ if(password_verify($person->getPassword(), $dbHashedPassword)){
 	$status = $_POST["status"];
 	
 	if($status=='active'){
-		$query = "UPDATE warehouse SET active='1' WHERE district='$district'";
+		$validCond = getWarehouseValidSqlCondition();
+		$query = "UPDATE warehouse SET active='1' WHERE district='$district' AND $validCond";
 		writeLog("User ->" ." Warehouse Active -> ". $_SESSION['user'] . "| " . $district);
 	}
 	else{
