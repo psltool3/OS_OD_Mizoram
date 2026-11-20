@@ -12,10 +12,18 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 // Check if format is specified in GET request
 if (isset($_GET['format'])) {
     $format = $_GET['format'];
+    $include_remark = ($_GET['include_remark'] ?? '') === '1'
+        && ($_GET['source'] ?? '') !== 'rollout' && ($_GET['rollout'] ?? '') !== '1'
+        && in_array($format, ['csv', 'pdf'], true);
     $district = $_SESSION['district_district'];
     #$columns = ["from_district","from_id","from_name","to_district","to_id","to_name"];
 	$columns = ["scenario","from","from_state","from_id","from_name","from_district","from_lat","from_long","to","to_state","to_id","to_name","to_district","to_lat","to_long","commodity","quantity","distance"];
 	$columns_pdf = ["scenario","from","from_id","from_name","from_district","from_lat","from_long","to","to_id","to_name","to_district","to_lat","to_long","commodity","quantity","distance"];
+    if ($include_remark) {
+        $columns[] = 'Remark';
+        $columns_pdf[] = 'Remark';
+    }
+
 
 	
 	$month = "";
@@ -99,6 +107,9 @@ if (isset($_GET['format'])) {
 				$row["from_name"] = $row['new_name_district'];
 				$row["distance"] = $row['new_distance_district'];
 			}
+            if ($include_remark) {
+                $row['Remark'] = $row['reason_district'] ?? '';
+            }
             $temp = array();
             $temp_pdf = array();
             for($i=0;$i<count($columns);$i++){
@@ -151,6 +162,119 @@ if (isset($_GET['format'])) {
 
         case 'pdf':
             require('fpdf/fpdf.php');
+            if ($include_remark) {
+            $pdf = new FPDF('L', 'mm', 'A4');
+            if ($include_remark) {
+                $pdf->SetAutoPageBreak(true, 10);
+            }
+            $pdf->AddPage();
+
+            $pageWidth = $pdf->GetPageWidth() - 20;
+            $numCols = count($columns_pdf);
+            $nameIndex = array_search('to_name', $columns_pdf, true);
+            $nameIndex = $nameIndex === false ? -1 : $nameIndex;
+            $remarkWidth = 35;
+            $colWidth = $include_remark ? ($pageWidth - $remarkWidth) / ($numCols - 1 + ($nameIndex >= 0 ? 2 : 0)) : $pageWidth / $numCols;
+            $remarkIndex = $include_remark ? $numCols - 1 : -1;
+
+            // Wrap remarks by measured font width, preserving the full text.
+            $wrapRemark = function ($text) use ($pdf, $remarkWidth) {
+                $lines = [];
+                foreach (explode("\n", str_replace("\r", '', (string)$text)) as $paragraph) {
+                    $line = '';
+                    foreach (preg_split('//u', $paragraph, -1, PREG_SPLIT_NO_EMPTY) as $character) {
+                        if ($line !== '' && $pdf->GetStringWidth($line . $character) > $remarkWidth - 2) {
+                            $space = strrpos($line, ' ');
+                            if ($space !== false) {
+                                $lines[] = substr($line, 0, $space);
+                                $line = substr($line, $space + 1);
+                            } else {
+                                $lines[] = $line;
+                                $line = '';
+                            }
+                        }
+                        $line .= $character;
+                    }
+                    $lines[] = $line;
+                }
+                return $lines;
+            };
+
+            // Render Header
+            $pdf->SetFont('Arial', 'B', 7);
+            $pdf->SetFillColor(200, 220, 255);
+            foreach ($tableData_pdf[0] as $columnIndex => $col) {
+                $width = $columnIndex === $remarkIndex ? $remarkWidth : ($columnIndex === $nameIndex ? $colWidth * 3 : $colWidth);
+                if ($include_remark) {
+                    $fontSize = 7;
+                    $pdf->SetFont('Arial', 'B', $fontSize);
+                    while ($pdf->GetStringWidth($col) > $width - 2 && $fontSize > 1) {
+                        $fontSize -= 0.5;
+                        $pdf->SetFont('Arial', 'B', $fontSize);
+                    }
+                }
+                $pdf->Cell($width, 8, $col, 1, 0, 'C', true);
+            }
+            $pdf->Ln();
+
+            // Render Rows
+            $pdf->SetFont('Arial', '', 6);
+            $pdf->SetFillColor(255, 255, 255);
+            for ($i = 1; $i < count($tableData_pdf); $i++) {
+                $remarkLines = $include_remark ? $wrapRemark($tableData_pdf[$i][$remarkIndex]) : [];
+                $rowHeight = max(8, count($remarkLines) * 3);
+                if ($pdf->GetY() + $rowHeight > $pdf->GetPageHeight() - 10) {
+                    $pdf->AddPage();
+                    $pdf->SetFont('Arial', 'B', 7);
+                    $pdf->SetFillColor(200, 220, 255);
+                    foreach ($tableData_pdf[0] as $columnIndex => $col) {
+                        $width = $columnIndex === $remarkIndex ? $remarkWidth : ($columnIndex === $nameIndex ? $colWidth * 3 : $colWidth);
+                        if ($include_remark) {
+                            $fontSize = 7;
+                            $pdf->SetFont('Arial', 'B', $fontSize);
+                            while ($pdf->GetStringWidth($col) > $width - 2 && $fontSize > 1) {
+                                $fontSize -= 0.5;
+                                $pdf->SetFont('Arial', 'B', $fontSize);
+                            }
+                        }
+                        $pdf->Cell($width, 8, $col, 1, 0, 'C', true);
+                    }
+                    $pdf->Ln();
+                    $pdf->SetFont('Arial', '', 6);
+                    $pdf->SetFillColor(255, 255, 255);
+                }
+                foreach ($tableData_pdf[$i] as $columnIndex => $col) {
+                    $str = (string)$col;
+                    if ($columnIndex === $remarkIndex) {
+                        $x = $pdf->GetX();
+                        $y = $pdf->GetY();
+                        $pdf->Rect($x, $y, $remarkWidth, $rowHeight);
+                        foreach ($remarkLines as $lineIndex => $line) {
+                            $pdf->SetXY($x, $y + $lineIndex * 3);
+                            $pdf->Cell($remarkWidth, 3, $line, 0, 0, 'L');
+                        }
+                        $pdf->SetXY($x + $remarkWidth, $y);
+                        continue;
+                    }
+                    $width = $columnIndex === $nameIndex ? $colWidth * 3 : $colWidth;
+                    $fontSize = 6;
+                    $pdf->SetFont('Arial', '', $fontSize);
+                    while ($pdf->GetStringWidth($str) > $width - 2 && $fontSize > 1) {
+                        $fontSize -= 0.5;
+                        $pdf->SetFont('Arial', '', $fontSize);
+                    }
+                    $pdf->Cell($width, $rowHeight, $str, 1, 0, 'C', true);
+                    $pdf->SetFont('Arial', '', 6);
+                }
+                $pdf->Ln($rowHeight);
+            }
+
+                header('Content-Type: application/pdf');
+                header('Content-Disposition: attachment;filename="' . $filename . '.pdf"');
+                echo $pdf->Output('S');
+                break;
+            }
+
             $pdf = new FPDF('L', 'mm', 'A4');
 			$pdf->AddPage();
 			$pdf->SetFont('Arial', 'B', 15); // Set initial font size

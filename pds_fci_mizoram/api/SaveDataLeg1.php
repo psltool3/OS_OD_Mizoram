@@ -48,8 +48,8 @@ foreach ($_POST as $key => $value) {
 		writeLog("User ->" ." Save Data | approve admin change yes ->". $_SESSION['user'] . "| " . $fromid . " - " . $toid);
 	}
 	else if($value=="same"){
-		$query = "UPDATE " . $tablename . " SET approve_admin='' WHERE from_id='$fromid' AND to_id='$toid' AND commodity='$commodity'";
-		writeLog("User ->" ." Save Data | approve admin change yes ->". $_SESSION['user'] . "| " . $fromid . " - " . $toid);
+		$query = "UPDATE " . $tablename . " SET approve_admin='yes', new_id_admin=from_id, new_name_admin=from_name, new_distance_admin=distance, reason_admin='' WHERE from_id='$fromid' AND to_id='$toid' AND commodity='$commodity'";
+		writeLog("User ->" ." Save Data | keep system generated, approve admin yes ->". $_SESSION['user'] . "| " . $fromid . " - " . $toid);
 	}
 	else if($value=="no"){
 		// this case will not fall as we have check for this in js

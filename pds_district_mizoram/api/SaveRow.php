@@ -57,6 +57,10 @@ foreach ($_POST as $key => $value) {
 		$query = "UPDATE " . $tablename . " SET approve_district='yes' WHERE from_id='$fromid' AND to_id='$toid' AND commodity='$commodity'";
 		writeLog("district User ->" ." Save Data | approve district change yes ->". $_SESSION['district_user'] . "| " . $fromid . " - " . $toid . " - " . $commodity);
 	}
+	else if($value=="same"){
+		$query = "UPDATE " . $tablename . " SET approve_district='yes', new_id_district='', new_name_district='', new_distance_district='', reason_district='' WHERE from_id='$fromid' AND to_id='$toid' AND commodity='$commodity'";
+		writeLog("district User -> Save Data | keep system generated, approve district yes ->" . $_SESSION['district_user'] . "| " . $fromid . " - " . $toid . " - " . $commodity);
+	}
 	else if($value=="no"){
 		$query = "UPDATE " . $tablename . " SET approve_district='', new_id_district='' WHERE from_id='$fromid' AND to_id='$toid' AND commodity='$toid'";
 		$filteredPost = $_POST;

@@ -471,7 +471,7 @@ if($currentTimestamp >= $targetTimestamp) {
 				document.getElementById(selectedId + "_iddistance").disabled = false;
 			}
 			else{
-				modifiedData[selectedId] = "same";
+				modifiedData[selectedId] = newvalue === "same" ? "same" : "";
 				document.getElementById(selectedId).value = '';
 				document.getElementById(selectedId).disabled = true;
 				document.getElementById(selectedId + "_idreason").disabled = true;
@@ -535,7 +535,7 @@ if($currentTimestamp >= $targetTimestamp) {
 		document.getElementById('downloadCSV').addEventListener('click', async function() {
 			try {
 				var district = document.getElementById("district").value;
-				const csvResponse = await fetch('api/DownloadOptimalDataLeg1.php?format=csv'+ "&district=" + district);
+				const csvResponse = await fetch('api/DownloadOptimalDataLeg1.php?format=csv&include_remark=1'+ "&district=" + district);
 				const csvBlob = await csvResponse.blob();
 				downloadFile(csvBlob, 'OptimisedData_Leg1_' + getDateString() + '.csv');
 			} catch (error) {
@@ -546,7 +546,7 @@ if($currentTimestamp >= $targetTimestamp) {
 		document.getElementById('downloadPDF').addEventListener('click', async function() {
 			try {
 				var district = document.getElementById("district").value;
-				const csvResponse = await fetch('api/DownloadOptimalDataLeg1.php?format=pdf'+ "&district=" + district);
+				const csvResponse = await fetch('api/DownloadOptimalDataLeg1.php?format=pdf&include_remark=1'+ "&district=" + district);
 				const csvBlob = await csvResponse.blob();
 				downloadFile(csvBlob, 'OptimisedData_Leg1_' + getDateString() + '.pdf');
 			} catch (error) {
@@ -739,11 +739,8 @@ if($currentTimestamp >= $targetTimestamp) {
 									obj[datafield]["new_id"] = "";
 								}
 								
-								if(approve_admin=="yes" && newid_admin==""){
-									var admin_approve = "<td><button class='btn btn-info'>Approved</button></td>";
-								}
-								else if(approve_admin=="yes" && newid_admin!=""){
-									var admin_approve = "<td><button class='btn btn-danger'>Not Approved</button></td>";
+								if(approve_admin=="yes"){
+									var admin_approve = "<td><button class='btn btn-info'>Already Reviewed</button></td>";
 								}
 								else if(approve_admin=="no"){
 									var admin_approve = "<td><button class='btn btn-danger'>Not Approved</button></td>";
@@ -756,14 +753,14 @@ if($currentTimestamp >= $targetTimestamp) {
 								}
 								
 								if(approve_admin=="yes"){
-									var warehouse_id_part = "<td><button class='btn btn-info'>Yes</button></td><td>" + newid_admin + "</td>";
+									var warehouse_id_part = "<td><button class='btn btn-info'>Already Reviewed</button></td><td>" + newid_admin + "</td>";
 								}
 								else if(approve_admin=="no"){
 									var warehouse_id_part = "<td><button class='btn btn-info'>No</button></td><td>" + newid_admin + "</td>";
-									//var warehouse_id_part = "<td><select class='form-control' onchange='enableDisable(\"" + uniqueid + "\")' id='" + uniqueid_bool + "' name='" + uniqueid_bool + "'><option value=''>Select</option><option value='yes'>Agree</option><option value='no'>Change ID</option></select></td><td><select class='form-control' onchange='handleNewIdChange(\"" + uniqueid + "\")' id='" + uniqueid + "' name='" + uniqueid + "' disabled><option value=''>Select Id</option>" + warehousepart + "</select></td>";
+									//var warehouse_id_part = "<td><select class='form-control' onchange='enableDisable(\"" + uniqueid + "\")' id='" + uniqueid_bool + "' name='" + uniqueid_bool + "'><option value=''>Select</option><option value='yes'>Agree</option><option value='same'>Keep System Generated</option><option value='no'>Change ID</option></select></td><td><select class='form-control' onchange='handleNewIdChange(\"" + uniqueid + "\")' id='" + uniqueid + "' name='" + uniqueid + "' disabled><option value=''>Select Id</option>" + warehousepart + "</select></td>";
 								}
 								else{
-									var warehouse_id_part = "<td><select class='form-control' onchange='enableDisable(\"" + uniqueid + "\")' id='" + uniqueid_bool + "' name='" + uniqueid_bool + "'><option value=''>Select</option><option value='yes'>Agree</option><option value='no'>Change ID</option></select></td><td><select class='form-control' onchange='handleNewIdChange(\"" + uniqueid + "\")' id='" + uniqueid + "' name='" + uniqueid + "' disabled><option value=''>Select Id</option>" + warehousepart + "</select></td>";
+									var warehouse_id_part = "<td><select class='form-control' onchange='enableDisable(\"" + uniqueid + "\")' id='" + uniqueid_bool + "' name='" + uniqueid_bool + "'><option value=''>Select</option><option value='yes'>Agree</option><option value='same'>Keep System Generated</option><option value='no'>Change ID</option></select></td><td><select class='form-control' onchange='handleNewIdChange(\"" + uniqueid + "\")' id='" + uniqueid + "' name='" + uniqueid + "' disabled><option value=''>Select Id</option>" + warehousepart + "</select></td>";
 									uniqueid_bool_array.push(uniqueid_bool);
 								}
 								

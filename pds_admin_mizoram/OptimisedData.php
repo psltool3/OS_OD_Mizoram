@@ -537,7 +537,7 @@ if(!empty($date) && !empty($time) && $currentTimestamp >= $targetTimestamp) {
 			try {
 				var month = document.getElementById("month").value;
 				var district = document.getElementById("district").value;
-				const csvResponse = await fetch('api/DownloadOptimalData.php?format=csv&month=' + month + "&district=" + district);
+				const csvResponse = await fetch('api/DownloadOptimalData.php?format=csv&include_remark=1&month=' + month + "&district=" + district);
 				const csvBlob = await csvResponse.blob();
 				downloadFile(csvBlob, 'Optimise_Plan_Leg2_' + getDateString() + '.csv');
 			} catch (error) {
@@ -549,7 +549,7 @@ if(!empty($date) && !empty($time) && $currentTimestamp >= $targetTimestamp) {
 			try {
 				var month = document.getElementById("month").value;
 				var district = document.getElementById("district").value;
-				const csvResponse = await fetch('api/DownloadOptimalData.php?format=pdf&month=' + month + "&district=" + district);
+				const csvResponse = await fetch('api/DownloadOptimalData.php?format=pdf&include_remark=1&month=' + month + "&district=" + district);
 				const csvBlob = await csvResponse.blob();
 				downloadFile(csvBlob, 'Optimise_Plan_Leg2_' + getDateString() + '.pdf');
 			} catch (error) {

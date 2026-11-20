@@ -106,6 +106,7 @@ if(isset($_POST['step'])){
                                 </div>
 								<div style="float:right" style="margin:10px">
 									<button id="downloadCSV" class="btn btn-warning" style="margin-bottom: 10px;" type="button">Download CSV</button>
+<button id="downloadPDF" class="btn btn-danger" style="margin-bottom: 10px;" type="button">Download PDF</button>
 									<!-- <button id="downloadXLSX" class="btn btn-success" style="margin-bottom: 10px;" type="button">Download XLSX</button> -->
 								</div>
 								<div class="row" style="margin-top:30px;float:left">
@@ -212,11 +213,24 @@ if(isset($_POST['step'])){
 				var tableName = '<?php echo $tablename ?>';
 				var tableName1 = '<?php echo $tablename1 ?>';
 				var district = document.getElementById('district').value;
-				const csvResponse = await fetch('api/DownloadOptimalDataOptimised.php?format=csv&tableName=' + tableName + '&tableName1=' + tableName1 + '&district=' + district);
+				const csvResponse = await fetch('api/DownloadOptimalDataOptimised.php?format=csv&include_remark=1&tableName=' + tableName + '&tableName1=' + tableName1 + '&district=' + district);
 				const csvBlob = await csvResponse.blob();
 				downloadFile(csvBlob, 'Optimised_Data_' + getDateString() + '.csv');
 			} catch (error) {
 				console.error('Error downloading CSV file:', error);
+			}
+		});
+
+document.getElementById('downloadPDF').addEventListener('click', async function() {
+			try {
+				var tableName = '<?php echo $tablename ?>';
+				var tableName1 = '<?php echo $tablename1 ?>';
+				var district = document.getElementById('district').value;
+				const csvResponse = await fetch('api/DownloadOptimalDataOptimised.php?format=pdf&include_remark=1&tableName=' + tableName + '&tableName1=' + tableName1 + '&district=' + district);
+				const csvBlob = await csvResponse.blob();
+				downloadFile(csvBlob, 'Optimised_Data_' + getDateString() + '.pdf');
+			} catch (error) {
+				console.error('Error downloading PDF file:', error);
 			}
 		});
 
@@ -238,7 +252,7 @@ if(isset($_POST['step'])){
 		/*document.getElementById('downloadPDF').addEventListener('click', async function() {
 			try {
 				var tableName = '<?php echo $tablename ?>';	
-				const pdfResponse = await fetch('api/DownloadOptimalDataOptimised.php?format=pdf&tableName='+tableName);
+				const pdfResponse = await fetch('api/DownloadOptimalDataOptimised.php?format=pdf&include_remark=1&tableName='+tableName);
 				const pdfBlob = await pdfResponse.blob();
 
 				const url = window.URL.createObjectURL(pdfBlob);
