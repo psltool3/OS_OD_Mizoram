@@ -79,7 +79,7 @@ function getYearMonth(){
 								</br></br>
 								<div style="float:right">
 									<button id="downloadCSV" class="btn btn-warning" style="margin-bottom: 10px;" type="button">Download CSV</button>
-									<button id="downloadXLSX" class="btn btn-success" style="margin-bottom: 10px;" type="button">Download XLSX</button>
+									<!-- <button id="downloadXLSX" class="btn btn-success" style="margin-bottom: 10px;" type="button">Download XLSX</button> -->
 								</div>
 								</br></br>
 							</br></br>
@@ -282,16 +282,16 @@ function getYearMonth(){
 		});
 
 		// Event listener for downloading XLSX
-		document.getElementById('downloadXLSX').addEventListener('click', async function() {
-			try {
-				var month = document.getElementById("month").value;
-				const excelResponse = await fetch('api/DistrictPerformance.php?format=xlsx&month=' + month);
-				const excelBlob = await excelResponse.blob();
-				downloadFile(excelBlob, 'RolloutPlan_' + getDateString() + '.xlsx');
-			} catch (error) {
-				console.error('Error downloading XLSX file:', error);
-			}
-		});
+// 		document.getElementById('downloadXLSX').addEventListener('click', async function() {
+// 			try {
+// 				var month = document.getElementById("month").value;
+// 				const excelResponse = await fetch('api/DistrictPerformance.php?format=xlsx&month=' + month);
+// 				const excelBlob = await excelResponse.blob();
+// 				downloadFile(excelBlob, 'RolloutPlan_' + getDateString() + '.xlsx');
+// 			} catch (error) {
+// 				console.error('Error downloading XLSX file:', error);
+// 			}
+// 		});
 		
 		function downloadFile(blob, fileName) {
 			const url = window.URL.createObjectURL(blob);

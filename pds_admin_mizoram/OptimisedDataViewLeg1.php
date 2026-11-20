@@ -123,7 +123,7 @@ $leg = 1;
                                 </div>
 								<div style="float:right" style="margin:10px">
 									<button id="downloadCSV" class="btn btn-warning" style="margin-bottom: 10px;" type="button">Download CSV</button>
-									<button id="downloadXLSX" class="btn btn-success" style="margin-bottom: 10px;" type="button">Download XLSX</button>
+									<!-- <button id="downloadXLSX" class="btn btn-success" style="margin-bottom: 10px;" type="button">Download XLSX</button> -->
 								</div>
                                 <div class="panel-body">
                                  <div class="table-responsive">
@@ -279,17 +279,17 @@ $leg = 1;
 		});
 
 		// Event listener for downloading XLSX
-		document.getElementById('downloadXLSX').addEventListener('click', async function() {
-			try {
-				var tableName = '<?php echo $tablename ?>';
-				var tableName1 = '<?php echo $tablename1 ?>';
-				const excelResponse = await fetch('api/DownloadOptimalDataOptimised.php?format=xlsx&tableName='+tableName+'&tableName1='+tableName1);
-				const excelBlob = await excelResponse.blob();
-				downloadFile(excelBlob, 'Optimiseddata_' + getDateString() + '.xlsx');
-			} catch (error) {
-				console.error('Error downloading XLSX file:', error);
-			}
-		});
+// 		document.getElementById('downloadXLSX').addEventListener('click', async function() {
+// 			try {
+// 				var tableName = '<?php echo $tablename ?>';
+// 				var tableName1 = '<?php echo $tablename1 ?>';
+// 				const excelResponse = await fetch('api/DownloadOptimalDataOptimised.php?format=xlsx&tableName='+tableName+'&tableName1='+tableName1);
+// 				const excelBlob = await excelResponse.blob();
+// 				downloadFile(excelBlob, 'Optimiseddata_' + getDateString() + '.xlsx');
+// 			} catch (error) {
+// 				console.error('Error downloading XLSX file:', error);
+// 			}
+// 		});
 		
 		// Functions for file download and PDF generation (similar to previous code)
 		function downloadFile(blob, fileName) {

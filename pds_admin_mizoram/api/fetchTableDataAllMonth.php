@@ -1,73 +1,40 @@
 <?php
 require('../util/Connection.php');
-require('../structures/District.php');
 require('../util/SessionFunction.php');
-require('../structures/Login.php');
-
-if(!SessionCheck()){
-	//return;
+header('Content-Type: application/json');
+if (!SessionCheck()) {
+    http_response_code(401);
+    echo json_encode(array('data' => array(), 'message' => 'Unable to check L2. You can still continue with L1.'));
+    exit;
 }
-$message = "";
-$month = isset($_POST['month']) ? $_POST['month'] : '';
-$year = isset($_POST['year']) ? $_POST['year'] : '';
+$response = array('data' => array(), 'message' => 'Unable to check L2 for the selected period. You can still continue with L1.');
+$month = $_POST['month'] ?? '';
+$year = $_POST['year'] ?? '';
 $months = array('jan', 'feb', 'march', 'april', 'may', 'june', 'july', 'aug', 'sept', 'oct', 'nov', 'dec');
-$month_index = array_search(strtolower($month), $months);
-$prev_month = '';
-$prev_year = '';
-if ($month_index !== false) {
-	$prev_month_index = $month_index - 1;
-	$prev_year = intval($year);
-	if ($prev_month_index < 0) {
-		$prev_month_index = 11;
-		$prev_year = $prev_year - 1;
-	}
-	$prev_month = $months[$prev_month_index];
+if (!is_string($month) || !in_array($month, $months, true) || !is_string($year) || !preg_match('/^[0-9]{4}$/D', $year)) {
+    $response['message'] = 'Invalid month or year for the L2 check. You can still continue with L1.';
+    echo json_encode($response);
+    exit;
 }
-$query = "SELECT * FROM optimised_table WHERE month='$month' AND year='$year'";
-$result = mysqli_query($con,$query);
-$response = array();
-$response_data = array();
-while($row = mysqli_fetch_array($result))
-{
-	$temp = array();
-	$temp["year"] = $row["year"];
-	$temp["month"] = $row["month"];
-	$temp["id"] = $row["id"];
-	$temp["applicable"] = $row["applicable"];
-	$temp["last_updated"] = $row["last_updated"];
-	array_push($response,$temp);
-	$query_approve = "SELECT * FROM optimiseddata_".$row["id"]." WHERE approve_admin<>'yes' OR approve_admin IS NULL";
-	$result_approve = mysqli_query($con,$query_approve);
-	$numrows_approve = mysqli_num_rows($result_approve);
-	if($numrows_approve != 0){
-		$message = "Please approve all tags of leg2 first";
-	}
+try {
+    $stmt = mysqli_prepare($con, 'SELECT id, month, year, applicable, last_updated FROM optimised_table WHERE month=? AND year=? ORDER BY last_updated DESC LIMIT 1');
+    if ($stmt) {
+        mysqli_stmt_bind_param($stmt, 'ss', $month, $year);
+        if (mysqli_stmt_execute($stmt)) {
+            $result = mysqli_stmt_get_result($stmt);
+            if ($result) {
+                $row = mysqli_fetch_assoc($result);
+                if ($row) {
+                    $response['data'][] = $row;
+                    $response['message'] = 'An L2 run was found for ' . $month . ' ' . $year . ' (updated ' . $row['last_updated'] . '). Please check that L2 is for the correct period. You can still continue with L1.';
+                } else {
+                    $response['message'] = 'No L2 run was found for ' . $month . ' ' . $year . '. You can still continue with L1.';
+                }
+            }
+        }
+        mysqli_stmt_close($stmt);
+    }
+} catch (mysqli_sql_exception $e) {
+    // Lookup failures remain advisory.
 }
-if(count($response)==0 && !empty($prev_month)){
-	$query = "SELECT * FROM optimised_table WHERE month='$prev_month' AND year='$prev_year'";
-	$result = mysqli_query($con,$query);
-	while($row = mysqli_fetch_array($result))
-	{
-		$temp = array();
-		$temp["year"] = $row["year"];
-		$temp["month"] = $row["month"];
-		$temp["id"] = $row["id"];
-		$temp["applicable"] = $row["applicable"];
-		$temp["last_updated"] = $row["last_updated"];
-		array_push($response,$temp);
-		$query_approve = "SELECT * FROM optimiseddata_".$row["id"]." WHERE approve_admin<>'yes' OR approve_admin IS NULL";
-		$result_approve = mysqli_query($con,$query_approve);
-		$numrows_approve = mysqli_num_rows($result_approve);
-		if($numrows_approve != 0){
-			$message = "Please approve all tags of leg2 first";
-		}
-	}
-}
-if(count($response)==0){
-	$message = "First optimized the leg2 for this month or previous month";
-}
-$response_data["data"] = $response;
-$response_data["message"] = $message;
-echo json_encode($response_data);
-
-?>
+echo json_encode($response);

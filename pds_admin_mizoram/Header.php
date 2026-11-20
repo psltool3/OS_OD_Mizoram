@@ -177,9 +177,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
 				<li>
 					<a href="SendMessage.php" style="padding-left:0px"><span class="xn-text" style="font-family:sans-serif;font-weight:italic;font-size:16px;">Send Message</span></a>
 				</li>
-				<li>
+				<!-- <li>
 					<a href="Timer.php" style="padding-left:0px"><span class="xn-text" style="font-family:sans-serif;font-weight:italic;font-size:16px;">Edit Deadline</span></a>
-				</li>
+				</li> -->
 				<li>
 					<a style="padding-left:0px"><span class="xn-text" style="font-family:sans-serif;font-weight:italic;font-size:16px;">Version V.1</span></a>
 				</li>

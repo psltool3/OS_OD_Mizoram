@@ -177,6 +177,6 @@ if(isset($_SESSION['district_user'])){
 			 <script>
 			// Function to display error message after 10 seconds
 			setTimeout(function() {
-				document.getElementById("error-message").innerHTML = "You Have Following Error :";
+				document.getElementById("error-message").innerHTML = "Data is being loaded, Errors that are being detected show below";
 			}, 5000); // 10 seconds delay
 		</script>

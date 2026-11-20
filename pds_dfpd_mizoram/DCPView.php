@@ -40,7 +40,7 @@ $tablename = "dcp_".$id;
                                 </div>
 								<div style="float:right" style="margin:10px">
 									<button id="downloadCSV" class="btn btn-warning" style="margin-bottom: 10px;" type="button">Download CSV</button>
-									<button id="downloadXLSX" class="btn btn-success" style="margin-bottom: 10px;" type="button">Download XLSX</button>
+									<!-- <button id="downloadXLSX" class="btn btn-success" style="margin-bottom: 10px;" type="button">Download XLSX</button> -->
 								</div>
                                 <div class="panel-body">
                                  <div class="table-responsive">
@@ -142,16 +142,16 @@ $tablename = "dcp_".$id;
 		});
 
 		// Event listener for downloading XLSX
-		document.getElementById('downloadXLSX').addEventListener('click', async function() {
-			try {
-				var tableName = '<?php echo $tablename ?>';
-				const excelResponse = await fetch('api/DownloadOptimalDataDCP.php?format=xlsx&tableName='+tableName);
-				const excelBlob = await excelResponse.blob();
-				downloadFile(excelBlob, 'Mizoram_DCP_' + getDateString() + '.xlsx');
-			} catch (error) {
-				console.error('Error downloading XLSX file:', error);
-			}
-		});
+// 		document.getElementById('downloadXLSX').addEventListener('click', async function() {
+// 			try {
+// 				var tableName = '<?php echo $tablename ?>';
+// 				const excelResponse = await fetch('api/DownloadOptimalDataDCP.php?format=xlsx&tableName='+tableName);
+// 				const excelBlob = await excelResponse.blob();
+// 				downloadFile(excelBlob, 'Mizoram_DCP_' + getDateString() + '.xlsx');
+// 			} catch (error) {
+// 				console.error('Error downloading XLSX file:', error);
+// 			}
+// 		});
 
 
 		

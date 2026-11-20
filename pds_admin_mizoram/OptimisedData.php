@@ -279,7 +279,7 @@ if(!empty($date) && !empty($time) && $currentTimestamp >= $targetTimestamp) {
 								<button class='btn btn-primary pull-right' onClick='sendData()' type='button'>Save</button>
 								</br></br>
 								<button id="downloadCSV" class="btn btn-warning pull-right" style="margin-left: 10px;" type="button">Download CSV</button>
-								<button id="downloadXLSX" class="btn btn-success pull-right" style="margin-left: 10px;" type="button">Download XLSX</button>
+								<!-- <button id="downloadXLSX" class="btn btn-success pull-right" style="margin-left: 10px;" type="button">Download XLSX</button> -->
 								<button id="downloadPDF" class="btn btn-danger pull-right" style="margin-left: 10px;" type="button">Download PDF</button>
                                 <button id="pushSCM" class="btn btn-primary pull-right" style="margin-left: 10px;" type="button" onclick="pushToSCM(2)">Push to SCMS</button>
 								</br></br>
@@ -567,17 +567,17 @@ if(!empty($date) && !empty($time) && $currentTimestamp >= $targetTimestamp) {
 			}
 
 		// Event listener for downloading XLSX
-		document.getElementById('downloadXLSX').addEventListener('click', async function() {
-			try {
-				var month = document.getElementById("month").value;
-				var district = document.getElementById("district").value;
-				const excelResponse = await fetch('api/DownloadOptimalData.php?format=xlsx&month=' + month + "&district=" + district);
-				const excelBlob = await excelResponse.blob();
-				downloadFile(excelBlob, 'Optimise_Plan_Leg2_' + getDateString() + '.xlsx');
-			} catch (error) {
-				console.error('Error downloading XLSX file:', error);
-			}
-		});
+// 		document.getElementById('downloadXLSX').addEventListener('click', async function() {
+// 			try {
+// 				var month = document.getElementById("month").value;
+// 				var district = document.getElementById("district").value;
+// 				const excelResponse = await fetch('api/DownloadOptimalData.php?format=xlsx&month=' + month + "&district=" + district);
+// 				const excelBlob = await excelResponse.blob();
+// 				downloadFile(excelBlob, 'Optimise_Plan_Leg2_' + getDateString() + '.xlsx');
+// 			} catch (error) {
+// 				console.error('Error downloading XLSX file:', error);
+// 			}
+// 		});
 
 
 		// Functions for file download and PDF generation (similar to previous code)

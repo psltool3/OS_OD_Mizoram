@@ -79,16 +79,17 @@ $errorCount    = 0;
 
 foreach ($districtData as $data) {
     try {
-        if (empty($data['district_code']) || empty($data['district_name'])) {
+        if (!isset($data['district_code'], $data['district_name']) || (!is_string($data['district_code']) && !is_int($data['district_code'])) || !preg_match('/^[A-Za-z0-9]{1,50}$/D', (string)$data['district_code']) || empty($data['district_name'])) {
             $errorCount++;
             continue;
         }
 
         $district = new District;
         $district->setId($data['district_code']);
+        $district->setCode((string)$data['district_code']);
         $district->setName(formatName($data['district_name']));
 
-        $insertQuery = $district->insert($district);
+        $insertQuery = $district->insert($district, $con);
         if (mysqli_query($con, $insertQuery)) {
             $insertedCount++;
             $user = isset($_SESSION['user']) ? $_SESSION['user'] : 'SYSTEM';

@@ -42,6 +42,10 @@ require('Header.php');
                                         <div class="col-md-6">
 
                                             <div class="form-group">
+<label class="col-md-3 control-label" for="district_code">District Code*</label>
+<div class="col-md-9"><input type="text" class="form-control" id="district_code" name="district_code" required maxlength="50" pattern="[A-Za-z0-9]{1,50}" /></div>
+</div>
+<div class="form-group">
                                                 <label class="col-md-3 control-label">District*</label>
                                                 <div class="col-md-9">
                                                     <div class="input-group">
@@ -148,7 +152,7 @@ require('Header.php');
             
 			var name = document.getElementById('name').value;
 
-            if (name === '') {
+            if (!document.getElementById('district_code').reportValidity() || !document.getElementById('name').reportValidity() || name.trim() === '') {
                 alert('Please enter all fields');
                 return false;
             }

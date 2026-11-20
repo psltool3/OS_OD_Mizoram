@@ -6,6 +6,11 @@ require('Header.php');
 <script src="crypto-js/crypto-js.js"></script>
 <script src="js/Encryption.js"></script>
 <style>
+#districts-panel > .panel-heading { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+#districts-panel > .panel-heading::before, #districts-panel > .panel-heading::after { display:none; }
+#districts-panel .panel-title { float:none; margin:0; padding:0; }
+#districts-panel #export_table th, #districts-panel #export_table td { text-align:center; padding:12px; }
+
     td {
             font-size: 15px; /* Increase font size for table headers and data cells */
         }
@@ -31,26 +36,27 @@ require('Header.php');
                         <div class="col-md-12">
 
                             <!-- START SIMPLE DATATABLE -->
-                            <div class="panel panel-default">
+                            <div class="panel panel-default" id="districts-panel">
 							<div class="panel-heading">
                                     <h3 class="panel-title">Districts Data</h3>
+<a href="DistrictAdd.php"><button type="button" class="btn btn-success">Add New</button></a>
                                 </div>
-								<a href="DistrictAdd.php" style="float:right;margin-top:10px;margin-right:13px"><button type="button" class="btn btn-success">Add New</button></a> 
-								<a href="LoadDistrict.php" style="float:right;margin-top:10px;margin-right:13px"><button type="button" class="btn btn-info">Load Districts</button></a>
-                                <div class="btn-group pull-right" style="margin-top:10px;margin-right:13px">
+
+								<!-- <a href="LoadDistrict.php" style="float:right;margin-top:10px;margin-right:13px"><button type="button" class="btn btn-info">Load Districts</button></a> -->
+                                <!-- <div class="btn-group pull-right" style="margin-top:10px;margin-right:13px">
                                         <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bars"></i> Export Data</button>
                                         <ul class="dropdown-menu">
                                             <li><a href="#" onClick ="$('#export_table').tableExport({type:'excel',escape:'false'});"><img src='img/icons/xls.png' width="24"/> XLS</a></li>
                                         </ul>
-                                 </div>
+                                 </div> -->
                                 <div class="panel-body">
                                  <div class="table-responsive">
                                     <table id="export_table" class="table">
                                         <thead>
                                             <tr>
-												<th style="font-size:16px">Name</th>
-                                                <th style="font-size:16px">Edit</th>
-                                                <th style="font-size:16px">Delete</th>
+												<th style="font-size:16px">District Code</th><th style="font-size:16px">Name</th>
+                                                <!-- <th>Edit</th> -->
+                                                <!-- <th>Delete</th> -->
                                             </tr>
                                         </thead>
 										<tbody>
@@ -65,9 +71,15 @@ require('Header.php');
 											$temp_id = (string)$row['id'];
 											$name = $row['name'];
 
-											echo "<tr><td>{$row['name']}</td>".
+                                            $code = htmlspecialchars((string)($row['district_code'] ?? ''), ENT_QUOTES, 'UTF-8');
+                                            $name = htmlspecialchars($row['name'], ENT_QUOTES, 'UTF-8');
+                                            echo "<tr><td>{$code}</td><td>{$name}</td>";
+                                            /* Original row with disabled Edit/Delete cells:
+echo "<tr><td>{$row['name']}</td>".
 											 "<td> <button class='btn btn-warning btn-rounded' onclick=\"edit_entry('{$temp_id}')\">Edit</button></td>".
 											 "<td> <button class='btn btn-danger btn-rounded' onclick=\"delete_entry('{$temp_id}')\">Delete</button></td></tr>";
+                                            */
+                                            echo "</tr>";
 
 										}
 
@@ -76,9 +88,9 @@ require('Header.php');
 									<div id="popup" class="popup">
 										<a class="close" onclick="hidePopup()" style="font-size:25px">×</a>
 										</br></br>
-										
+
 										<div class="col-md-6">
-										
+
 											<div class="form-group">
                                                 <label class="col-md-3 control-label">Username*</label>
                                                 <div class="col-md-9">
@@ -90,11 +102,11 @@ require('Header.php');
                                                 </div>
                                             </div>
 											 <input type="hidden" class="form-control" id="deleteid" name="deleteid"  />
-											
+
                                         </div>
                                         <div class="col-md-6">
-										
-										
+
+
 											<div class="form-group">
                                                 <label class="col-md-3 control-label">Password*</label>
                                                 <div class="col-md-9">
@@ -105,10 +117,10 @@ require('Header.php');
                                                     <span class="help-block">Password</span>
                                                 </div>
                                             </div>
-											
-											
+
+
                                         </div>
-										
+
 										<center><button class="btn btn-primary" type="button" onClick="VerifyAndDelete()">Verify</button></center>
 									</div>
                                     </table>
@@ -146,13 +158,13 @@ require('Header.php');
 		<script type="text/javascript" src="js/plugins/tableexport/jspdf/libs/sprintf.js"></script>
 		<script type="text/javascript" src="js/plugins/tableexport/jspdf/jspdf.js"></script>
 		<script type="text/javascript" src="js/plugins/tableexport/jspdf/libs/base64.js"></script>
-		
+
         <script type="text/javascript" src="js/plugins.js"></script>
         <script type="text/javascript" src="js/actions.js"></script>
         <!-- END PAGE PLUGINS -->
 
         <!-- START TEMPLATE -->
-        
+
         <!-- END TEMPLATE -->
 
 		<script>
@@ -179,9 +191,9 @@ require('Header.php');
 			document.body.appendChild(form);
 			form.submit();
 		}
-		
+
 		document.getElementById('popup').style.display = 'none';
-		
+
 		function delete_entry(temp_id){
 			document.getElementById('popup').style.display = 'block';
 			document.getElementById('deleteid').value = temp_id;
@@ -190,7 +202,7 @@ require('Header.php');
 		function edit_entry(temp_id){
 			post({uid: temp_id} ,"DistrictEdit.php");
 		}
-		
+
 		function VerifyAndDelete(){
 			var username = document.getElementById('username').value;
 			var password = document.getElementById('password').value;
@@ -201,11 +213,11 @@ require('Header.php');
 			var temp_id = document.getElementById('deleteid').value;
 			post({uid: temp_id,username:username,password:encrypted} ,"api/DistrictDelete.php");
 		}
-		
+
 		function hidePopup() {
             document.getElementById('popup').style.display = 'none';
         }
-		
+
 		</script>
     </body>
 </html>

@@ -268,7 +268,7 @@ if($currentTimestamp >= $targetTimestamp) {
 							<?php } ?>
                             <!-- END SIMPLE DATATABLE -->
 								<button id="downloadCSV" class="btn btn-warning pull-right" style="margin-left: 10px;" type="button">Download CSV</button>
-								<button id="downloadXLSX" class="btn btn-success pull-right" style="margin-left: 10px;" type="button">Download XLSX</button>
+								<!-- <button id="downloadXLSX" class="btn btn-success pull-right" style="margin-left: 10px;" type="button">Download XLSX</button> -->
 								<button id="downloadPDF" class="btn btn-danger pull-right" style="margin-bottom: 10px;" type="button">Download PDF</button>
 								</br></br>
 								<div class="table-container">
@@ -577,16 +577,16 @@ if($currentTimestamp >= $targetTimestamp) {
 			}
 
 		// Event listener for downloading XLSX
-		document.getElementById('downloadXLSX').addEventListener('click', async function() {
-			try {
-				
-				const excelResponse = await fetch('api/DownloadOptimalData.php?format=xlsx');
-				const excelBlob = await excelResponse.blob();
-				downloadFile(excelBlob, 'Optimised_Planning_' + getDateString() + '.xlsx');
-			} catch (error) {
-				console.error('Error downloading XLSX file:', error);
-			}
-		});
+// 		document.getElementById('downloadXLSX').addEventListener('click', async function() {
+// 			try {
+//
+// 				const excelResponse = await fetch('api/DownloadOptimalData.php?format=xlsx');
+// 				const excelBlob = await excelResponse.blob();
+// 				downloadFile(excelBlob, 'Optimised_Planning_' + getDateString() + '.xlsx');
+// 			} catch (error) {
+// 				console.error('Error downloading XLSX file:', error);
+// 			}
+// 		});
 		
 		document.getElementById('downloadPDF').addEventListener('click', async function() {
 			try {

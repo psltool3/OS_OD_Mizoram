@@ -181,7 +181,7 @@ if($rolled_out == '1' && !empty($id)){
 							</br></br>
 								<div style="float:right">
 									<button id="downloadCSV" class="btn btn-warning" style="margin-bottom: 10px;" type="button">Download CSV</button>
-									<button id="downloadXLSX" class="btn btn-success" style="margin-bottom: 10px;" type="button">Download XLSX</button>
+									<!-- <button id="downloadXLSX" class="btn btn-success" style="margin-bottom: 10px;" type="button">Download XLSX</button> -->
 									<button id="downloadPDF" class="btn btn-danger" style="margin-bottom: 10px;" type="button">Download PDF</button>
 								</div>
 								</br></br>
@@ -291,16 +291,16 @@ if($rolled_out == '1' && !empty($id)){
 	});
 
 	// Event listener for downloading XLSX
-	document.getElementById('downloadXLSX').addEventListener('click', async function() {
-		try {
-			var month = document.getElementById("month").value;
-			const excelResponse = await fetch('api/DownloadOptimalData.php?format=xlsx&month='+month+'&source=rollout');
-			const excelBlob = await excelResponse.blob();
-			downloadFile(excelBlob, 'Downloaded_Excel.xlsx');
-		} catch (error) {
-			console.error('Error downloading XLSX file:', error);
-		}
-	});
+// 	document.getElementById('downloadXLSX').addEventListener('click', async function() {
+// 		try {
+// 			var month = document.getElementById("month").value;
+// 			const excelResponse = await fetch('api/DownloadOptimalData.php?format=xlsx&month='+month+'&source=rollout');
+// 			const excelBlob = await excelResponse.blob();
+// 			downloadFile(excelBlob, 'Downloaded_Excel.xlsx');
+// 		} catch (error) {
+// 			console.error('Error downloading XLSX file:', error);
+// 		}
+// 	});
 	
 	// Event listener for downloading XLSX
 	document.getElementById('downloadPDF').addEventListener('click', async function() {

@@ -57,7 +57,7 @@ if (empty($tablename)) {
                                 </div>
 								<div style="float:right" style="margin:10px">
 									<button id="downloadCSV" class="btn btn-warning" style="margin-bottom: 10px;" type="button">Download CSV</button>
-									<button id="downloadXLSX" class="btn btn-success" style="margin-bottom: 10px;" type="button">Download XLSX</button>
+									<!-- <button id="downloadXLSX" class="btn btn-success" style="margin-bottom: 10px;" type="button">Download XLSX</button> -->
 								</div>
 								<div class="row" style="float:right;margin-top:20px">
 									<div class="col-md-8">
@@ -175,16 +175,16 @@ if (empty($tablename)) {
 		});
 
 		// Event listener for downloading XLSX
-		document.getElementById('downloadXLSX').addEventListener('click', async function() {
-			try {
-				var tableName = '<?php echo $tablename ?>';
-				const excelResponse = await fetch('api/DownloadOptimalDataFPS.php?format=xlsx&tableName='+tableName);
-				const excelBlob = await excelResponse.blob();
-				downloadFile(excelBlob, 'FPS_' + getDateString() + '.xlsx');
-			} catch (error) {
-				console.error('Error downloading XLSX file:', error);
-			}
-		});
+// 		document.getElementById('downloadXLSX').addEventListener('click', async function() {
+// 			try {
+// 				var tableName = '<?php echo $tablename ?>';
+// 				const excelResponse = await fetch('api/DownloadOptimalDataFPS.php?format=xlsx&tableName='+tableName);
+// 				const excelBlob = await excelResponse.blob();
+// 				downloadFile(excelBlob, 'FPS_' + getDateString() + '.xlsx');
+// 			} catch (error) {
+// 				console.error('Error downloading XLSX file:', error);
+// 			}
+// 		});
 
 		// Event listener for downloading PDF
 		/*document.getElementById('downloadPDF').addEventListener('click', async function() {

@@ -162,9 +162,9 @@ if (basename($_SERVER['PHP_SELF']) == basename(__FILE__)) {
 				<li>
 					<a href="../SendMessage.php" style="padding-left:0px"><span class="xn-text" style="font-family:sans-serif;font-weight:italic;font-size:16px;">Send Message</span></a>
 				</li>
-				<li>
+				<!-- <li>
 					<a href="../Timer.php" style="padding-left:0px"><span class="xn-text" style="font-family:sans-serif;font-weight:italic;font-size:16px;">Edit Deadline</span></a>
-				</li>
+				</li> -->
 				<li style="margin-bottom: 60px;">
 					<a style="padding-left:0px"><span class="xn-text" style="font-family:sans-serif;font-weight:italic;font-size:16px;">Version V.1</span></a>
 				</li>
@@ -190,6 +190,6 @@ if (basename($_SERVER['PHP_SELF']) == basename(__FILE__)) {
 			 <script>
 			// Function to display error message after 10 seconds
 			setTimeout(function() {
-				document.getElementById("error-message").innerHTML = "You Have Following Error :";
+				document.getElementById("error-message").innerHTML = "Data is being loaded, Errors that are being detected show below";
 			}, 5000); // 10 seconds delay
 		</script>

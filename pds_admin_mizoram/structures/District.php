@@ -3,6 +3,9 @@
 class District{
   public $Id;
   public $Name;
+  public $Code;
+  public function getCode() { return $this->Code; }
+  public function setCode($code) { $this->Code = $code; return $this; }
 
     /**
      * Get the value of Id
@@ -53,16 +56,17 @@ class District{
     }
 
 
-    function insert(District $District){
-
-        return "INSERT INTO Districts(id,name) VALUES ('".$District->getId()."','".$District->getName()."')";
-
+    function insert(District $District, $con){
+        $id = mysqli_real_escape_string($con, $District->getId());
+        $name = mysqli_real_escape_string($con, $District->getName());
+        $code = $District->getCode() === null ? "NULL" : "'" . mysqli_real_escape_string($con, $District->getCode()) . "'";
+        return "INSERT INTO Districts(id,name,district_code) VALUES ('$id','$name',$code)";
     }
-	
-	function check(District $District){
 
-        return "SELECT * FROM Districts WHERE name='".$District->getName()."'";
-
+    function check(District $District, $con){
+        $name = mysqli_real_escape_string($con, $District->getName());
+        $code = mysqli_real_escape_string($con, (string)$District->getCode());
+        return "SELECT * FROM Districts WHERE name='$name' OR district_code='$code'";
     }
 
     function delete(District $District){

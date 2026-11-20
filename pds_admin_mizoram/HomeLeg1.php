@@ -9,7 +9,7 @@ require('util/Logger.php');
 	<link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300' rel='stylesheet' type='text/css'>
 
 </head>
-<script src="https://cdn.jsdelivr.net/npm/chart.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.js" integrity="sha384-sitkSLEO56SJYRloHWybrHos3JVvByQSlOZYJ1HiExytjxUlVOernDbpQcOgwtW8" crossorigin="anonymous"></script>
 <style>
 	.multiselect {
 	  width: 200px;
@@ -1470,57 +1470,49 @@ option.textContent = currentMonthValue;
 dropdown.appendChild(option);
 dropdown.options[1].selected = true;
 
+var l2PeriodRequest = 0;
 fetchApplicableMonth(currentMonthValue);
 
 function fetchApplicableMonth(month){
-	var year = document.getElementById('year').value;
-	var datastring = "month=" + month + "&year=" + year;
-	$.ajax({
-		type: "POST",
-		url: "api/fetchTableDataAllMonth.php",
-		data: datastring,
-		cache: false,
-		error: function(){
-			alert("timeout");
-		},
-		timeout: 120000,
-		success: function(result){		
-		try{
-			var resultarray = JSON.parse(result);
-			var dataarray = resultarray["data"];
-			var messagearray = resultarray["message"];
-			if (messagearray.length != 0) {
-				alert(messagearray);
-				var fetchButton = document.getElementById('fetchButton');
-				fetchButton.disabled = true;
-				var upload_button = document.getElementById('upload_button');
-				upload_button.disabled = true;
-				return;
-			}
-			dataarray.forEach(item => {
-				var container = document.getElementById('checkboxes');
-				var checkboxes = container.querySelectorAll('input[type="checkbox"]');
-				checkboxes.forEach(function(checkbox) {
-					checkbox.checked = false;
-				});
-				 item.applicable.split(',').forEach(applicableMonth => {
-					var checkboxId = applicableMonth.toLowerCase();
-					var checkbox = document.getElementById(checkboxId);
-					if (checkbox) {
-						checkbox.checked = true;
-					}
-				});
-			});
-			updateApplicableMonths();
-			document.getElementById("processingPopup").style.display = "none";
-			fetchFromDb();
-		}
-		catch (error) {
-				console.log(error);
-				document.getElementById("processingPopup").style.display = "none";
-			}
-		}
-	});	
+    var request = ++l2PeriodRequest;
+    var fallback = 'Unable to check L2 for the selected period. You can still continue with L1.';
+    $.ajax({
+        type: 'POST',
+        url: 'api/fetchTableDataAllMonth.php',
+        data: {month: month, year: document.getElementById('year').value},
+        dataType: 'json',
+        cache: false,
+        timeout: 120000,
+        success: function(result){
+            if (request !== l2PeriodRequest) return;
+            try {
+                if (!result || !Array.isArray(result.data) || typeof result.message !== 'string') {
+                    alert(fallback);
+                    return;
+                }
+                alert(result.message || fallback);
+                if (result.data.length && typeof result.data[0].applicable === 'string') {
+                    var container = document.getElementById('checkboxes');
+                    container.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox){ checkbox.checked = false; });
+                    result.data[0].applicable.split(',').forEach(function(month){
+                        var checkbox = document.getElementById(month.toLowerCase());
+                        if (checkbox && container.contains(checkbox)) checkbox.checked = true;
+                    });
+                }
+                updateApplicableMonths();
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        error: function(){
+            if (request === l2PeriodRequest) alert(fallback);
+        },
+        complete: function(){
+            if (request !== l2PeriodRequest) return;
+            document.getElementById('processingPopup').style.display = 'none';
+            fetchFromDb();
+        }
+    });
 }
 
 document.getElementById('month').addEventListener('change', function() {

@@ -136,7 +136,7 @@ require('Header.php');
 							</br></br>
 								<div style="float:right">
 									<button id="downloadCSV" class="btn btn-warning" style="margin-bottom: 10px;" type="button">Download CSV</button>
-									<button id="downloadXLSX" class="btn btn-success" style="margin-bottom: 10px;" type="button">Download XLSX</button>
+									<!-- <button id="downloadXLSX" class="btn btn-success" style="margin-bottom: 10px;" type="button">Download XLSX</button> -->
 									<button id="downloadPDF" class="btn btn-danger" style="margin-bottom: 10px;" type="button">Download PDF</button>
 									<a href="OptimisedDataAll.php"><button class="btn btn-info" style="margin-bottom: 10px;" type="button">Previous Data</button></a>
 								</div>
@@ -291,17 +291,17 @@ require('Header.php');
 	});
 
 	// Event listener for downloading XLSX
-	document.getElementById('downloadXLSX').addEventListener('click', async function() {
-		try {
-			var month = document.getElementById("month").value;
-			var district = document.getElementById("district").value;
-			const excelResponse = await fetch('api/DownloadOptimalDataLeg1All.php?format=xlsx&month=' + month + "&district=" + district);
-			const excelBlob = await excelResponse.blob();
-			downloadFile(excelBlob, 'RolloutPlan_' + getDateString() + '.xlsx');
-		} catch (error) {
-			console.error('Error downloading XLSX file:', error);
-		}
-	});
+// 	document.getElementById('downloadXLSX').addEventListener('click', async function() {
+// 		try {
+// 			var month = document.getElementById("month").value;
+// 			var district = document.getElementById("district").value;
+// 			const excelResponse = await fetch('api/DownloadOptimalDataLeg1All.php?format=xlsx&month=' + month + "&district=" + district);
+// 			const excelBlob = await excelResponse.blob();
+// 			downloadFile(excelBlob, 'RolloutPlan_' + getDateString() + '.xlsx');
+// 		} catch (error) {
+// 			console.error('Error downloading XLSX file:', error);
+// 		}
+// 	});
 	
 	document.getElementById('downloadPDF').addEventListener('click', async function() {
 		try {

@@ -28,6 +28,9 @@ function formatName($name) {
     return trim($name);
 }
 
+if (!isset($_POST['name'], $_POST['district_code']) || !is_string($_POST['name']) || trim($_POST['name']) === '' || !is_string($_POST['district_code']) || !preg_match('/^[A-Za-z0-9]{1,50}$/D', $_POST['district_code'])) {
+    die('Error : District name and an alphanumeric District Code (1-50 characters) are required.');
+}
 $person = new Login;
 $person->setUsername($_POST["username"]);
 $Encryption = new Encryption();
@@ -46,17 +49,27 @@ $dbHashedPassword = $row['password'];
 if(password_verify($person->getPassword(), $dbHashedPassword)){
 	$District = new District;
 	$District->setId(uniqid());
+	$District->setCode($_POST['district_code']);
 	$District->setName(formatName($_POST['name']));
 
-	$query = $District->check($District);
-	$result = mysqli_query($con, $query);
+	$query = $District->check($District, $con);
+	try {
+		$result = mysqli_query($con, $query);
+	} catch (mysqli_sql_exception $e) {
+		die('Error : Unable to check district.');
+	}
+	if (!$result) { die('Error : Unable to check district.'); }
 	$numrows = mysqli_num_rows($result);
 	if($numrows>0){
-		echo "Error : District name already exist";
+		echo "Error : District name or code already exists";
 		exit();
 	}
-	$query = $District->insert($District);
-	mysqli_query($con, $query);
+	$query = $District->insert($District, $con);
+	try {
+		if (!mysqli_query($con, $query)) { die('Error : Unable to add district. Name or code may already exist.'); }
+	} catch (mysqli_sql_exception $e) {
+		die('Error : Unable to add district. Name or code may already exist.');
+	}
 	mysqli_close($con);
 
 	$filteredPost = $_POST;

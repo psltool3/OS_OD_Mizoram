@@ -158,7 +158,7 @@ require('Header.php');
 							</br></br></br>
                             <!-- END SIMPLE DATATABLE -->
 							<button id="downloadCSV" class="btn btn-warning pull-right" style="margin-bottom: 10px;" type="button">Download CSV</button>
-							<button id="downloadXLSX" class="btn btn-success pull-right" style="margin-bottom: 10px;" type="button">Download XLSX</button>
+							<!-- <button id="downloadXLSX" class="btn btn-success pull-right" style="margin-bottom: 10px;" type="button">Download XLSX</button> -->
 							<button class='btn btn-primary pull-right' onClick='sendData()' type='button'>Save</button>
 							
 							<div class="table-container">
@@ -317,17 +317,17 @@ require('Header.php');
 		}
 
 	// Event listener for downloading XLSX
-	document.getElementById('downloadXLSX').addEventListener('click', async function() {
-		try {
-			var month = document.getElementById("month").value;
-			var district = document.getElementById("district").value;
-			const excelResponse = await fetch('api/DownloadOptimalData.php?format=xlsx&month=' + month + "&district=" + district);
-			const excelBlob = await excelResponse.blob();
-			downloadFile(excelBlob, 'Pb_Warehouse_' + getDateString() + '.xlsx');
-		} catch (error) {
-			console.error('Error downloading XLSX file:', error);
-		}
-	});
+// 	document.getElementById('downloadXLSX').addEventListener('click', async function() {
+// 		try {
+// 			var month = document.getElementById("month").value;
+// 			var district = document.getElementById("district").value;
+// 			const excelResponse = await fetch('api/DownloadOptimalData.php?format=xlsx&month=' + month + "&district=" + district);
+// 			const excelBlob = await excelResponse.blob();
+// 			downloadFile(excelBlob, 'Pb_Warehouse_' + getDateString() + '.xlsx');
+// 		} catch (error) {
+// 			console.error('Error downloading XLSX file:', error);
+// 		}
+// 	});
 
 
 	// Functions for file download and PDF generation (similar to previous code)

@@ -455,7 +455,7 @@ require('Header.php');
 							</br></br>
 								<center>
 									<button id="downloadCSV" class="btn btn-warning" style="margin-bottom: 10px;" type="button">Download CSV</button>
-									<button id="downloadXLSX" class="btn btn-success" style="margin-bottom: 10px;" type="button">Download XLSX</button>
+									<!-- <button id="downloadXLSX" class="btn btn-success" style="margin-bottom: 10px;" type="button">Download XLSX</button> -->
 									<button id="downloadPDF" class="btn btn-danger" style="margin-bottom: 10px;" type="button">Download PDF</button>
 								</center>
 			</div>
@@ -642,16 +642,16 @@ require('Header.php');
 	});
 
 	// Event listener for downloading XLSX
-	document.getElementById('downloadXLSX').addEventListener('click', async function() {
-		try {
-			var month = document.getElementById("month").value;
-			const excelResponse = await fetch('api/DownloadOptimalData.php?format=xlsx&month='+month);
-			const excelBlob = await excelResponse.blob();
-			downloadFile(excelBlob, 'Downloaded_Excel.xlsx');
-		} catch (error) {
-			console.error('Error downloading XLSX file:', error);
-		}
-	});
+// 	document.getElementById('downloadXLSX').addEventListener('click', async function() {
+// 		try {
+// 			var month = document.getElementById("month").value;
+// 			const excelResponse = await fetch('api/DownloadOptimalData.php?format=xlsx&month='+month);
+// 			const excelBlob = await excelResponse.blob();
+// 			downloadFile(excelBlob, 'Downloaded_Excel.xlsx');
+// 		} catch (error) {
+// 			console.error('Error downloading XLSX file:', error);
+// 		}
+// 	});
 
 	// Event listener for downloading PDF
 	document.getElementById('downloadPDF').addEventListener('click', async function() {
